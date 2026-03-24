@@ -1,0 +1,27 @@
+{
+  "name": "@workspace/ui",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./globals.css": "./src/styles/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./lib/*": "./src/lib/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts"
+  },
+  "scripts": {
+    "lint": "oxlint && eslint",
+    "lint:fix": "oxlint --fix && eslint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.32.0",
+    "postcss": "^8.4.49",
+    "postcss-mobile-forever": "^5.0.0",
+    "typescript": "^5.9.2"
+  }
+}
