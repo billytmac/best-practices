@@ -42,5 +42,35 @@
       "oxlint --fix",
       "eslint --fix"
     ]
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "citty": "0.2.1",
+        "eslint": "10.*"
+      }
+    },
+    "allowedDeprecatedVersions": {
+      "glob": "*",
+      "inflight": "1",
+      "are-we-there-yet": "2",
+      "gauge": "3",
+      "node-domexception": "1",
+      "npmlog": "5",
+      "rimraf": "3",
+      "@types/parse-path": "7",
+      "@oxc-parser/wasm": "0.60.0",
+      "unplugin-vue-router": "*"
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "simple-git-hooks",
+      "unrs-resolver"
+    ]
+  },
+  "resolutions": {
+    "vite": "^7.3.1",
+    "vue-router": "^5.0.3"
   }
 }
