@@ -33,8 +33,8 @@ export default defineNuxtConfig({
       // https://github.com/wswmsword/postcss-mobile-forever
       'postcss-mobile-forever': {
         appSelector: '#__nuxt',
-        viewportWidth: 375,
-        maxDisplayWidth: 600,
+        viewportWidth: (file: string) => file.includes('vant') ? 375 : 750,
+        maxDisplayWidth: 480,
         // devtools excluded
         exclude: /@nuxt/,
         border: true,

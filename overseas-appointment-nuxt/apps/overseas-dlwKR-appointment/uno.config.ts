@@ -6,7 +6,7 @@ import {
   presetIcons,
   presetTypography,
   presetWebFonts,
-  presetWind4,
+  presetWind3,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -18,20 +18,17 @@ const BASE_FONT_SIZE = 4
 
 export default defineConfig({
   shortcuts: [
-    ['btn', 'px-6 py-3 rounded-3 inline-block bg-primary text-white cursor-pointer hover:bg-primary-hover disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50'],
+    ['flex-items-center', 'flex items-center'],
+    ['flex-justify-center', 'flex justify-center'],
+    ['flex-items-center-between', 'flex items-center justify-between'],
+    ['flex-items-between', 'flex justify-between'],
+    ['flex-items-center-center', 'flex items-center justify-center '],
+    ['no-wrap-ellipsis', 'whitespace-nowrap text-ellipsis overflow-hidden'],
+    ['absolute-Y-center', 'translate-y--50% top-50% absolute'],
   ],
 
   presets: [
-    presetWind4({
-      /**
-       * Converts rem to px for all utilities
-       */
-      preflights: {
-        theme: {
-          process: createRemToPxProcessor(BASE_FONT_SIZE),
-        },
-      },
-    }),
+    presetWind3(),
     presetAttributify(),
     presetIcons(),
     presetTypography(),
