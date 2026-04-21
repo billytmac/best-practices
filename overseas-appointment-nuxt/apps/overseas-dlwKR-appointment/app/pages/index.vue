@@ -102,13 +102,13 @@ definePageMeta({
   name: "Home",
 });
 
-const store = useStore();
 
 
 
 const isShowNav = ref<boolean>(false)
 const isShowAppointmentPopup = ref<boolean>(false)
 const isShowPhoneAppointmentPopup = ref<boolean>(false)
+const isShowAppointmentSuccessPopup = ref<boolean>(true)
 
 const currentNav = ref<string>('main-menu')
 function setIsShowNav(val: boolean) {
@@ -466,6 +466,28 @@ function setCurrentNav(val: string) {
         </div>
       </van-popup>
     </client-only>
+    <!-- 预约成功弹窗 -->
+    <client-only>
+      <van-popup v-model:show="isShowAppointmentSuccessPopup" class='h-full !bg-transparent !w-full !max-w-750 '
+        z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
+        <div class="  mt-449 ml-116 flex">
+          <NuxtImg src="/popup/success-title.png" class="w-514 h-94" />
+          <NuxtImg src="/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
+            @click="isShowAppointmentSuccessPopup = false" />
+        </div>
+        <div class="success-popup-bg bg-cover-no-repeat h-414 w-657 mt-9 ml-47 pt-31">
+          <div class="ml-142">
+            <NuxtImg src="/popup/success-icon.png" class="w-380 h-206" />
+          </div>
+          <div class="text-[24px] text-[#281378] leading-[24px] font-500 font-[NotoSansSC] ml-103 mt-31">공식 라운지에서 더 많은
+            이벤트에 참여하세요!</div>
+          <div class="mt-12 ml-180">
+            <NuxtImg src="/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
+          </div>
+        </div>
+
+      </van-popup>
+    </client-only>
   </div>
 
 </template>
@@ -557,5 +579,9 @@ function setCurrentNav(val: string) {
 
 .popup-radio-bg {
   background-image: url("/popup/radio-bg.png");
+}
+
+.success-popup-bg {
+  background-image: url("/popup/success-bg.png");
 }
 </style>
