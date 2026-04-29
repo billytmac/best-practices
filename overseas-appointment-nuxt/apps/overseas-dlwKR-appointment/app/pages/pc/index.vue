@@ -127,22 +127,35 @@ const isShowPhoneAppointmentPopup = ref<boolean>(false)
 const isShowAppointmentSuccessPopup = ref<boolean>(false)
 
 const currentNav = ref<string>('main-menu')
-function setIsShowNav(val: boolean) {
-  isShowNav.value = val
-}
+
 function setCurrentNav(val: string) {
   currentNav.value = val
-  // const targetElement = document.getElementById(val)
-  // if (targetElement) {
-  //   // 计算需要滚动的位置，考虑固定头部的高度（76px）
-  //   const offsetTop = targetElement.offsetTop - 86
-
-  //   // 平滑滚动到目标位置
-  //   window.scrollTo({
-  //     top: offsetTop,
-  //     behavior: 'smooth'
-  //   })
-  // }
+  const targetElement = document.getElementById(val)
+  console.log(targetElement,'targetElement')
+  if (targetElement) {
+    // 计算需要滚动的位置，考虑固定头部的高度（76px）
+    const offsetTop = targetElement.offsetTop 
+    let diffVal = 0
+     switch (val) {
+      case 'preorder':
+        diffVal = 1015
+        break;
+      case 'activity':
+        diffVal = 900
+        break;
+        case 'role':
+          diffVal = 920
+          break;
+        case 'game-features':
+          diffVal = 1000
+          break;
+     }
+    // 平滑滚动到目标位置
+    window.scrollTo({
+      top: offsetTop + diffVal,
+      behavior: 'smooth'
+    })
+  }
 }
 
 const onMouse = (item, flag: boolean) => {
@@ -156,8 +169,8 @@ const onMouse = (item, flag: boolean) => {
 </script>
 
 <template>
-  <div class="bg-black h-5938">
-    <div class="relative max-w-1920 mx-auto bg-black">
+  <div class="h-5938 appointment-bg-wrap bg-black">
+    <div class="relative max-w-1920 min-w-1920 mx-auto ">
       <!-- 顶部固定栏 -->
       <div
         class="flex-items-center pl-26 pr-85 max-w-1920   bg-black h-80 w-full  top-0 fixed z-30 font-[DNF_Forged_Blade] font-300 text-[28px] color-white">
@@ -337,7 +350,7 @@ const onMouse = (item, flag: boolean) => {
         </div>
 
         <!-- 第四部分 -->
-        <div class="mt-150" id="game-features ">
+        <div class="mt-150" id="game-features">
           <div class="w-909 h-39 ml-1011 mb-48">
             <img src="/animated-png/pc-line-bottom.png" class="w-909 h-39" />
           </div>
@@ -371,186 +384,164 @@ const onMouse = (item, flag: boolean) => {
           </div>
         </div>
       </div>
-
-      <!-- 导航弹窗 -->
-      <client-only>
-        <van-popup v-model:show="isShowNav" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
-          overlay-class='!bg-black/80' :close-on-click-overlay="false">
-          <div class='text-right pt-5 pr-40 flex flex-row-reverse'>
-            <NuxtImg src="/popup/close.png" class="w-84 h-85 cursor-pointer" @click="setIsShowNav(false)" />
-          </div>
-          <div class="ml-138">
-            <NuxtImg src="/popup/nav-icon.png" class="w-481 h-188 " />
-          </div>
-          <div class="flex flex-col items-center font-500 font-[NotoSansSC] text-[48px]  text-[#fff] pt-71">
-            <div class="cursor-pointer relative " v-for="item in navList" :key="item.name"
-              @mouseenter="onMouse(item, true)" @mouseleave="onMouse(item, false)" @click="setCurrentNav(item.image)"
-              :class="{ 'mt-71': item.mt === 71, 'mt-70': item.mt === 70, 'mt-72': item.mt === 72, 'mt-85': item.mt === 85 }">
-              <div class="w-184 h-59 whitespace-nowrap flex-items-center-center"
-                v-show="currentNav !== item.image && !item.isHover">
-                <span>{{ item.name }}</span>
-              </div>
-              <NuxtImg v-show="currentNav === item.image || item.isHover" :src="`/popup/${item.image}.png`"
-                class="w-184 h-59  " />
-            </div>
-          </div>
-          <div class="mt-73 pl-79">
-            <NuxtImg src="/popup/nav-line.png" class="w-583 h-12 " />
-          </div>
-          <div class="flex ml-219 pt-24">
-            <NuxtImg src="/popup/line.png" class="w-143 h-115 mr-26 mt-7 cursor-pointer" />
-            <NuxtImg src="/popup/youtube.png" class="w-144 h-126 cursor-pointer" />
-          </div>
-        </van-popup>
-      </client-only>
       <!-- 预约弹窗(商店和手机) -->
       <client-only>
-        <van-popup v-model:show="isShowAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
-          overlay-class='!bg-black/80' :close-on-click-overlay="false">
-          <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679 mt-129 ml-49 pt-228">
-            <div class=" ml-69 relative">
-              <NuxtImg src="/popup/appointment-title.png" class="w-530 h-101" />
-              <NuxtImg src="/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
-                @click="isShowAppointmentPopup = false" />
-            </div>
-            <div class='ml-88 mt-42'>
-              <NuxtImg src="/popup/step-1.png" class="w-479 h-38" />
-            </div>
-            <div
-              class="popup-prize-list-bg flex-items-between bg-cover-no-repeat h-173 w-491 ml-83 mt-16 pl-32 pr-28 pt-13">
-              <div class="flex-col-items-center mt-20">
-                <NuxtImg src="/popup/444-icon.png" class="w-100 h-93" />
-                <NuxtImg src="/popup/444.png" class="w-105 h-29 mt-13" />
+        <div v-show="isShowAppointmentPopup"
+          class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-justify-center overflow-auto' z-index="40">
+          <div class="">
+            <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679  ml-49 pt-228">
+              <div class=" ml-69 relative">
+                <NuxtImg src="/popup/appointment-title.png" class="w-530 h-101" />
+                <NuxtImg src="/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
+                  @click="isShowAppointmentPopup = false" />
               </div>
-              <div class="flex-col-items-center relative">
-                <NuxtImg src="/popup/sizheng-icon.png" class="w-155 h-137" />
-                <NuxtImg src="/popup/sizheng.png" class="w-145 h-29  absolute top-[126px] left-[11px]" />
-              </div>
-              <div class="flex-col-items-center mt-18">
-                <NuxtImg src="/popup/qianghua-icon.png" class="w-114 h-92" />
-                <NuxtImg src="/popup/qianghua.png" class="w-106 h-29 mt-13 mt-16" />
-              </div>
-
-            </div>
-            <div class="mt-13 ml-201">
-              <NuxtImg src="/popup/google-appointment.png" class="w-255 h-92" />
-            </div>
-            <div class='ml-88 mt-4'>
-              <NuxtImg src="/popup/step-2.png" class="w-479 h-38" />
-            </div>
-            <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
-              <div class="mr-99 flex">
-                <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
-                </div>
-                <div>AOS</div>
-              </div>
-              <div class="flex">
-                <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
-                </div>
-                <div>IOS</div>
-              </div>
-            </div>
-            <div
-              class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
-              <div class="text-[38px] mr-115">010</div>
-              <div class="flex-1">
-                <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                  placeholder="휴대폰 번호 입력" />
-              </div>
-            </div>
-            <div class="flex ml-65 mt-17">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
-                <NuxtImg src="/tick.png" class="h-16 w-24" />
+              <div class='ml-88 mt-42'>
+                <NuxtImg src="/popup/step-1.png" class="w-479 h-38" />
               </div>
               <div
-                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
-                <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                class="popup-prize-list-bg flex-items-between bg-cover-no-repeat h-173 w-491 ml-83 mt-16 pl-32 pr-28 pt-13">
+                <div class="flex-col-items-center mt-20">
+                  <NuxtImg src="/popup/444-icon.png" class="w-100 h-93" />
+                  <NuxtImg src="/popup/444.png" class="w-105 h-29 mt-13" />
+                </div>
+                <div class="flex-col-items-center relative">
+                  <NuxtImg src="/popup/sizheng-icon.png" class="w-155 h-137" />
+                  <NuxtImg src="/popup/sizheng.png" class="w-145 h-29  absolute top-[126px] left-[11px]" />
+                </div>
+                <div class="flex-col-items-center mt-18">
+                  <NuxtImg src="/popup/qianghua-icon.png" class="w-114 h-92" />
+                  <NuxtImg src="/popup/qianghua.png" class="w-106 h-29 mt-13 mt-16" />
+                </div>
+
+              </div>
+              <div class="mt-13 ml-201">
+                <NuxtImg src="/popup/google-appointment.png" class="w-255 h-92" />
+              </div>
+              <div class='ml-88 mt-4'>
+                <NuxtImg src="/popup/step-2.png" class="w-479 h-38" />
+              </div>
+              <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
+                <div class="mr-99 flex">
+                  <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
+                    <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  </div>
+                  <div>AOS</div>
+                </div>
+                <div class="flex">
+                  <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
+                    <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  </div>
+                  <div>IOS</div>
+                </div>
+              </div>
+              <div
+                class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
+                <div class="text-[38px] mr-115">010</div>
+                <div class="flex-1">
+                  <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
+                    placeholder="휴대폰 번호 입력" />
+                </div>
+              </div>
+              <div class="flex ml-65 mt-17">
+                <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
+                  <NuxtImg src="/tick.png" class="h-16 w-24" />
+                </div>
+                <div
+                  class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
+                  <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                  <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                </div>
+              </div>
+              <div class='ml-185 mt-8'>
+                <NuxtImg src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" />
               </div>
             </div>
-            <div class='ml-185 mt-8'>
-              <NuxtImg src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" />
-            </div>
           </div>
-        </van-popup>
+
+        </div>
       </client-only>
       <!-- 预约弹窗(手机) -->
       <client-only>
-        <van-popup v-model:show="isShowPhoneAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 '
-          z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
-          <div class="ml-46 relative mt-365">
-            <NuxtImg src="/popup/phone-title.png" class="w-636 h-94" />
-            <NuxtImg src="/popup/close.png" class="w-84 h-85 absolute right-3.9% top--9% cursor-pointer"
-              @click="isShowPhoneAppointmentPopup = false" />
-          </div>
-          <div class="phone-appointment-popup-bg bg-cover-no-repeat h-707 w-683 mt-13 ml-21 pt-54">
-            <div class=" ml-340">
-              <NuxtImg src="/popup/phone-info.png" class="w-333 h-165" />
+        <div v-show="isShowPhoneAppointmentPopup"
+          class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center overflow-auto'>
+          <div class="h-full pt-74">
+            <div class="ml-46 relative ">
+              <NuxtImg src="/popup/phone-title.png" class="w-636 h-94" />
+              <NuxtImg src="/popup/close.png" class="w-84 h-85 absolute right-3.9% top--9% cursor-pointer"
+                @click="isShowPhoneAppointmentPopup = false" />
             </div>
-            <div class="mt-4 ml-324">
-              <NuxtImg src="/popup/phone-dialog.png" class="w-339 h-117" />
-            </div>
-            <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
-              <div class="mr-99 flex">
-                <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+            <div class="phone-appointment-popup-bg bg-cover-no-repeat h-707 w-683 mt-13 ml-21 pt-54">
+              <div class=" ml-340">
+                <NuxtImg src="/popup/phone-info.png" class="w-333 h-165" />
+              </div>
+              <div class="mt-4 ml-324">
+                <NuxtImg src="/popup/phone-dialog.png" class="w-339 h-117" />
+              </div>
+              <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
+                <div class="mr-99 flex">
+                  <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
+                    <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  </div>
+                  <div class="mt--1">AOS</div>
                 </div>
-                <div class="mt--1">AOS</div>
-              </div>
-              <div class="flex">
-                <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+                <div class="flex">
+                  <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
+                    <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  </div>
+                  <div class="mt--1">IOS</div>
                 </div>
-                <div class="mt--1">IOS</div>
-              </div>
-            </div>
-            <div
-              class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
-              <div class="text-[38px] mr-115">010</div>
-              <div class="flex-1">
-                <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                  placeholder="휴대폰 번호 입력" />
-              </div>
-            </div>
-            <div class="flex ml-110 mt-14">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
-                <NuxtImg src="/tick.png" class="h-16 w-24" />
               </div>
               <div
-                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
-                <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
+                <div class="text-[38px] mr-115">010</div>
+                <div class="flex-1">
+                  <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
+                    placeholder="휴대폰 번호 입력" />
+                </div>
               </div>
-            </div>
-            <div class='ml-225 mt-24'>
-              <NuxtImg src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" />
-            </div>
-          </div>
-        </van-popup>
-      </client-only>
-      <!-- 预约成功弹窗 -->
-      <client-only>
-        <van-popup v-model:show="isShowAppointmentSuccessPopup" class='h-full !bg-transparent !w-full !max-w-750 '
-          z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
-          <div class="  mt-449 ml-116 flex">
-            <NuxtImg src="/popup/success-title.png" class="w-514 h-94" />
-            <NuxtImg src="/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
-              @click="isShowAppointmentSuccessPopup = false" />
-          </div>
-          <div class="success-popup-bg bg-cover-no-repeat h-414 w-657 mt-9 ml-47 pt-31">
-            <div class="ml-142">
-              <NuxtImg src="/popup/success-icon.png" class="w-380 h-206" />
-            </div>
-            <div class="text-[24px] text-[#281378] leading-[24px] font-500 font-[NotoSansSC] ml-103 mt-31">공식 라운지에서 더 많은
-              이벤트에 참여하세요!</div>
-            <div class="mt-12 ml-180">
-              <NuxtImg src="/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
+              <div class="flex ml-110 mt-14">
+                <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
+                  <NuxtImg src="/tick.png" class="h-16 w-24" />
+                </div>
+                <div
+                  class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
+                  <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                  <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                </div>
+              </div>
+              <div class='ml-225 mt-24'>
+                <NuxtImg src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" />
+              </div>
             </div>
           </div>
 
-        </van-popup>
+        </div>
+      </client-only>
+      <!-- 预约成功弹窗 -->
+      <client-only>
+        <div v-if="isShowAppointmentSuccessPopup"
+          class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-justify-center overflow-auto' z-index="40">
+          <div class="pt-200 h-full">
+            <div class="ml-116 flex">
+              <NuxtImg src="/popup/success-title.png" class="w-514 h-94" />
+              <NuxtImg src="/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
+                @click="isShowAppointmentSuccessPopup = false" />
+            </div>
+            <div class="success-popup-bg bg-cover-no-repeat h-414 w-657 mt-9 ml-47 pt-31">
+              <div class="ml-142">
+                <NuxtImg src="/popup/success-icon.png" class="w-380 h-206" />
+              </div>
+              <div class="text-[24px] text-[#281378] leading-[24px] font-500 font-[NotoSansSC] ml-103 mt-31">공식 라운지에서 더
+                많은
+                이벤트에 참여하세요!</div>
+              <div class="mt-12 ml-180">
+                <NuxtImg src="/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </client-only>
     </div>
   </div>
@@ -562,6 +553,10 @@ const onMouse = (item, flag: boolean) => {
 .apppointment-bg {
   background-image: url("/pc/bg.png");
 }
+
+/* .apppointment-bg-wrap {
+  overflow: auto;
+} */
 
 .kv-bg {
   background-image: url("/pc/kv-img.png");
@@ -657,5 +652,13 @@ const onMouse = (item, flag: boolean) => {
 
 .nvqumo-title-bg {
   background-image: url("/pc/roles/nvqumo-title-bg.png");
+}
+
+
+
+@media (min-width: 1700px) {
+  .appointment-bg-wrap {
+    overflow: hidden;
+  }
 }
 </style>

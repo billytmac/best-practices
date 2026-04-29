@@ -22,10 +22,19 @@ export default defineNuxtConfig({
   },
 
   css: [
+    '@unocss/reset/tailwind.css',
     './app/styles/vars.css',
     './app/styles/global.css',
     './app/styles/default-theme.css',
+    'animate.css',
   ],
+  // unocss: {
+  //   // 禁用自动注入，改为手动在 app.vue 引入
+  //   injectPosition: 'last' // 或 'last'，根据需要调整
+  // },
+  // vant: {
+  //   // importStyle: true,  
+  // },
 
   postcss: {
     plugins: {
@@ -33,8 +42,10 @@ export default defineNuxtConfig({
 
       // https://github.com/wswmsword/postcss-mobile-forever
       'postcss-mobile-forever': {
-        appSelector: '#__nuxt',
-        viewportWidth: (file: string) => file.includes('vant') ? 375 : 750,
+        appSelector: '#apppointment-mobile',
+        viewportWidth: (file: string) => {
+          return file.includes('vant') ? 375 : 750
+        },
         maxDisplayWidth: 480,
         // devtools excluded
         exclude: /@nuxt/,
@@ -51,7 +62,10 @@ export default defineNuxtConfig({
       },
     },
   },
-
+  devServer: {
+    port: 3000,
+    host: '0.0.0.0',
+  },
   colorMode: {
     classSuffix: '',
     preference: 'system',
@@ -73,12 +87,12 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      viewport: 'width=device-width,initial-scale=1,viewport-fit=cover',
+      viewport: 'width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=false,maximumScale=1',
       link: [
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
       ],
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover,user-scalable=false,maximumScale=1' },
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#ffffff' },

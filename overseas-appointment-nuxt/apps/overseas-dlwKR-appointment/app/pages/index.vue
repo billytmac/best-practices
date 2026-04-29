@@ -108,7 +108,7 @@ definePageMeta({
 const isShowNav = ref<boolean>(false)
 const isShowAppointmentPopup = ref<boolean>(false)
 const isShowPhoneAppointmentPopup = ref<boolean>(false)
-const isShowAppointmentSuccessPopup = ref<boolean>(true)
+const isShowAppointmentSuccessPopup = ref<boolean>(false)
 
 const currentNav = ref<string>('main-menu')
 function setIsShowNav(val: boolean) {
@@ -116,7 +116,6 @@ function setIsShowNav(val: boolean) {
 }
 function setCurrentNav(val: string) {
   currentNav.value = val
-
   const targetElement = document.getElementById(val)
   if (targetElement) {
     // 计算需要滚动的位置，考虑固定头部的高度（76px）
@@ -137,12 +136,18 @@ function setCurrentNav(val: string) {
   isShowNav.value = false
 }
 
+const onMouse = (item,flag:boolean) => {
+  const isTouchDevice = 'ontouchstart' in window
+  if (isTouchDevice) return  // 移动端直接跳过
+  item.isHover = flag
+}
+
 
 
 </script>
 
 <template>
-  <div class="apppointment-bg bg-cover-no-repeat h-6235">
+  <div class="apppointment-bg bg-cover-no-repeat h-6235" id="apppointment-mobile">
     <!-- 顶部固定栏 -->
     <div class="flex-items-center-between pl-18 pr-53 pt-8 bg-black h-86 w-full max-w-750 top-0 fixed z-30">
       <NuxtImg src="/head-logo.png" class="h-70 w-181" />
@@ -320,7 +325,7 @@ function setCurrentNav(val: string) {
         </div>
         <div class="flex flex-col items-center font-500 font-[NotoSansSC] text-[48px]  text-[#fff] pt-71">
           <div class="cursor-pointer relative " v-for="item in navList" :key="item.name"
-            @mouseenter="item.isHover = true" @mouseleave="item.isHover = false" @click="setCurrentNav(item.image)"
+            @mouseenter="onMouse(item,true)" @mouseleave="onMouse(item,false)" @click="setCurrentNav(item.image)"
             :class="{ 'mt-71': item.mt === 71, 'mt-70': item.mt === 70, 'mt-72': item.mt === 72, 'mt-85': item.mt === 85 }">
             <div class="w-184 h-59 whitespace-nowrap flex-items-center-center"
               v-show="currentNav !== item.image && !item.isHover">
@@ -493,6 +498,7 @@ function setCurrentNav(val: string) {
 </template>
 
 <style scoped>
+
 .apppointment-bg {
   background-image: url("/bg.png");
 }
