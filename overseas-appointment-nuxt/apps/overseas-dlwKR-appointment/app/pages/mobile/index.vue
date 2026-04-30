@@ -1,11 +1,15 @@
 <script setup lang="ts">
 
-import { isMobile, mobileSystem } from "~/utils/index.client"
+import { isMobile, mobileSystem, formatNumber } from "~/utils/index.client"
+import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Autoplay } from 'swiper/modules'
 import { useDebounceFn } from '@vueuse/core'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { useCustomStore } from "~/stores/custom"
+import { storeToRefs } from 'pinia'
+
 const allImages = [
   '/people/nvqumo.png',
   '/people/nvwu.png',
@@ -25,12 +29,12 @@ useHead({
   }))
 })
 
-// const isIos = 
 
 definePageMeta({
   name: "mobile",
 });
-
+const handleCutomStore = useCustomStore()
+const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
 const modules = [Navigation, Autoplay]
 const isIos = ref('')
 // console.log(window.navigator,'mobileSystem')
@@ -40,31 +44,31 @@ const timeLineArr = ref([
     title: "10w",
     image: "/10w.png",
     style: "-8%",
-    isReached: false,
+    num: 100000,
   },
   {
     title: "30w",
     image: "/30w.png",
     style: "17%",
-    isReached: false,
+    num: 300000,
   },
   {
     title: "50w",
     image: "/50w.png",
     style: "42%",
-    isReached: false,
+    num: 500000,
   },
   {
     title: "80w",
     image: "/80w.png",
     style: "67%",
-    isReached: false,
+    num: 800000,
   },
   {
     title: "100w",
     image: "/100w.png",
     style: "91%",
-    isReached: false,
+    num: 1000000,
   },
 ]);
 const rolesList = ref([
@@ -162,6 +166,13 @@ const inputValue = ref('')
 const swiperInstance = ref(null)
 const currentRoleName = ref(rolesList.value[0])
 const tipText = ref('')
+const initData = ref({})
+const roleListRef = ref(null)
+const storagePhoneInfo = computed(() => ({
+  phone: userInfo.value?.phone,
+  bind_os: userInfo.value?.bind_os,
+}))
+
 
 // 是否正在程序化滚动（避免滚动监听器干扰手动导航）
 const isProgrammaticScroll = ref(false)
@@ -208,8 +219,27 @@ const onMouse = (item, flag: boolean) => {
   item.isHover = flag
 }
 
-const appointment = (type) => {
-  console.log(12312312, inputValue.value)
+const openStoreUrl = (type) => {
+  console.log(initData.value, 'initData')
+  const { store_url, store_ios_url } = initData.value?.store_url || {}
+  window.open(isIos ? store_ios_url : store_url)
+  if (type === 'PhoneAppointmentSuccessPopup') {
+    isShowPhoneAppointmentSuccessPopup.value = false
+  }
+  if (isAlreadyAppointment.value) {
+    if (!isGoShop.value) {
+      handleCutomStore.setIsGoShop(true)
+      isShowAppointmentSuccessPopup.value = true
+    }
+  } else {
+    if (!isGoShop.value) {
+      handleCutomStore.setIsGoShop(true)
+    }
+    isShowPhoneAppointmentPopup.value = true
+  }
+}
+
+const appointment = async (type) => {
   if (!/^\d{9}$/.test(inputValue.value)) {
     openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
     return
@@ -219,16 +249,37 @@ const appointment = (type) => {
     openTipPopup('개인정보 수집 및 이용 동의에 체크해 주세요.')
     return
   }
-  
-  if(true) {
-    isShowAppointmentSuccessPopup.value = true
+
+  const loadingToast = showLoadingToast({
+    message: 'loading...',
+    forbidClick: true
+  })
+  const phoneInfo = {
+    phone: inputValue.value,
+    bind_os: bindOs.value
+  }
+  const res = await reservationPlayerReserve(phoneInfo).finally(() => {
+    loadingToast.close()
+  })
+  const isReserve = res.data?.is_reserve
+  handleCutomStore.setUserInfo(phoneInfo)
+  handleCutomStore.setIsAlreadyAppointment(true)
+
+  if (isReserve === 1) {
+    openTipPopup('이미 사전 예약을 완료하셨습니다.')
+  }
+  if (isGoShop.value) {
+    if (isReserve === 0) {
+      isShowAppointmentSuccessPopup.value = true
+    }
   } else {
     isShowPhoneAppointmentSuccessPopup.value = true
   }
-  if(type === 'phonePopup') {
+
+  if (type === 'phonePopup') {
     isShowPhoneAppointmentPopup.value = false
   }
-  if(type === 'phoneAndShopPopup') {
+  if (type === 'phoneAndShopPopup') {
     isShowAppointmentPopup.value = false
   }
 }
@@ -252,7 +303,6 @@ const updateActiveNavByScroll = () => {
       // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
       if (scrollTop >= elementTop - viewportHeight / 3) {
         activeNav.value = sectionIds[i]
-        console.log(activeNav.value, 'activeNav.value')
         break
       }
     }
@@ -281,6 +331,7 @@ const swiperNext = () => {
 }
 
 const selectRole = (currentItem) => {
+  // currentRoleName.value = {}
   currentRoleName.value = currentItem
   currentItem.isSelected = true
   rolesList.value.forEach((item) => {
@@ -288,10 +339,60 @@ const selectRole = (currentItem) => {
       item.isSelected = false
     }
   })
+  if (['baihu','jiuwei', 'youxia', 'stone',].includes(currentItem.name)) {
+    let left = 0
+    switch (currentItem.name) {
+      case 'jiuwei':
+        left = 70
+        break
+      case 'youxia':
+        left = 141
+        break
+      case 'stone':
+        left = 208
+        break
+    }
+    roleListRef.value?.scrollTo({
+      left,
+      behavior: 'smooth'
+    })
+  }
+
+}
+const reservationInitApi = async () => {
+  allowMultipleToast();
+  const loadingToast = showLoadingToast({
+    message: '로딩 중...',
+    forbidClick: true
+  })
+  const res = await reservationInit(storagePhoneInfo.value).finally(() => {
+    loadingToast.close()
+  })
+  const resData = res?.data || {}
+  console.log(resData, 'resData')
+  initData.value = resData
+}
+
+const toBindOs = system => {
+  // if(isAlreadyAppointment.value) return
+  bindOs.value = system
+}
+const toAgree = () => {
+  // if(isAlreadyAppointment.value) return
+  isAgree.value = !isAgree.value
 }
 
 onMounted(() => {
-  isShowAppointmentPopup.value = true
+  if (isAlreadyAppointment.value) {
+    // inputValue.value = storagePhoneInfo.value?.phone
+    // bindOs.value = storagePhoneInfo.value?.bind_os
+    // isAgree.value = true
+    if (!isGoShop.value) {
+      isShowPhoneAppointmentSuccessPopup.value = true
+    }
+  } else {
+    isShowAppointmentPopup.value = true
+  }
   isIos.value = mobileSystem() === 'ios'
   if (isIos.value) {
     bindOs.value = 'ios'
@@ -299,8 +400,9 @@ onMounted(() => {
   // 添加滚动监听器
   window.addEventListener('scroll', handleScroll, { passive: true })
   updateActiveNavByScroll()
-})
+  reservationInitApi()
 
+})
 
 
 
@@ -323,14 +425,15 @@ onMounted(() => {
           <source src='/video/mobile-kv.mp4' type="video/mp4" />
         </video>
       </div>
-      <NuxtImg src="/head-title.png" class="ml-19 ml-19 h-50 w-723 absolute z-1 top-134" />
+      <NuxtImg src="/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" />
       <client-only>
         <!-- mt-1046  -->
         <div class="ml-32 flex absolute z-1 top-1222">
           <div class=" h-120 w-330 cursor-pointer mr-30">
             <NuxtImg @click="setActivedNav('preorder')" src="/appointment-btn.png" class="w-full h-full" />
           </div>
-          <div class="shine-wrapper overflow-hidden relative" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'">
+          <div class="shine-wrapper overflow-hidden relative" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'"
+            @click="openStoreUrl">
             <NuxtImg v-if='isIos' src="/apple-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
             <NuxtImg v-else src="/google-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
           </div>
@@ -346,7 +449,7 @@ onMounted(() => {
         <client-only>
           <div
             class="text-[35px] text-[#C1D0FF] leading-[35px] font-[NotoSansSC] font-700 text-center w-170 right-[-1%] top-31.1% absolute">
-            1,000,000
+            {{ formatNumber(initData?.reserved_count) }}
           </div>
         </client-only>
         <NuxtImg src="/title-1-icon.png" class="h-105 w-106 right--19% top--8% absolute z-1" />
@@ -357,7 +460,8 @@ onMounted(() => {
           <NuxtImg src="/prize-2.png" class="h-236 w-191" />
           <NuxtImg src="/prize-3.png" class="h-236 w-191" />
         </div>
-        <div class="shine-wrapper overflow-hidden relative  ml-215 w-300 h-105 mt-15" :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'">
+        <div class="shine-wrapper overflow-hidden relative  ml-215 w-300 h-105 mt-15"
+          :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'" @click="openStoreUrl">
           <NuxtImg v-if='isIos' src="/apple-1.png" class="w-full h-full cursor-pointer" />
           <NuxtImg v-else src="/google-1.png" class="w-full h-full cursor-pointer" />
         </div>
@@ -366,7 +470,7 @@ onMounted(() => {
         <NuxtImg src="/people-talk.png" class="ml-30 h-185 w-649 top-105 absolute z-1" />
         <div class="text-[21px] text-[#D0C8FF] leading-[21px] font-500 flex left-33% top-48% absolute z-2">
           <client-only>
-            <div class="mr-75 flex cursor-pointer" @click="bindOs = 'android'">
+            <div class="mr-75 flex cursor-pointer" @click="toBindOs('android')">
               <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
                 <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'android'" />
               </div>
@@ -374,7 +478,7 @@ onMounted(() => {
             </div>
           </client-only>
           <client-only>
-            <div class="flex cursor-pointer" @click="bindOs = 'ios'">
+            <div class="flex cursor-pointer" @click="toBindOs('ios')">
               <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
                 <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'ios'" />
               </div>
@@ -388,6 +492,7 @@ onMounted(() => {
           <div class="w-2 h-36 bg-[#9189FA] ml-25 mr-25"></div>
           <div class="flex-1">
             <client-only>
+              <!-- :disabled="isAlreadyAppointment" -->
               <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
                 class="outline-none bg-transparent number-input text-[34px] w-full appearant-none"
                 placeholder="휴대폰 번호 입력" />
@@ -396,21 +501,23 @@ onMounted(() => {
         </div>
         <div class="flex ml-65 mt-17">
           <client-only>
-            <div class="flex radio-bg bg-cover-no-repeat w-28 h-28 font-500 pt-5 pl-3 cursor-pointer"
-              @click="isAgree = !isAgree">
+            <div class="flex radio-bg bg-cover-no-repeat w-28 h-28 font-500 pt-5 pl-3 cursor-pointer" @click="toAgree">
               <NuxtImg src="/tick.png" class="h-17 w-27 " v-show="isAgree" />
             </div>
           </client-only>
           <div
             class="text-[#A7AABC] mt-2 text-[22px] leading-[22px] font-[NotoSansSC] font-500 ml-14 tracking-[-1px] underline-offset-[6px]">
             <client-only>
-              <span class="cursor-pointer" @click="isAgree = !isAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+              <span class="cursor-pointer" @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
               <span class="ml-10 underline cursor-pointer" @click='isShowAnnouncementsPopup = true'>유의사항</span>
             </client-only>
           </div>
         </div>
         <div class="mt-11 ml-218">
           <client-only>
+            <!-- <NuxtImg v-if='isAlreadyAppointment' src="/appointment-btn1-disabled.png"
+              class="h-100 w-277 cursor-pointer" /> -->
+            <!-- v-else -->
             <NuxtImg src="/appointment-btn1.png" class="h-100 w-277 cursor-pointer" @click="appointment" />
           </client-only>
         </div>
@@ -426,7 +533,7 @@ onMounted(() => {
           <client-only>
             <div class="absolute  flex flex-col gap-92 top-[-8%] left-[-38px]">
               <div v-for="item in timeLineArr" :key="item.title" class="  h-90 w-91">
-                <NuxtImg v-if="item.isReached" src="/line-reached.png" class="w-full h-full" />
+                <NuxtImg v-if="initData?.reserved_count >= item.num" src="/line-reached.png" class="w-full h-full" />
                 <NuxtImg v-else src="/line-mark.png" class="w-full h-full" />
               </div>
             </div>
@@ -452,21 +559,30 @@ onMounted(() => {
             <img :src="`/animated-png/${currentRoleName.name}.png`" class="w-full h-full" />
           </div>
           <div class="title-3-decorate bg-cover-no-repeat w-full h-626 relative">
-            <NuxtImg :src="`/people/${currentRoleName.name}.png`" class="absolute z-1 "
-              :class='currentRoleName.sizeClass' preload />
+            <div>
+              <NuxtImg :src="`/people/${currentRoleName.name}.png`" class="absolute z-1 "
+                :class='currentRoleName.sizeClass' preload />
+            </div>
             <NuxtImg :src="`/people/${currentRoleName.name}-intro.png`"
               class="w-auto h-93 absolute z-2 bottom-6% right-1%" />
             <NuxtImg :src="`/people/${currentRoleName.name}-symbel.png`"
               class="w-255 h-145 absolute right-6% top-42%" />
           </div>
-          <div class="ml-51 mr-39 flex gap-5 mt-30  overflow-auto">
-            <div v-for="item in rolesList" :key="item.name" class="w-128 h-184 flex-shrink-0 cursor-pointer"
-              @click="selectRole(item)">
-              <NuxtImg :src="`/roles/${item.name}-selected.png`" v-show="item.isSelected" class="w-full h-full" />
-              <NuxtImg :src="`/roles/${item.name}.png`" v-show="!item.isSelected" class="w-full h-full" />
+          <div class="relative h-307">
+            <div class="ml-51 mr-39 flex gap-5 mt-30  overflow-auto pb-12 absolute z-2 " ref="roleListRef">
+              <div v-for="item in rolesList" :key="item.name" class="flex-shrink-0  cursor-pointer flex-col flex"
+                @click="selectRole(item)">
+
+                <NuxtImg :src="`/roles/${item.name}-selected.png`" v-show="item.isSelected" class="w-128 h-184" />
+                <NuxtImg :src="`/roles/${item.name}.png`" v-show="!item.isSelected" class="w-128 h-184" />
+                <NuxtImg v-show="item.isSelected" src="/line-selected.png" class="w-35 h-2 mt-15  ml-33" />
+              </div>
+            </div>
+            <div class='w-652 h-2 ml-50 bg-[#645991] absolute z-1 bottom-[24.6%]'>
             </div>
           </div>
         </client-only>
+
       </div>
       <div class="h-30 w-full mt-20">
         <img src="/animated-png/line-bottom.png" class="w-full h-full" />
@@ -524,9 +640,10 @@ onMounted(() => {
         class="h-255 w-228 absolute left-[5px] top-[-127px] animate__animated animate__pulse animate__infinite" />
       <NuxtImg src="/bottom-text.png" class="h-41 w-237 ml-226 mt-42" />
       <client-only>
-        <div class="shine-wrapper overflow-hidden relative " :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'">
-          <NuxtImg v-if='isIos' src="/apple-bottom.png" class="h-101 w-282 cursor-pointer mt-12" />
-          <NuxtImg v-else src="/google-bottom.png" class="h-101 w-282 cursor-pointer mt-12" />
+        <div class="shine-wrapper overflow-hidden relative h-101 w-282 "
+          :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl">
+          <NuxtImg v-if='isIos' src="/apple-bottom.png" class="w-full h-full cursor-pointer mt-12" />
+          <NuxtImg v-else src="/google-bottom.png" class="w-full h-full cursor-pointer mt-12" />
         </div>
       </client-only>
     </div>
@@ -591,8 +708,9 @@ onMounted(() => {
             </div>
 
           </div>
-          <div class="mt-13 ml-201">
-            <NuxtImg src="/popup/google-appointment.png" class="w-255 h-92" />
+          <div class="mt-13 ml-201 w-255 h-92" @click="openStoreUrl">
+            <NuxtImg v-if='isIos' src="/popup/apple-appointment.png" class="w-full h-full" />
+            <NuxtImg v-else src="/popup/google-appointment.png" class="w-full h-full" />
           </div>
           <div class='ml-88 mt-4'>
             <NuxtImg src="/popup/step-2.png" class="w-479 h-38" />
@@ -615,22 +733,25 @@ onMounted(() => {
             class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
             <div class="text-[38px] mr-115">010</div>
             <div class="flex-1">
-              <input v-model="inputValue" type="tel" pattern="[0-9]*" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                placeholder="휴대폰 번호 입력" />
+              <input v-model="inputValue" type="tel" pattern="[0-9]*"
+                class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
             </div>
           </div>
           <div class="flex ml-65 mt-17">
-            <div @click="isAgree = !isAgree" class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
+            <div @click="isAgree = !isAgree"
+              class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
               <NuxtImg src="/tick.png" class="h-16 w-24" v-show="isAgree" />
             </div>
             <div
               class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
               <span class="cursor-pointer" @click="isAgree = !isAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-              <span class="ml-10 underline underline-offset-[6px] cursor-pointer"  @click='isShowAnnouncementsPopup = true'>유의사항</span>
+              <span class="ml-10 underline underline-offset-[6px] cursor-pointer"
+                @click='isShowAnnouncementsPopup = true'>유의사항</span>
             </div>
           </div>
           <div class='ml-185 mt-8'>
-            <NuxtImg src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" @click="appointment('phoneAndShopPopup')" />
+            <NuxtImg src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer"
+              @click="appointment('phoneAndShopPopup')" />
           </div>
         </div>
       </van-popup>
@@ -669,22 +790,24 @@ onMounted(() => {
             class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
             <div class="text-[38px] mr-115">010</div>
             <div class="flex-1">
-              <input v-model="inputValue" type="tel" pattern="[0-9]*" inputmode="numeric" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                placeholder="휴대폰 번호 입력" />
+              <input v-model="inputValue" type="tel" pattern="[0-9]*" inputmode="numeric"
+                class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
             </div>
           </div>
           <div class="flex ml-110 mt-14">
-            <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500" @click="isAgree = !isAgree">
+            <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500"
+              @click="isAgree = !isAgree">
               <NuxtImg src="/tick.png" class="h-16 w-24" v-show="isAgree" />
             </div>
             <div
               class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
-              <span @click="isAgree = !isAgree" >개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+              <span @click="isAgree = !isAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
               <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
             </div>
           </div>
           <div class='ml-225 mt-24'>
-            <NuxtImg src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" @click="appointment('phonePopup')" />
+            <NuxtImg src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer"
+              @click="appointment('phonePopup')" />
           </div>
         </div>
       </van-popup>
@@ -706,7 +829,10 @@ onMounted(() => {
             <NuxtImg src="/popup/phone-prize-2.png" class="w-207 h-224" />
             <NuxtImg src="/popup/phone-prize-3.png" class="w-207 h-224" />
           </div>
-          <NuxtImg src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176" />
+          <NuxtImg v-if='isIos' src="/popup/phone-apple.png" class="w-300 h-89 mt-47 ml-176"
+            @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
+          <NuxtImg v-else src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176"
+            @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
         </div>
       </van-popup>
     </client-only>
@@ -748,7 +874,8 @@ onMounted(() => {
               벤트 관련 프로모션 정보를 문자(SMS) 등으로 수신하는 데 동의합니다.
             </div>
           </div>
-          <NuxtImg src="/popup/announcements-confirm.png" class="w-185 h-71 cursor-pointer mt-18 mx-auto" @click='isShowAnnouncementsPopup = false' />
+          <NuxtImg src="/popup/announcements-confirm.png" class="w-185 h-71 cursor-pointer mt-18 mx-auto"
+            @click='isShowAnnouncementsPopup = false' />
         </div>
       </van-popup>
     </client-only>
@@ -783,7 +910,8 @@ onMounted(() => {
           <div class="text-[24px] text-[#281378] leading-[24px] font-500 font-[NotoSansSC] ml-103 mt-31">공식 라운지에서 더 많은
             이벤트에 참여하세요!</div>
           <div class="mt-12 ml-180">
-            <NuxtImg src="/popup/success-btn.png" class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite" />
+            <NuxtImg src="/popup/success-btn.png"
+              class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite" />
           </div>
         </div>
 
@@ -922,6 +1050,7 @@ onMounted(() => {
   -webkit-mask: url('/google-head.png') center / 100% 100% no-repeat;
   mask: url('/google-head.png') center / 100% 100% no-repeat;
 }
+
 .apple-head-wrap {
   -webkit-mask: url('/apple-head.png') center / 100% 100% no-repeat;
   mask: url('/apple-head.png') center / 100% 100% no-repeat;
@@ -931,14 +1060,17 @@ onMounted(() => {
   -webkit-mask: url('/google-1.png') center / 100% 100% no-repeat;
   mask: url('/google-1.png') center / 100% 100% no-repeat;
 }
+
 .apple-1-wrap {
   -webkit-mask: url('/apple-1.png') center / 100% 100% no-repeat;
   mask: url('/apple-1.png') center / 100% 100% no-repeat;
 }
+
 .google-bottom-wrap {
   -webkit-mask: url('/google-bottom.png') center / 100% 100% no-repeat;
   mask: url('/google-bottom.png') center / 100% 100% no-repeat;
 }
+
 .apple-bottom-wrap {
   -webkit-mask: url('/apple-bottom.png') center / 100% 100% no-repeat;
   mask: url('/apple-bottom.png') center / 100% 100% no-repeat;
