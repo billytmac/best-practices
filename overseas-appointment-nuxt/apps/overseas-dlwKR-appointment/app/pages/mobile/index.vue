@@ -413,9 +413,7 @@ onMounted(() => {
     <!-- 顶部固定栏 -->
     <div class="flex-items-center-between pl-18 pr-53 pt-8 bg-black h-86 w-full max-w-750 top-0 fixed z-30">
       <NuxtImg src="/head-logo.png" class="h-70 w-181" />
-      <client-only>
         <NuxtImg src="/head-nav.png" class="h-30 w-56 cursor-pointer" @click="setIsShowNav(true)" />
-      </client-only>
     </div>
     <!-- kv图 -->
     <!-- pt-134 -->
@@ -426,7 +424,7 @@ onMounted(() => {
         </video>
       </div>
       <NuxtImg src="/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" />
-      <client-only>
+      
         <!-- mt-1046  -->
         <div class="ml-32 flex absolute z-1 top-1222">
           <div class=" h-120 w-330 cursor-pointer mr-30">
@@ -438,7 +436,6 @@ onMounted(() => {
             <NuxtImg v-else src="/google-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
           </div>
         </div>
-      </client-only>
     </div>
     <div>
       <img src="/animated-png/more-icon.png" class="mx-auto mt-18 h-97 w-88" />
@@ -446,12 +443,11 @@ onMounted(() => {
     <!-- 第一部分 -->
     <div id="preorder">
       <div class="step-title-1 bg-cover-no-repeat ml-129 mt-15 h-105 w-482 relative">
-        <client-only>
+        
           <div
             class="text-[35px] text-[#C1D0FF] leading-[35px] font-[NotoSansSC] font-700 text-center w-170 right-[-1%] top-31.1% absolute">
             {{ formatNumber(initData?.reserved_count) }}
           </div>
-        </client-only>
         <NuxtImg src="/title-1-icon.png" class="h-105 w-106 right--19% top--8% absolute z-1" />
       </div>
       <div class="prize-list-bg bg-cover-no-repeat ml-5 mt-42 pt-131 h-501 w-731">
@@ -469,57 +465,51 @@ onMounted(() => {
       <div class="appointment-input-bg bg-cover-no-repeat ml-23 mt-20 pt-310 h-557 w-702 relative">
         <NuxtImg src="/people-talk.png" class="ml-30 h-185 w-649 top-105 absolute z-1" />
         <div class="text-[21px] text-[#D0C8FF] leading-[21px] font-500 flex left-33% top-48% absolute z-2">
-          <client-only>
+          
             <div class="mr-75 flex cursor-pointer" @click="toBindOs('android')">
               <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
                 <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'android'" />
               </div>
               <div>AOS</div>
             </div>
-          </client-only>
-          <client-only>
+          
             <div class="flex cursor-pointer" @click="toBindOs('ios')">
               <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
                 <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'ios'" />
               </div>
               <div>IOS</div>
             </div>
-          </client-only>
         </div>
         <div
           class="download-bg bg-cover-no-repeat h-80 w-621 ml-40 pl-52 font-500 text-[#5C47DD] flex-items-center font-[NotoSansSC]">
           <div class="text-[38px]">010</div>
           <div class="w-2 h-36 bg-[#9189FA] ml-25 mr-25"></div>
           <div class="flex-1">
-            <client-only>
+            
               <!-- :disabled="isAlreadyAppointment" -->
               <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
                 class="outline-none bg-transparent number-input text-[34px] w-full appearant-none"
                 placeholder="휴대폰 번호 입력" />
-            </client-only>
           </div>
         </div>
         <div class="flex ml-65 mt-17">
-          <client-only>
+          
             <div class="flex radio-bg bg-cover-no-repeat w-28 h-28 font-500 pt-5 pl-3 cursor-pointer" @click="toAgree">
               <NuxtImg src="/tick.png" class="h-17 w-27 " v-show="isAgree" />
             </div>
-          </client-only>
           <div
             class="text-[#A7AABC] mt-2 text-[22px] leading-[22px] font-[NotoSansSC] font-500 ml-14 tracking-[-1px] underline-offset-[6px]">
-            <client-only>
+            
               <span class="cursor-pointer" @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
               <span class="ml-10 underline cursor-pointer" @click='isShowAnnouncementsPopup = true'>유의사항</span>
-            </client-only>
           </div>
         </div>
         <div class="mt-11 ml-218">
-          <client-only>
+          
             <!-- <NuxtImg v-if='isAlreadyAppointment' src="/appointment-btn1-disabled.png"
               class="h-100 w-277 cursor-pointer" /> -->
             <!-- v-else -->
             <NuxtImg src="/appointment-btn1.png" class="h-100 w-277 cursor-pointer" @click="appointment" />
-          </client-only>
         </div>
       </div>
     </div>
@@ -530,7 +520,7 @@ onMounted(() => {
       </div>
       <div class="mt-42 flex relative">
         <div class="time-line bg-cover-no-repeat h-747 w-15 relative ml-90 mt-94  ">
-          <client-only>
+          
             <div class="absolute  flex flex-col gap-92 top-[-8%] left-[-38px]">
               <div v-for="item in timeLineArr" :key="item.title" class="  h-90 w-91">
                 <NuxtImg v-if="initData?.reserved_count >= item.num" src="/line-reached.png" class="w-full h-full" />
@@ -538,7 +528,6 @@ onMounted(() => {
               </div>
             </div>
 
-          </client-only>
         </div>
         <div class="gap-13 flex flex-col ml-55">
           <NuxtImg v-for="item in timeLineArr" :key="item.title" :src="item.image" class="w-517 h-169" />
@@ -554,7 +543,7 @@ onMounted(() => {
         <div class="step-title-3 bg-cover-no-repeat ml-245 h-105 w-257 relative mb-25">
           <NuxtImg src="/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
         </div>
-        <client-only>
+        
           <div class="absolute left-[45%] top-[12%] w-383 h-155">
             <img :src="`/animated-png/${currentRoleName.name}.png`" class="w-full h-full" />
           </div>
@@ -581,7 +570,6 @@ onMounted(() => {
             <div class='w-652 h-2 ml-50 bg-[#645991] absolute z-1 bottom-[24.6%]'>
             </div>
           </div>
-        </client-only>
 
       </div>
       <div class="h-30 w-full mt-20">
@@ -593,7 +581,7 @@ onMounted(() => {
       <div class="step-title-4 bg-cover-no-repeat ml-265 h-105 w-221 relative">
         <NuxtImg src="/title-4-icon.png" class="h-100 w-87 absolute z-1 left-[-34%] top-[-7%]" />
       </div>
-      <client-only>
+      
         <div class="swiper-bg w-579 h-903 relative ml-83 bg-cover-no-repeat  pt-81">
           <NuxtImg src="/swiper-left.png" class="w-52 h-78 absolute top-45% left-[-6%] cursor-pointer"
             @click="swiperPrev" />
@@ -620,7 +608,6 @@ onMounted(() => {
             <NuxtImg src="/swiper-1.png" class="w-full h-full" />
           </div> -->
         </div>
-      </client-only>
     </div>
     <div class="pt-34 pb-15  
            w-full  flex-col-items-center   text-[#fff]  font-[NotoSansSC]">
@@ -639,16 +626,15 @@ onMounted(() => {
       <NuxtImg src="/bottom-role.png"
         class="h-255 w-228 absolute left-[5px] top-[-127px] animate__animated animate__pulse animate__infinite" />
       <NuxtImg src="/bottom-text.png" class="h-41 w-237 ml-226 mt-42" />
-      <client-only>
+      
         <div class="shine-wrapper overflow-hidden relative h-101 w-282 "
           :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl">
           <NuxtImg v-if='isIos' src="/apple-bottom.png" class="w-full h-full cursor-pointer mt-12" />
           <NuxtImg v-else src="/google-bottom.png" class="w-full h-full cursor-pointer mt-12" />
         </div>
-      </client-only>
     </div>
     <!-- 导航弹窗 -->
-    <client-only>
+    
       <van-popup v-model:show="isShowNav" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
         overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class='text-right pt-5 pr-40 flex flex-row-reverse'>
@@ -678,9 +664,8 @@ onMounted(() => {
           <NuxtImg src="/popup/youtube.png" class="w-144 h-126 cursor-pointer" />
         </div>
       </van-popup>
-    </client-only>
     <!-- 预约弹窗(商店和手机) -->
-    <client-only>
+    
       <van-popup v-model:show="isShowAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
         overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679 mt-129 ml-49 pt-228">
@@ -755,9 +740,8 @@ onMounted(() => {
           </div>
         </div>
       </van-popup>
-    </client-only>
     <!-- 预约弹窗(手机) -->
-    <client-only>
+    
       <van-popup v-model:show="isShowPhoneAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 '
         z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class="ml-46 relative mt-365">
@@ -811,9 +795,8 @@ onMounted(() => {
           </div>
         </div>
       </van-popup>
-    </client-only>
     <!-- 电话预约成功,商店没点击时弹窗 -->
-    <client-only>
+    
       <van-popup v-model:show="isShowPhoneAppointmentSuccessPopup" class='h-full !bg-transparent !w-full !max-w-750 '
         z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
 
@@ -835,9 +818,8 @@ onMounted(() => {
             @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
         </div>
       </van-popup>
-    </client-only>
     <!-- 注意事项弹窗 -->
-    <client-only>
+    
       <van-popup v-model:show="isShowAnnouncementsPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
         overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class="relative mt-365 ml-46">
@@ -878,9 +860,8 @@ onMounted(() => {
             @click='isShowAnnouncementsPopup = false' />
         </div>
       </van-popup>
-    </client-only>
     <!-- 系统弹窗 -->
-    <client-only>
+    
       <van-popup v-model:show="isShowTipPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
         overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class='relative mt-552 ml-47'>
@@ -893,9 +874,8 @@ onMounted(() => {
           </div>
         </div>
       </van-popup>
-    </client-only>
     <!-- 预约成功弹窗 -->
-    <client-only>
+    
       <van-popup v-model:show="isShowAppointmentSuccessPopup" class='h-full !bg-transparent !w-full !max-w-750 '
         z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
         <div class="  mt-449 ml-116 flex">
@@ -916,7 +896,6 @@ onMounted(() => {
         </div>
 
       </van-popup>
-    </client-only>
   </div>
 
 </template>

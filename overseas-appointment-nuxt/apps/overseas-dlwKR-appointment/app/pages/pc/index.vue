@@ -320,7 +320,7 @@ const onMouse = (item, flag: boolean) => {
           <div class="step-title-3 bg-cover-no-repeat ml-728 h-105 w-257 relative mb-25">
             <NuxtImg src="/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
           </div>
-          <div class="title-3-bg w-1602 h-735 mt-94 ml-162 relative">
+          <!-- <div class="title-3-bg w-1602 h-735 mt-94 ml-162 relative">
             <client-only>
               <div class="absolute left-[827px] top-[-29px]  w-373 h-148">
                 <img src="/animated-png/qumo-title.png" class="w-full h-full" />
@@ -338,7 +338,7 @@ const onMouse = (item, flag: boolean) => {
               </div>
 
             </client-only>
-          </div>
+          </div> -->
           <client-only>
             <div class="ml-369 mt-33 flex gap-9">
               <div v-for="item in rolesList" :key="item.name" class="w-141 h-202">
