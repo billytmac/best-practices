@@ -31,7 +31,7 @@ useHead({
 
 
 definePageMeta({
-  name: "mobile",
+  name: "index",
 });
 const handleCutomStore = useCustomStore()
 const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)

@@ -175,7 +175,7 @@ const storagePhoneInfo = computed(() => ({
 
 
 // 是否正在程序化滚动（避免滚动监听器干扰手动导航）
-const isProgrammaticScroll = ref(false)
+// const isProgrammaticScroll = ref(false)
 
 
 // 是否显示底部预约弹窗（只在3,4,5屏显示）
@@ -287,7 +287,7 @@ const appointment = async (type) => {
 
 
 const updateActiveNavByScroll = () => {
-  if (isProgrammaticScroll.value) return
+  // if (isProgrammaticScroll.value) return
 
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
   const viewportHeight = window.innerHeight
@@ -418,8 +418,8 @@ onMounted(() => {
     <!-- kv图 -->
     <!-- pt-134 -->
     <div class="kv-bg bg-cover-no-repeat  h-1334 w-full relative" id="main-menu">
-      <div className="absolute top-0 left-0 w-full  overflow-hidden z-0 pointer-events-none">
-        <video className="w-full h-1334 object-cover" autoPlay loop muted playsInline>
+      <div >
+        <video  autoPlay loop muted playsInline>
           <source src='/video/mobile-kv.mp4' type="video/mp4" />
         </video>
       </div>
