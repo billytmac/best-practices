@@ -74,49 +74,49 @@ const rolesList = ref([
     name: "nvqumo",
     isSelected: true,
     sizeClass: "w-1272 h-779 left--29 bottom--14",
-    titleBgClass:'nvqumo-title-bg'
+    titleBgClass: 'nvqumo-title-bg'
   },
   {
     name: "nvwu",
     isSelected: false,
     sizeClass: "w-683 h-681 left-10% top-1.2%",
-    titleBgClass:'nvwu-title-bg'
+    titleBgClass: 'nvwu-title-bg'
   },
   {
     name: "baihu",
     isSelected: false,
     sizeClass: "w-791 h-719 left-6% top-1.5%",
-    titleBgClass:'baihu-title-bg'
+    titleBgClass: 'baihu-title-bg'
   },
   {
     name: "jiuwei",
     isSelected: false,
     sizeClass: "w-698 h-802 left-7.6% top--15.5%",
-    titleBgClass:'jiuwei-title-bg'
+    titleBgClass: 'jiuwei-title-bg'
   },
   {
     name: "youxia",
     isSelected: false,
     sizeClass: "w-623 h-690 left-16% ",
-    titleBgClass:'youxia-title-bg'
+    titleBgClass: 'youxia-title-bg'
   },
   {
     name: "stone",
     isSelected: false,
     sizeClass: "w-651 h-698 left-7.6% top--1%",
-    titleBgClass:'stone-title-bg'
+    titleBgClass: 'stone-title-bg'
   },
   {
     name: "yandou",
     isSelected: false,
     sizeClass: "w-664 h-710 left-7.6% top--2.4%",
-    titleBgClass:'yandou-title-bg'
+    titleBgClass: 'yandou-title-bg'
   },
   {
     name: "nanzhu",
     isSelected: false,
     sizeClass: "w-831 h-674 left-3.6% top-2.4%",
-    titleBgClass:'nanzhu-title-bg'
+    titleBgClass: 'nanzhu-title-bg'
   },
 ]);
 const navList = ref([
@@ -312,19 +312,19 @@ const updateActiveNavByScroll = () => {
     const element = document.getElementById(sectionId)
     if (element) {
       switch (sectionId) {
-      case 'preorder':
-        diffVal = 1015
-        break;
-      case 'activity':
-        diffVal = 900
-        break;
-      case 'role':
-        diffVal = 920
-        break;
-      case 'game-features':
-        diffVal = 1000
-        break;
-    }
+        case 'preorder':
+          diffVal = 1015
+          break;
+        case 'activity':
+          diffVal = 900
+          break;
+        case 'role':
+          diffVal = 920
+          break;
+        case 'game-features':
+          diffVal = 1000
+          break;
+      }
       const elementTop = element.offsetTop + diffVal
       // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
       if (scrollTop >= elementTop - viewportHeight / 3) {
@@ -360,7 +360,7 @@ const swiperNext = () => {
 const selectRole = (currentItem) => {
   // currentRoleName.value = {}
   // nextTick(() => {
-   currentRoleName.value = currentItem
+  currentRoleName.value = currentItem
   // })
   currentItem.isSelected = true
   rolesList.value.forEach((item) => {
@@ -403,6 +403,7 @@ const reservationInitApi = async () => {
 }
 
 const toBindOs = system => {
+  console.log(system, 'system')
   // if(isAlreadyAppointment.value) return
   bindOs.value = system
 }
@@ -478,7 +479,7 @@ function setActiveNav(val: string) {
     <div class="relative max-w-1920 min-w-1920 mx-auto ">
       <!-- 顶部固定栏 -->
       <div
-        class="flex-items-center pl-26 pr-85 max-w-1920   bg-black h-80 w-full  top-0 fixed z-10 font-[DNF_Forged_Blade] font-300 text-[28px] color-white" >
+        class="flex-items-center pl-26 pr-85 max-w-1920   bg-black h-80 w-full  top-0 fixed z-10 font-[DNF_Forged_Blade] font-300 text-[28px] color-white">
         <img src="/pc/head-logo.png" class="h-70 w-181" />
         <div class="flex-1">
         </div>
@@ -514,7 +515,7 @@ function setActiveNav(val: string) {
           </div>
         </div>
         <div class="mt-14 ml-803 relative">
-          <img src="/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer" @click="setActiveNav('activity')" />
+          <img src="/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer" @click="setActiveNav('preorder')" />
           <img src="/animated-png/more-icon.png" class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
         </div>
 
@@ -571,12 +572,14 @@ function setActiveNav(val: string) {
                 </div>
               </div>
               <div class="flex ml-65 mt-17">
-                <div class="flex-items-center-center radio-bg bg-cover-no-repeat w-23 h-23 font-500 cursor-pointer relative" @click="toAgree">
+                <div
+                  class="flex-items-center-center radio-bg bg-cover-no-repeat w-23 h-23 font-500 cursor-pointer relative"
+                  @click="toAgree">
                   <img src="/pc/tick.png" class="h-15 w-23 absolute right-[-7%]" v-show="isAgree" />
                 </div>
                 <div
                   class="text-[#A7AABC] mt-1 text-[18px] leading-[18px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
-                  <span class="" @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                  <span  @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
                   <span class="ml-10 underline underline-offset-[4px] "
                     @click='isShowAnnouncementsPopup = true'>유의사항</span>
                 </div>
@@ -638,7 +641,8 @@ function setActiveNav(val: string) {
             </div>
           </div>
           <div class="pl-369 mt-33 flex gap-9 w-full relative border-b-4 border-[#6024F8] pb-53">
-            <div v-for="item in rolesList" :key="item.name" class="w-141 h-202 cursor-pointer flex-col-items-center" @click="selectRole(item)">
+            <div v-for="item in rolesList" :key="item.name" class="w-141 h-202 cursor-pointer flex-col-items-center"
+              @click="selectRole(item)">
               <img :src="`/pc/roles/${item.name}-selected.png`" v-show="item.isSelected" class="w-full h-full" />
               <img :src="`/pc/roles/${item.name}.png`" v-show="!item.isSelected" class="w-full h-full" />
               <img src="/pc/line-selected.png" v-show="item.isSelected" class="w-63 h-4 mt-53 mr-15" />
@@ -716,15 +720,15 @@ function setActiveNav(val: string) {
               <img src="/popup/step-2.png" class="w-479 h-38" />
             </div>
             <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
-              <div class="mr-99 flex">
+              <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
                 </div>
                 <div>AOS</div>
               </div>
-              <div class="flex">
+              <div class="flex cursor-pointer" @click="toBindOs('ios')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
                 </div>
                 <div>IOS</div>
               </div>
@@ -733,22 +737,22 @@ function setActiveNav(val: string) {
               class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
                   placeholder="휴대폰 번호 입력" />
               </div>
             </div>
             <div class="flex ml-65 mt-17">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
-                <img src="/tick.png" class="h-16 w-24" />
+              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer" @click="toAgree">
+                <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
-                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
-                <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
+                <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
               </div>
             </div>
             <div class='ml-185 mt-8'>
-              <img src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" />
+              <img src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" @click="appointment('phoneAndShopPopup')" />
             </div>
           </div>
         </div>
@@ -756,7 +760,7 @@ function setActiveNav(val: string) {
       </div>
       <!-- 预约弹窗(手机) -->
       <div v-show="isShowPhoneAppointmentPopup"
-        class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center overflow-auto'>
+        class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center overflow-auto '>
         <div class="h-full pt-74">
           <div class="ml-46 relative ">
             <img src="/popup/phone-title.png" class="w-636 h-94" />
@@ -771,15 +775,15 @@ function setActiveNav(val: string) {
               <img src="/popup/phone-dialog.png" class="w-339 h-117" />
             </div>
             <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
-              <div class="mr-99 flex">
+              <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'"   />
                 </div>
                 <div class="mt--1">AOS</div>
               </div>
-              <div class="flex">
+              <div class="flex cursor-pointer" @click="toBindOs('ios')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'"   />
                 </div>
                 <div class="mt--1">IOS</div>
               </div>
@@ -788,52 +792,53 @@ function setActiveNav(val: string) {
               class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="text" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
                   placeholder="휴대폰 번호 입력" />
               </div>
             </div>
             <div class="flex ml-110 mt-14">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
-                <img src="/tick.png" class="h-16 w-24" />
+              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer" @click="toAgree">
+                <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
-                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
-                <span>개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]">유의사항</span>
+                class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
+                <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
               </div>
             </div>
             <div class='ml-225 mt-24'>
-              <img src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" />
+              <img src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" @click="appointment('phonePopup')" />
             </div>
           </div>
         </div>
 
       </div>
       <!-- 电话预约成功,商店没点击时弹窗 -->
-      <div v-show="isShowPhoneAppointmentSuccessPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
-        overlay-class='!bg-black/80' :close-on-click-overlay="false">
-
-        <div class="phone-appointment-success-popup-bg bg-cover-no-repeat h-947 w-655  ml-49 pt-256 mt-109">
-          <div class="relative">
-            <img src="/popup/phone-success-title.png" class="w-636 h-94" />
-            <img src="/popup/close.png" class="w-84 h-85 absolute right--2.9% top--9% cursor-pointer"
-              @click="isShowPhoneAppointmentSuccessPopup = false" />
+      <div v-show="isShowPhoneAppointmentSuccessPopup"
+        class='overflow-auto h-full bg-black/80  z-40 fixed w-full top-0 left-0  '>
+        <div class="w-full">
+          <div class="phone-appointment-success-popup-bg bg-cover-no-repeat h-947 w-655  pt-256 mx-auto ">
+            <div class="relative">
+              <img src="/popup/phone-success-title.png" class="w-636 h-94" />
+              <img src="/popup/close.png" class="w-84 h-85 absolute right--2.9% top--9% cursor-pointer"
+                @click="isShowPhoneAppointmentSuccessPopup = false" />
+            </div>
+            <img src="/popup/phone-go-market-title.png" class="w-564 h-42 mt-74 ml-48" />
+            <div class='ml-30 mt-42 flex'>
+              <img src="/popup/phone-prize-1.png" class="w-207 h-224" />
+              <img src="/popup/phone-prize-2.png" class="w-207 h-224" />
+              <img src="/popup/phone-prize-3.png" class="w-207 h-224" />
+            </div>
+            <img v-if='isIos' src="/popup/phone-apple.png" class="w-300 h-89 mt-47 ml-176"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
+            <img v-else src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
           </div>
-          <img src="/popup/phone-go-market-title.png" class="w-564 h-42 mt-74 ml-48" />
-          <div class='ml-30 mt-42 flex'>
-            <img src="/popup/phone-prize-1.png" class="w-207 h-224" />
-            <img src="/popup/phone-prize-2.png" class="w-207 h-224" />
-            <img src="/popup/phone-prize-3.png" class="w-207 h-224" />
-          </div>
-          <img v-if='isIos' src="/popup/phone-apple.png" class="w-300 h-89 mt-47 ml-176"
-            @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
-          <img v-else src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176"
-            @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
         </div>
       </div>
       <!-- 注意事项弹窗 -->
       <div v-show="isShowAnnouncementsPopup"
-        class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center' z-index="40">
+        class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center'>
         <div>
           <div class="relative ml-46">
             <img src="/popup/announcements-title.png" class="w-636 h-94" />
@@ -875,8 +880,7 @@ function setActiveNav(val: string) {
 
       </div>
       <!-- 系统弹窗 -->
-      <div v-show="isShowTipPopup" class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center' 
-        >
+      <div v-show="isShowTipPopup" class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center'>
         <div class='relative'>
           <img src="/popup/close.png" class="w-84 h-85 absolute right-4.1% top--20% cursor-pointer"
             @click="isShowTipPopup = false" />
@@ -1023,36 +1027,43 @@ function setActiveNav(val: string) {
   width: 757px;
   height: 203px;
 }
+
 .nvwu-title-bg {
   background-image: url("/pc/people/nvwu-title-bg.png");
   width: 767px;
   height: 204px;
 }
+
 .baihu-title-bg {
   background-image: url("/pc/people/baihu-title-bg.png");
   width: 768px;
   height: 203px;
 }
+
 .jiuwei-title-bg {
   background-image: url("/pc/people/jiuwei-title-bg.png");
   width: 575px;
   height: 203px;
 }
+
 .youxia-title-bg {
   background-image: url("/pc/people/youxia-title-bg.png");
   width: 575px;
   height: 204px;
 }
+
 .stone-title-bg {
   background-image: url("/pc/people/stone-title-bg.png");
   width: 774px;
   height: 203px;
 }
+
 .yandou-title-bg {
   background-image: url("/pc/people/yandou-title-bg.png");
   width: 562px;
   height: 204px;
 }
+
 .nanzhu-title-bg {
   background-image: url("/pc/people/nanzhu-title-bg.png");
   width: 774px;
@@ -1102,6 +1113,10 @@ function setActiveNav(val: string) {
 .sanxing-wrap {
   -webkit-mask: url('/pc/sanxing.png') center / 100% 100% no-repeat;
   mask: url('/pc/sanxing.png') center / 100% 100% no-repeat;
+}
+
+.phone-appointment-success-popup-bg {
+  background-image: url("/popup/phone-success-bg.png");
 }
 
 .announcements-popup-bg {

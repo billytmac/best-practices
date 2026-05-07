@@ -699,13 +699,13 @@ onMounted(() => {
             <img src="/popup/step-2.png" class="w-479 h-38" />
           </div>
           <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
-            <div class="mr-99 flex cursor-pointer" @click="bindOs = 'android'">
+            <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
               <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
+                <div class="rounded-full bg-[#fff] h-16 w-16" v-show="toBindOs === 'android'" />
               </div>
               <div>AOS</div>
             </div>
-            <div class="flex cursor-pointer" @click="bindOs = 'ios'">
+            <div class="flex cursor-pointer" @click="toBindOs('ios')">
               <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
                 <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
               </div>
@@ -721,13 +721,13 @@ onMounted(() => {
             </div>
           </div>
           <div class="flex ml-65 mt-17">
-            <div @click="isAgree = !isAgree"
+            <div @click="toAgree"
               class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500">
               <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
             </div>
             <div
               class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] ">
-              <span class="cursor-pointer" @click="isAgree = !isAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+              <span class="cursor-pointer" @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
               <span class="ml-10 underline underline-offset-[6px] cursor-pointer"
                 @click='isShowAnnouncementsPopup = true'>유의사항</span>
             </div>
@@ -777,12 +777,12 @@ onMounted(() => {
           </div>
           <div class="flex ml-110 mt-14">
             <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500"
-              @click="isAgree = !isAgree">
+              @click="toAgree">
               <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
             </div>
             <div
               class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
-              <span @click="isAgree = !isAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+              <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
               <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
             </div>
           </div>
