@@ -31,6 +31,29 @@ useHead({
   }))
 })
 
+const bannerArr = [
+  {
+    bannerImg: '/pc/swiper-1.png',
+    bannerUrl: '',
+  },
+  {
+    bannerImg: '/pc/swiper-1.png',
+    bannerUrl: '',
+  },
+  {
+    bannerImg: '/pc/swiper-1.png',
+    bannerUrl: '',
+  },
+  {
+    bannerImg: '/pc/swiper-1.png',
+    bannerUrl: '',
+  },
+  {
+    bannerImg: '/pc/swiper-1.png',
+    bannerUrl: '',
+  },
+]
+
 const handleCutomStore = useCustomStore()
 const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
 const modules = [Navigation, Autoplay]
@@ -579,7 +602,7 @@ function setActiveNav(val: string) {
                 </div>
                 <div
                   class="text-[#A7AABC] mt-1 text-[18px] leading-[18px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
-                  <span  @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
+                  <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
                   <span class="ml-10 underline underline-offset-[4px] "
                     @click='isShowAnnouncementsPopup = true'>유의사항</span>
                 </div>
@@ -652,14 +675,15 @@ function setActiveNav(val: string) {
           </div> -->
         </div>
         <!-- 第四部分 -->
-        <div class="mt-150" id="game-features">
+        <div class="mt-96" id="game-features">
           <div class="w-909 h-39 ml-1011 mb-48">
             <img src="/animated-png/pc-line-bottom.png" class="w-909 h-39" />
           </div>
           <div class="step-title-4 bg-cover-no-repeat ml-846 h-105 w-221 relative">
             <img src="/title-4-icon.png" class="h-100 w-87 absolute z-1 left-[-34%] top-[-7%]" />
           </div>
-          <div class="relative mt-90 ml-386 flex">
+          <swiperPc :slides="bannerArr" />
+          <!-- <div class="relative mt-90 ml-386 flex">
             <img src="/pc/swiper-left.png" class="w-49 h-74 mr-107 cursor-pointer mt-365" />
             <div class="swiper-bg w-453 h-782 relative ml-83 bg-cover-no-repeat pl-27 pt-45">
               <div class="w-400 h-710">
@@ -667,8 +691,7 @@ function setActiveNav(val: string) {
               </div>
             </div>
             <img src="/pc/swiper-right.png" class="w-49 h-74 ml-107  cursor-pointer mt-365" />
-          </div>
-
+          </div> -->
         </div>
 
         <div
@@ -737,22 +760,25 @@ function setActiveNav(val: string) {
               class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                  placeholder="휴대폰 번호 입력" />
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                  class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>
             <div class="flex ml-65 mt-17">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer" @click="toAgree">
+              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer"
+                @click="toAgree">
                 <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
                 class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
                 <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
+                <span class="ml-10 underline underline-offset-[6px]"
+                  @click='isShowAnnouncementsPopup = true'>유의사항</span>
               </div>
             </div>
             <div class='ml-185 mt-8'>
-              <img src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer" @click="appointment('phoneAndShopPopup')" />
+              <img src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer"
+                @click="appointment('phoneAndShopPopup')" />
             </div>
           </div>
         </div>
@@ -777,13 +803,13 @@ function setActiveNav(val: string) {
             <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
               <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'"   />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
                 </div>
                 <div class="mt--1">AOS</div>
               </div>
               <div class="flex cursor-pointer" @click="toBindOs('ios')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'"   />
+                  <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
                 </div>
                 <div class="mt--1">IOS</div>
               </div>
@@ -792,18 +818,20 @@ function setActiveNav(val: string) {
               class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" class="outline-none bg-transparent popup-number-input text-[38px] w-full"
-                  placeholder="휴대폰 번호 입력" />
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                  class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>
             <div class="flex ml-110 mt-14">
-              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer" @click="toAgree">
+              <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer"
+                @click="toAgree">
                 <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
                 class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
                 <span @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-                <span class="ml-10 underline underline-offset-[6px]" @click='isShowAnnouncementsPopup = true'>유의사항</span>
+                <span class="ml-10 underline underline-offset-[6px]"
+                  @click='isShowAnnouncementsPopup = true'>유의사항</span>
               </div>
             </div>
             <div class='ml-225 mt-24'>
