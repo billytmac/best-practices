@@ -1,14 +1,16 @@
 <script setup lang="ts">
-
 import { isMobile, mobileSystem, formatNumber } from "~/utils/index.client"
-import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Autoplay } from 'swiper/modules'
 import { useDebounceFn } from '@vueuse/core'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useCustomStore } from "~/stores/custom"
-import { storeToRefs } from 'pinia'
+import useCommon from '~/composables/useCommon'
+
+
+const {storagePhoneInfo, openUrl, useDebounceFn, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
+
 
 const allImages = [
   '/people/nvqumo.png',
@@ -20,6 +22,8 @@ const allImages = [
   '/people/yandou.png',
   '/people/nanzhu.png',
 ]
+
+const bannerArr = ['/swiper-1.png','/swiper-2.png','/swiper-3.png','/swiper-4.png','/swiper-5.png','/swiper-6.png'] 
 
 useHead({
   link: allImages.map(href => ({
@@ -34,9 +38,7 @@ definePageMeta({
   name: "mobile",
 });
 const handleCutomStore = useCustomStore()
-const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
 const modules = [Navigation, Autoplay]
-const isIos = ref('')
 // console.log(window.navigator,'mobileSystem')
 
 const timeLineArr = ref([
@@ -151,42 +153,14 @@ const navList = ref([
   },
 ]);
 const isShowNav = ref<boolean>(false)
-const isShowAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentSuccessPopup = ref<boolean>(false)
-const isShowTipPopup = ref<boolean>(false)
-// 当前选中的导航项 (默认选中第一个：main-menu)
-const activeNav = ref('main-menu')
 
-const isShowAppointmentSuccessPopup = ref<boolean>(false)
-const isShowAnnouncementsPopup = ref<boolean>(false)
-const bindOs = ref('android')
-const isAgree = ref(false)
-const inputValue = ref('')
 const swiperInstance = ref(null)
 const currentRoleName = ref(rolesList.value[0])
-const tipText = ref('')
-const initData = ref({})
-const roleListRef = ref(null)
-const storagePhoneInfo = computed(() => ({
-  phone: userInfo.value?.phone,
-  bind_os: userInfo.value?.bind_os,
-}))
 
 
 // 是否正在程序化滚动（避免滚动监听器干扰手动导航）
 // const isProgrammaticScroll = ref(false)
 
-
-// 是否显示底部预约弹窗（只在3,4,5屏显示）
-const showBottomPopup = computed(() => {
-  return ['activity', 'role', 'game-features'].includes(activeNav.value)
-})
-
-function openTipPopup(text: string) {
-  tipText.value = text
-  isShowTipPopup.value = true
-}
 
 function setIsShowNav(val: boolean) {
   isShowNav.value = val
@@ -218,72 +192,6 @@ const onMouse = (item, flag: boolean) => {
   if (isTouchDevice) return  // 移动端直接跳过
   item.isHover = flag
 }
-
-const openStoreUrl = (type) => {
-  console.log(initData.value, 'initData')
-  const { store_url, store_ios_url } = initData.value?.store_url || {}
-  window.open(isIos ? store_ios_url : store_url)
-  if (type === 'PhoneAppointmentSuccessPopup') {
-    isShowPhoneAppointmentSuccessPopup.value = false
-  }
-  if (isAlreadyAppointment.value) {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-    }
-    isShowPhoneAppointmentPopup.value = true
-  }
-}
-
-const appointment = async (type) => {
-  if (!/^\d{9}$/.test(inputValue.value)) {
-    openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
-    return
-  }
-
-  if (!isAgree.value) {
-    openTipPopup('개인정보 수집 및 이용 동의에 체크해 주세요.')
-    return
-  }
-
-  const loadingToast = showLoadingToast({
-    message: 'loading...',
-    forbidClick: true
-  })
-  const phoneInfo = {
-    phone: inputValue.value,
-    bind_os: bindOs.value
-  }
-  const res = await reservationPlayerReserve(phoneInfo).finally(() => {
-    loadingToast.close()
-  })
-  const isReserve = res.data?.is_reserve
-  handleCutomStore.setUserInfo(phoneInfo)
-  handleCutomStore.setIsAlreadyAppointment(true)
-
-  if (isReserve === 1) {
-    openTipPopup('이미 사전 예약을 완료하셨습니다.')
-  }
-  if (isGoShop.value) {
-    if (isReserve === 0) {
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    isShowPhoneAppointmentSuccessPopup.value = true
-  }
-
-  if (type === 'phonePopup') {
-    isShowPhoneAppointmentPopup.value = false
-  }
-  if (type === 'phoneAndShopPopup') {
-    isShowAppointmentPopup.value = false
-  }
-}
-
 
 
 const updateActiveNavByScroll = () => {
@@ -359,39 +267,21 @@ const selectRole = (currentItem) => {
   }
 
 }
-const reservationInitApi = async () => {
-  allowMultipleToast();
-  const loadingToast = showLoadingToast({
-    message: '로딩 중...',
-    forbidClick: true
-  })
-  const res = await reservationInit(storagePhoneInfo.value).finally(() => {
-    loadingToast.close()
-  })
-  const resData = res?.data || {}
-  console.log(resData, 'resData')
-  initData.value = resData
-}
 
-const toBindOs = system => {
-  // if(isAlreadyAppointment.value) return
-  bindOs.value = system
-}
-const toAgree = () => {
-  // if(isAlreadyAppointment.value) return
-  isAgree.value = !isAgree.value
-}
 
 onMounted(() => {
   if (isAlreadyAppointment.value) {
-    // inputValue.value = storagePhoneInfo.value?.phone
-    // bindOs.value = storagePhoneInfo.value?.bind_os
-    // isAgree.value = true
     if (!isGoShop.value) {
       isShowPhoneAppointmentSuccessPopup.value = true
     }
-  } else {
-    isShowAppointmentPopup.value = true
+    gge(storagePhoneInfo.value?.phone)
+  }
+  else {
+    if (isGoShop.value) {
+      isShowPhoneAppointmentPopup.value = true
+    } else {
+      isShowAppointmentPopup.value = true
+    }
   }
   isIos.value = mobileSystem() === 'ios'
   if (isIos.value) {
@@ -431,7 +321,7 @@ onMounted(() => {
             <img @click="setActivedNav('preorder')" src="/appointment-btn.png" class="w-full h-full" />
           </div>
           <div class="shine-wrapper overflow-hidden relative" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'"
-            @click="openStoreUrl">
+            @click="openStoreUrl('main-menu')">
             <img v-if='isIos' src="/apple-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
             <img v-else src="/google-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
           </div>
@@ -457,7 +347,7 @@ onMounted(() => {
           <img src="/prize-3.png" class="h-236 w-191" />
         </div>
         <div class="shine-wrapper overflow-hidden relative  ml-215 w-300 h-105 mt-15"
-          :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'" @click="openStoreUrl">
+          :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'" @click="openStoreUrl('preorder')">
           <img v-if='isIos' src="/apple-1.png" class="w-full h-full cursor-pointer" />
           <img v-else src="/google-1.png" class="w-full h-full cursor-pointer" />
         </div>
@@ -591,17 +481,8 @@ onMounted(() => {
             delay: 5000,
             disableOnInteraction: false,
           }" @swiper="onSwiper" class="w-423 h-751">
-            <swiper-slide>
-              <img src="/swiper-1.png" alt="" class="w-423 h-751" />
-            </swiper-slide>
-            <swiper-slide>
-              <img src="/swiper-1.png" alt="" class="w-423 h-751" />
-            </swiper-slide>
-            <swiper-slide>
-              <img src="/swiper-1.png" alt="" class="w-423 h-751" />
-            </swiper-slide>
-            <swiper-slide>
-              <img src="/swiper-1.png" alt="" class="w-423 h-751" />
+            <swiper-slide v-for="item in bannerArr" :key="item">
+              <img :src="item" alt="" class="w-423 h-751" />
             </swiper-slide>
           </swiper>
           <!-- <div class="w-423 h-751">
@@ -612,9 +493,9 @@ onMounted(() => {
     <div class="pt-34 pb-15  
            w-full  flex-col-items-center   text-[#fff]  font-[NotoSansSC]">
       <div class="tracking-[6px] flex text-[18px]  leading-[18px]">
-        <span>이용약관</span>
+        <span @click="openUrl('serviceUrl')" class="cursor-pointer">이용약관</span>
         <span class="w-1 h-21 bg-white ml-20 mr-20"></span>
-        <span>개인정보처리방침</span>
+        <span @click="openUrl('priviateUrl')" class="cursor-pointer">개인정보처리방침</span>
       </div>
       <div class="mt-9 text-[14px]">
         ©2026 DAWN BREAKING NETWORK TECHNOLOGY CO., LIMITED. ALL RIGHTS RESERVED.
@@ -628,7 +509,7 @@ onMounted(() => {
       <img src="/bottom-text.png" class="h-41 w-237 ml-226 mt-42" />
       
         <div class="shine-wrapper overflow-hidden relative h-101 w-282 "
-          :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl">
+          :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl('fixed-bottom')">
           <img v-if='isIos' src="/apple-bottom.png" class="w-full h-full cursor-pointer mt-12" />
           <img v-else src="/google-bottom.png" class="w-full h-full cursor-pointer mt-12" />
         </div>
@@ -691,7 +572,7 @@ onMounted(() => {
             </div>
 
           </div>
-          <div class="mt-13 ml-201 w-255 h-92" @click="openStoreUrl">
+          <div class="mt-13 ml-201 w-255 h-92" @click="openStoreUrl('phoneAndShopPopup')">
             <img v-if='isIos' src="/popup/apple-appointment.png" class="w-full h-full" />
             <img v-else src="/popup/google-appointment.png" class="w-full h-full" />
           </div>
@@ -701,7 +582,7 @@ onMounted(() => {
           <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
             <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
               <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
-                <div class="rounded-full bg-[#fff] h-16 w-16" v-show="toBindOs === 'android'" />
+                <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
               </div>
               <div>AOS</div>
             </div>

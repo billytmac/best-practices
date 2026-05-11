@@ -1,17 +1,11 @@
 <script setup lang="ts">
+import useCommon from '~/composables/useCommon'
+import { useDebounceFn } from '@vueuse/core'
 definePageMeta({
   name: "pc",
 });
-import { isMobile, mobileSystem, formatNumber } from "~/utils/index.client"
-import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Autoplay } from 'swiper/modules'
-import { useDebounceFn } from '@vueuse/core'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import { useCustomStore } from "~/stores/custom"
-import { storeToRefs } from 'pinia'
 
+const { openUrl,useDebounceFn, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
 const allImages = [
   '/pc/people/nvqumo.png',
   '/people/nvwu.png',
@@ -37,28 +31,29 @@ const bannerArr = [
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-1.png',
+    bannerImg: '/pc/swiper-2.png',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-1.png',
+    bannerImg: '/pc/swiper-3.png',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-1.png',
+    bannerImg: '/pc/swiper-4.png',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-1.png',
+    bannerImg: '/pc/swiper-5.png',
+    bannerUrl: '',
+  },
+  {
+    bannerImg: '/pc/swiper-6.png',
     bannerUrl: '',
   },
 ]
 
-const handleCutomStore = useCustomStore()
-const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
-const modules = [Navigation, Autoplay]
-const isIos = ref('')
-// console.log(window.navigator,'mobileSystem')
+const shopList = ['google', 'iphone', 'one', 'sanxing']
+
 
 const timeLineArr = ref([
   {
@@ -183,204 +178,17 @@ const navList = ref([
     isHover: false,
   },
 ]);
-const isShowNav = ref<boolean>(false)
-const isShowAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentSuccessPopup = ref<boolean>(false)
-const isShowTipPopup = ref<boolean>(false)
-// 当前选中的导航项 (默认选中第一个：main-menu)
-const activeNav = ref('main-menu')
-
-const isShowAppointmentSuccessPopup = ref<boolean>(false)
-const isShowAnnouncementsPopup = ref<boolean>(false)
-const bindOs = ref('android')
-const isAgree = ref(false)
-const inputValue = ref('')
-const swiperInstance = ref(null)
-const currentRoleName = ref(rolesList.value[0])
-const tipText = ref('')
-const initData = ref({})
-const roleListRef = ref(null)
-const storagePhoneInfo = computed(() => ({
-  phone: userInfo.value?.phone,
-  bind_os: userInfo.value?.bind_os,
-}))
-
 
 // 是否正在程序化滚动（避免滚动监听器干扰手动导航）
 const isProgrammaticScroll = ref(false)
 
-
-// 是否显示底部预约弹窗（只在3,4,5屏显示）
-const showBottomPopup = computed(() => {
-  return ['activity', 'role', 'game-features'].includes(activeNav.value)
-})
-
-function openTipPopup(text: string) {
-  tipText.value = text
-  isShowTipPopup.value = true
-}
-
-function setIsShowNav(val: boolean) {
-  isShowNav.value = val
-}
-function setActivedNav(val: string) {
-  activeNav.value = val
-  const targetElement = document.getElementById(val)
-  if (targetElement) {
-    // 计算需要滚动的位置，考虑固定头部的高度（76px）
-    const offsetTop = targetElement.offsetTop - 86
-
-    // 平滑滚动到目标位置
-    window.scrollTo({
-      top: offsetTop,
-      behavior: 'smooth'
-    })
-
-    // 滚动完成后重置标志
-    // setTimeout(() => {
-    //   isProgrammaticScroll.value = false
-    // }, 1000)
-  }
-  // 关闭导航弹窗
-  isShowNav.value = false
-}
-
-const onMouse = (item, flag: boolean) => {
-  const isTouchDevice = 'ontouchstart' in window
-  if (isTouchDevice) return  // 移动端直接跳过
-  item.isHover = flag
-}
-
-const openStoreUrl = (type) => {
-  console.log(initData.value, 'initData')
-  const { store_url, store_ios_url } = initData.value?.store_url || {}
-  window.open(isIos ? store_ios_url : store_url)
-  if (type === 'PhoneAppointmentSuccessPopup') {
-    isShowPhoneAppointmentSuccessPopup.value = false
-  }
-  if (isAlreadyAppointment.value) {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-    }
-    isShowPhoneAppointmentPopup.value = true
-  }
-}
-
-const appointment = async (type) => {
-  if (!/^\d{9}$/.test(inputValue.value)) {
-    openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
-    return
-  }
-
-  if (!isAgree.value) {
-    openTipPopup('개인정보 수집 및 이용 동의에 체크해 주세요.')
-    return
-  }
-
-  const loadingToast = showLoadingToast({
-    message: 'loading...',
-    forbidClick: true
-  })
-  const phoneInfo = {
-    phone: inputValue.value,
-    bind_os: bindOs.value
-  }
-  const res = await reservationPlayerReserve(phoneInfo).finally(() => {
-    loadingToast.close()
-  })
-  const isReserve = res.data?.is_reserve
-  handleCutomStore.setUserInfo(phoneInfo)
-  handleCutomStore.setIsAlreadyAppointment(true)
-
-  if (isReserve === 1) {
-    openTipPopup('이미 사전 예약을 완료하셨습니다.')
-  }
-  if (isGoShop.value) {
-    if (isReserve === 0) {
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    isShowPhoneAppointmentSuccessPopup.value = true
-  }
-
-  if (type === 'phonePopup') {
-    isShowPhoneAppointmentPopup.value = false
-  }
-  if (type === 'phoneAndShopPopup') {
-    isShowAppointmentPopup.value = false
-  }
-}
-
-
-
-const updateActiveNavByScroll = () => {
-  if (isProgrammaticScroll.value) return
-
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-  const viewportHeight = window.innerHeight
-
-  // 定义各屏幕区域的ID
-  const sectionIds = ['main-menu', 'preorder', 'activity', 'role', 'game-features']
-
-  // 遍历各个区域，找到当前在视窗中的区域
-  for (let i = sectionIds.length - 1; i >= 0; i--) {
-    let diffVal = 0
-    const sectionId = sectionIds[i]
-    const element = document.getElementById(sectionId)
-    if (element) {
-      switch (sectionId) {
-        case 'preorder':
-          diffVal = 1015
-          break;
-        case 'activity':
-          diffVal = 900
-          break;
-        case 'role':
-          diffVal = 920
-          break;
-        case 'game-features':
-          diffVal = 1000
-          break;
-      }
-      const elementTop = element.offsetTop + diffVal
-      // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
-      if (scrollTop >= elementTop - viewportHeight / 3) {
-        console.log(activeNav.value, 'activeNav.value')
-        activeNav.value = sectionId
-        break
-      }
-    }
-  }
-}
+const currentRoleName = ref(rolesList.value[0])
 
 // 创建防抖版本的滚动处理函数
 const debouncedScrollHandler = useDebounceFn(updateActiveNavByScroll, 100)
 
-// 滚动监听
-const handleScroll = () => {
-  debouncedScrollHandler()
-}
 
-
-const onSwiper = (swiper) => {
-  swiperInstance.value = swiper
-}
-
-const swiperPrev = () => {
-  swiperInstance.value?.slidePrev()
-}
-
-const swiperNext = () => {
-  swiperInstance.value?.slideNext()
-}
-
-const selectRole = (currentItem) => {
+function selectRole(currentItem) {
   // currentRoleName.value = {}
   // nextTick(() => {
   currentRoleName.value = currentItem
@@ -411,54 +219,6 @@ const selectRole = (currentItem) => {
   }
 
 }
-const reservationInitApi = async () => {
-  allowMultipleToast();
-  const loadingToast = showLoadingToast({
-    message: '로딩 중...',
-    forbidClick: true
-  })
-  const res = await reservationInit(storagePhoneInfo.value).finally(() => {
-    loadingToast.close()
-  })
-  const resData = res?.data || {}
-  console.log(resData, 'resData')
-  initData.value = resData
-}
-
-const toBindOs = system => {
-  console.log(system, 'system')
-  // if(isAlreadyAppointment.value) return
-  bindOs.value = system
-}
-const toAgree = () => {
-  // if(isAlreadyAppointment.value) return
-  isAgree.value = !isAgree.value
-}
-
-onMounted(() => {
-  if (isAlreadyAppointment.value) {
-    // inputValue.value = storagePhoneInfo.value?.phone
-    // bindOs.value = storagePhoneInfo.value?.bind_os
-    // isAgree.value = true
-    if (!isGoShop.value) {
-      isShowPhoneAppointmentSuccessPopup.value = true
-    }
-  } else {
-    isShowAppointmentPopup.value = true
-  }
-  isIos.value = mobileSystem() === 'ios'
-  if (isIos.value) {
-    bindOs.value = 'ios'
-  }
-  // 添加滚动监听器
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  updateActiveNavByScroll()
-  reservationInitApi()
-
-})
-
-
-const shopList = ['google', 'iphone', 'one', 'sanxing']
 
 
 function setActiveNav(val: string) {
@@ -492,6 +252,83 @@ function setActiveNav(val: string) {
 }
 
 
+function updateActiveNavByScroll() {
+  console.log(666666)
+  if (isProgrammaticScroll.value) return
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const viewportHeight = window.innerHeight
+
+  // 定义各屏幕区域的ID
+  const sectionIds = ['main-menu', 'preorder', 'activity', 'role', 'game-features']
+  console.log(sectionIds, 'sectionIds')
+
+  // 遍历各个区域，找到当前在视窗中的区域
+  for (let i = sectionIds.length - 1; i >= 0; i--) {
+    let diffVal = 0
+    const sectionId = sectionIds[i]
+    const element = document.getElementById(sectionId)
+    if (element) {
+      switch (sectionId) {
+        case 'preorder':
+          diffVal = 1015
+          break;
+        case 'activity':
+          diffVal = 900
+          break;
+        case 'role':
+          diffVal = 920
+          break;
+        case 'game-features':
+          diffVal = 1000
+          break;
+      }
+      const elementTop = element.offsetTop + diffVal
+      // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
+      if (scrollTop >= elementTop - viewportHeight / 3) {
+        console.log(activeNav.value, 'activeNav.value')
+        activeNav.value = sectionId
+        break
+      }
+    }
+  }
+}
+
+
+// 滚动监听
+function handleScroll() {
+  debouncedScrollHandler()
+}
+
+function clickShop(item) {
+  if (['google', 'iphone'].includes(item)) {
+    openStoreUrl(undefined, item)
+  }
+}
+
+onMounted(() => {
+  console.log(12312321)
+  console.log(isGoShop.value, 'isGoShop.value')
+  if (isAlreadyAppointment.value) {
+    if (!isGoShop.value) {
+      isShowPhoneAppointmentSuccessPopup.value = true
+    }
+  }
+  else {
+    if (isGoShop.value) {
+      isShowPhoneAppointmentPopup.value = true
+    } else {
+      isShowAppointmentPopup.value = true
+    }
+  }
+  isIos.value = mobileSystem() === 'ios'
+  if (isIos.value) {
+    bindOs.value = 'ios'
+  }
+  // 添加滚动监听器
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  updateActiveNavByScroll()
+  reservationInitApi()
+})
 
 
 
@@ -532,7 +369,7 @@ function setActiveNav(val: string) {
         <img src="/pc/head-title-icon.png" class=" w-497 h-232 ml-729" />
         <img src="/pc/head-title.png" class="ml-625 h-50 w-639" />
         <div class="ml-504 flex mt-454 gap-60">
-          <div v-for="item in shopList" :key="item" :class="`${item}-wrap`"
+          <div v-for="item in shopList" :key="item" :class="`${item}-wrap`" @click="clickShop(item)"
             class="w-183 h-55 cursor-pointer overflow-hidden shine-wrapper relative">
             <img :src="`/pc/${item}.png`" class="h-full w-full" />
           </div>
@@ -562,10 +399,11 @@ function setActiveNav(val: string) {
               </div>
               <div class="mt-12 flex gap-6">
                 <div class="shine-wrapper overflow-hidden relative google-1-wrap w-279 h-100 ml-58"
-                  @click="openStoreUrl">
+                  @click="openStoreUrl(undefined, 'google')">
                   <img src="/pc/google-1.png" class="w-full h-full   cursor-pointer" />
                 </div>
-                <div class="shine-wrapper overflow-hidden relative iphone-2-wrap w-279 h-100" @click="openStoreUrl">
+                <div class="shine-wrapper overflow-hidden relative iphone-2-wrap w-279 h-100"
+                  @click="openStoreUrl(undefined, 'iphone')">
                   <img src="/pc/iphone-2.png" class="w-full h-full  cursor-pointer" />
                 </div>
               </div>
@@ -698,9 +536,9 @@ function setActiveNav(val: string) {
           class="mt-133  pt-83
            w-full h-213 bg-[#08081D]  flex-col-items-center  absolute bottom-0 text-[24px] leading-[24px] text-[#fff]  font-[NotoSansSC]">
           <div class="tracking-[6px] flex ">
-            <span>이용약관</span>
+            <span @click="openUrl('serviceUrl')" class="cursor-pointer">이용약관</span>
             <span class="w-1 h-24 bg-white ml-20 mr-20"></span>
-            <span>개인정보처리방침</span>
+            <span @click="openUrl('priviateUrl')" class="cursor-pointer">개인정보처리방침</span>
           </div>
           <div class="mt-14">
             ©2026 DAWN BREAKING NETWORK TECHNOLOGY CO., LIMITED. ALL RIGHTS RESERVED.
@@ -736,8 +574,9 @@ function setActiveNav(val: string) {
               </div>
 
             </div>
-            <div class="mt-13 ml-201">
-              <img src="/popup/google-appointment.png" class="w-255 h-92" />
+            <div class="mt-13 ml-70 w-255 h-92 flex cursor-pointer" >
+              <img src="/popup/google-appointment.png"  class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','google')" />
+              <img src="/popup/apple-appointment.png" class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','iphone')" />
             </div>
             <div class='ml-88 mt-4'>
               <img src="/popup/step-2.png" class="w-479 h-38" />
@@ -857,10 +696,12 @@ function setActiveNav(val: string) {
               <img src="/popup/phone-prize-2.png" class="w-207 h-224" />
               <img src="/popup/phone-prize-3.png" class="w-207 h-224" />
             </div>
-            <img v-if='isIos' src="/popup/phone-apple.png" class="w-300 h-89 mt-47 ml-176"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
-            <img v-else src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
+            <div class="flex justify-center  mt-47">
+              <img  src="/popup/phone-google.png" class="w-300 h-89 cursor-pointer"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup','google')" />
+              <img src="/popup/phone-apple.png" class="w-300 h-89 cursor-pointer"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup','iphone')" />
+            </div>
           </div>
         </div>
       </div>
