@@ -9,7 +9,12 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:pc": "node scripts/dev.mjs pc",
+    "dev:mobile": "node scripts/dev.mjs mobile",
     "generate": "nuxt generate",
+    "generate:pc": "node scripts/build-all.mjs pc",
+    "generate:mobile": "node scripts/build-all.mjs mobile",
+    "generate:all": "node scripts/build-all.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",

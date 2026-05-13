@@ -1,7 +1,16 @@
+import path from 'node:path'
 import process from 'node:process'
 import { appDescription } from './app/constants/index'
 import preload from './app/utils/preload'
 import { currentLocales } from './i18n/i18n'
+
+// 通过 BUILD_TARGET 环境变量切换 PC / Mobile 打包配置
+// pc:    cdnURL -> .../pc      maxDisplayWidth: 750
+// mobile: cdnURL -> .../mobile  maxDisplayWidth: 480
+const buildTarget = (process.env.BUILD_TARGET === 'mobile' ? 'mobile' : 'pc') as 'pc' | 'mobile'
+const isPc = buildTarget === 'pc'
+const cdnURL = `https://cdn.dawnbreaking.com/reserve-dlw-korea-pre/${buildTarget}`
+const maxDisplayWidth = isPc ? 750 : 480
 
 export default defineNuxtConfig({
   modules: [
@@ -11,7 +20,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/image',
   ],
 
@@ -28,6 +37,16 @@ export default defineNuxtConfig({
     './app/styles/default-theme.css',
     'animate.css',
   ],
+  // image: {
+  //   // 强制指定 provider
+  //   provider: 'ipx',
+  //   // 告诉 Nuxt 允许并代理这个 CDN 域名
+  //   domains: ['https://cdn.dawnbreaking.com'], 
+  //   alias: {
+  //     // 设置快捷别名，将 cdn 映射到你的实际 CDN 地址
+  //     cdn: 'https://cdn.dawnbreaking.com/reserve-dlw-korea-pre/mobile'
+  //   }
+  // },
   // unocss: {
   //   // 禁用自动注入，改为手动在 app.vue 引入
   //   injectPosition: 'last' // 或 'last'，根据需要调整
@@ -46,7 +65,7 @@ export default defineNuxtConfig({
         viewportWidth: (file: string) => {
           return file.includes('vant') ? 375 : 750
         },
-        maxDisplayWidth: 480,
+        maxDisplayWidth,
         // devtools excluded
         exclude: /@nuxt/,
         border: true,
@@ -102,6 +121,8 @@ export default defineNuxtConfig({
         { innerHTML: preload(), type: 'text/javascript', tagPosition: 'head' },
       ],
     },
+    cdnURL,
+    baseURL: "/"
   },
 
   vite: {
@@ -138,6 +159,16 @@ export default defineNuxtConfig({
   eslint: {
     config: {
       standalone: false,
+    },
+  },
+
+  hooks: {
+    'pages:extend': function (pages) {
+      const rootPage = pages.find(p => p.path === '/')
+      if (rootPage?.file) {
+        const pagesDir = path.dirname(String(rootPage.file))
+        rootPage.file = path.join(pagesDir, buildTarget, 'index.vue')
+      }
     },
   },
 
