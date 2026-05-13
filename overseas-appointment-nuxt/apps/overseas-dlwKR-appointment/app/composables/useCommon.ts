@@ -1,0 +1,340 @@
+
+import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
+import { useCustomStore } from "~/stores/custom"
+import { storeToRefs } from 'pinia'
+import { useDebounceFn } from '@vueuse/core'
+import { fbe, ga4, ttq, gge } from '@/composables/mediaTagging'
+
+
+export default function useCommon() {
+    const handleCutomStore = useCustomStore()
+    const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
+    const isIos = ref('')
+    // console.log(window.navigator,'mobileSystem')
+    const isShowAppointmentPopup = ref<boolean>(false)
+    const isShowPhoneAppointmentPopup = ref<boolean>(false)
+    const isShowPhoneAppointmentSuccessPopup = ref<boolean>(false)
+    const isShowTipPopup = ref<boolean>(false)
+    // 当前选中的导航项 (默认选中第一个：main-menu)
+    const activeNav = ref('main-menu')
+
+    const urlObj = {
+        priviateUrl: 'https://cdn-overseas.dawnbreaking.com/overseasCdn/privacyAgreement/privacy_hanYu_53.html',
+        serviceUrl: 'https://cdn-overseas.dawnbreaking.com/overseasCdn/privacyAgreement/operate_hanYu_54.html',
+    }
+
+    const isShowAppointmentSuccessPopup = ref<boolean>(false)
+    const isShowAnnouncementsPopup = ref<boolean>(false)
+    const bindOs = ref('android')
+    const isAgree = ref(false)
+    const inputValue = ref('')
+    const tipText = ref('')
+    const initData = ref({})
+    const roleListRef = ref(null)
+    const storagePhoneInfo = computed(() => ({
+        phone: userInfo.value?.phone,
+        bind_os: userInfo.value?.bind_os,
+    }))
+
+
+    // 是否显示底部预约弹窗（只在3,4,5屏显示）
+    const showBottomPopup = computed(() => {
+        return ['activity', 'role', 'game-features'].includes(activeNav.value)
+    })
+
+    const getPcImageUrl = (name,type) => {
+        // 第一个参数是相对路径，第二个参数是基础URL
+        // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
+        // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
+        // eager: true 表示立即导入，而不是异步导入
+        
+        // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+       let images = ''
+       let path = ''
+       switch(type) {
+        case 'people':
+            images = import.meta.glob(`../assets/images/pc/people/*.png`, { eager: true });
+            path = `../assets/images/pc/people/${name}.png`;
+            break;
+        case 'roles':
+            images = import.meta.glob(`../assets/images/pc/roles/*.png`, { eager: true });
+            path = `../assets/images/pc/roles/${name}.png`;
+            break;
+        default:
+            console.log(name, 'name')
+            images = import.meta.glob(`../assets/images/pc/*.png`, { eager: true });
+            path = `../assets/images/pc/${name}.png`;
+            break;
+       }
+    
+        // 2. 匹配对应的完整路径
+        // const pathName = `${path}/${name}.png`;
+        // 3. 返回处理后的路径（通常包含 Hash）
+        return images[path]?.default ?? '';
+    }
+    const getImageUrl = (name,type) => {
+        // 第一个参数是相对路径，第二个参数是基础URL
+        // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
+        // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
+        // eager: true 表示立即导入，而不是异步导入
+        
+        // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+       let images = ''
+       let path = ''
+       switch(type) {
+        case 'animated-png':
+            images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+            path = `../assets/images/animated-png/${name}.png`;
+            break;
+        case 'people':
+            images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
+            path = `../assets/images/people/${name}.png`;
+            break;
+        case 'roles':
+            images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
+            path = `../assets/images/roles/${name}.png`;
+            break;
+        case 'popup':
+            images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
+            path = `../assets/images/popup/${name}.png`;
+            break;
+        default:
+            console.log(name, 'name')
+            images = import.meta.glob(`../assets/images/*.png`, { eager: true });
+            path = `../assets/images/${name}.png`;
+            break;
+       }
+       console.log(images, 'images')
+       console.log(path, 'path111')
+       console.log(images[path], 'images11')
+        // 2. 匹配对应的完整路径
+        // const pathName = `${path}/${name}.png`;
+        // 3. 返回处理后的路径（通常包含 Hash）
+        return images[path]?.default ?? '';
+    }
+
+
+
+
+
+    const openStoreUrl = (type, customStoreType) => {
+        reservationEventApi('hw_yry_shopping_count')
+        if (isAlreadyAppointment.value) {
+            gge(storagePhoneInfo.value?.phone)
+        }
+        fbe('Add to cart')
+        ga4('Add to cart')
+
+        fbe('Lead')
+        ga4('Lead')
+
+        ttq('ClickButton')
+
+        const { store_url, store_ios_url } = initData.value?.store_url || {}
+        let url = ''
+        if (customStoreType) {
+            if (customStoreType === 'google') {
+                url = store_url
+                fbe('MO_ios')
+                ga4('MO_ios')
+            } else {
+                fbe('MO_gp')
+                ga4('MO_gp')
+                url = store_ios_url
+            }
+        } else {
+            if (isIos) {
+                fbe('MO_ios')
+                ga4('MO_ios')
+                url = store_ios_url
+            } else {
+                fbe('MO_gp')
+                ga4('MO_gp')
+                url = store_url
+            }
+        }
+        console.log(url, 'url')
+        window.open(url)
+
+        switch (type) {
+            case 'main-menu':
+                fbe('MO_1')
+                break
+            case 'preorder':
+                fbe('MO_1_1')
+                break
+            case 'fixed-bottom':
+                fbe('MO_1_2')
+                break
+            case 'phoneAndShopPopup':
+                fbe('MO_2')
+                ga4('MO_2')
+                ttq('Search')
+                break
+            case 'PhoneAppointmentSuccessPopup':
+                fbe('MO_3')
+                ga4('MO_2')
+                ttq('Search')
+                isShowPhoneAppointmentSuccessPopup.value = false
+                break
+            case 'PhoneAppointmentPopup':
+                isShowAppointmentPopup.value = false
+                break
+        }
+
+        if (isAlreadyAppointment.value) {
+            if (!isGoShop.value) {
+                handleCutomStore.setIsGoShop(true)
+                isShowAppointmentSuccessPopup.value = true
+            }
+        } else {
+            if (!isGoShop.value) {
+                handleCutomStore.setIsGoShop(true)
+            }
+            isShowPhoneAppointmentPopup.value = true
+        }
+    }
+
+
+    function openUrl(type) {
+        window.open(urlObj[type])
+    }
+
+    function openTipPopup(text: string) {
+        tipText.value = text
+        isShowTipPopup.value = true
+    }
+
+    async function appointment(type) {
+        reservationEventApi('hw_yry_reservation_count')
+        if (!/^\d{9}$/.test(inputValue.value)) {
+            openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
+            return
+        }
+
+        if (!isAgree.value) {
+            openTipPopup('개인정보 수집 및 이용 동의에 체크해 주세요.')
+            return
+        }
+
+        const loadingToast = showLoadingToast({
+            message: 'loading...',
+            forbidClick: true
+        })
+        const phoneInfo = {
+            phone: inputValue.value,
+            bind_os: bindOs.value
+        }
+        const res = await reservationPlayerReserve(phoneInfo).finally(() => {
+            loadingToast.close()
+        })
+        const isReserve = res.data?.is_reserve
+        handleCutomStore.setUserInfo(phoneInfo)
+        handleCutomStore.setIsAlreadyAppointment(true)
+
+        if (isReserve === 1) {
+            openTipPopup('이미 사전 예약을 완료하셨습니다.')
+        } else {
+            gge(phoneInfo.phone)
+            ga4('CompleteRegistration')
+            fbe('CompleteRegistration')
+            ttq('CompleteRegistration')
+        }
+        if (isGoShop.value) {
+            if (isReserve === 0) {
+                isShowAppointmentSuccessPopup.value = true
+            }
+        } else {
+            isShowPhoneAppointmentSuccessPopup.value = true
+        }
+
+        switch (type) {
+            case 'phonePopup':
+                isShowPhoneAppointmentPopup.value = false
+                if (isReserve === 0) {
+                    fbe('CompleteRegistration4')
+                }
+                break;
+            case 'phoneAndShopPopup':
+                isShowAppointmentPopup.value = false
+                if (isReserve === 0) {
+                    fbe('CompleteRegistration3')
+                }
+                break;
+            default:
+                if (isReserve === 0) {
+                    fbe('CompleteRegistration2')
+                }
+                break;
+        }
+
+    }
+
+
+    async function reservationInitApi() {
+        allowMultipleToast();
+        const loadingToast = showLoadingToast({
+            message: '로딩 중...',
+            forbidClick: true
+        })
+        const res = await reservationInit(storagePhoneInfo.value).finally(() => {
+            loadingToast.close()
+        })
+        const resData = res?.data || {}
+        console.log(resData, 'resData')
+        initData.value = resData
+    }
+
+    function toBindOs(system) {
+        console.log(system, 'system')
+        // if(isAlreadyAppointment.value) return
+        bindOs.value = system
+    }
+    function toAgree() {
+        // if(isAlreadyAppointment.value) return
+        isAgree.value = !isAgree.value
+    }
+
+    function reservationEventApi(eventName) {
+        reservationEvent(eventName)
+    }
+
+    onMounted(() => {
+        reservationEventApi('hw_yry_PV')
+    })
+
+
+
+
+    return {
+        reservationEventApi,
+        reservationInitApi,
+        isGoShop,
+        isAlreadyAppointment,
+        openStoreUrl,
+        toBindOs,
+        toAgree,
+        appointment,
+        roleListRef,
+        activeNav,
+        isShowTipPopup,
+        tipText,
+        initData,
+        showBottomPopup,
+        isShowAppointmentPopup,
+        isShowPhoneAppointmentPopup,
+        isShowPhoneAppointmentSuccessPopup,
+        isShowAppointmentSuccessPopup,
+        isShowAnnouncementsPopup,
+        bindOs,
+        isAgree,
+        inputValue,
+        isIos,
+        useDebounceFn,
+        openUrl,
+        storagePhoneInfo,
+        getImageUrl,
+        getPcImageUrl
+    }
+
+}

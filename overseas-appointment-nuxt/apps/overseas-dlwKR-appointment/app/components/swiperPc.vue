@@ -1,14 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue'
 // import Swiper core and required modules
-import { Autoplay, Navigation } from 'swiper/modules'
-
+import { Autoplay } from 'swiper/modules'
+import useCommon from '~/composables/useCommon'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
+const { getPcImageUrl } = useCommon()
 // Import Swiper styles
 import 'swiper/css'
-import 'swiper/css/navigation'
 
 // 定义组件名称
 defineOptions({
@@ -67,7 +67,7 @@ const autoplayConfig = computed(() => ({
 // Swiper配置
 const swiperOptions = computed(() => ({
   // 自动切换配置
-  autoplay: autoplayConfig.value, // 只有一个slide时禁用自动播放
+  autoplay: false, // 只有一个slide时禁用自动播放
   loop: true, // 有足够数据时启用loop
   loopAdditionalSlides: 0, // 固定额外slide数量
   centeredSlides: true, // 居中显示
@@ -101,7 +101,7 @@ function swiperNext() {
 
 
 // 定义模块
-const modules = [Autoplay, Navigation]
+const modules = [Autoplay]
 
 // 别名 slides 为 processedSlides
 const slides = processedSlides
@@ -109,7 +109,7 @@ const slides = processedSlides
 
 <template>
   <div class="flex-items-center-between pl-386 pr-385 ">
-    <img src="/pc/swiper-left.png" class="w-49 h-74  cursor-pointer  " @click="swiperPrev" />
+    <img src="/assets/images/pc/swiper-left.png" class="w-49 h-74  cursor-pointer  " @click="swiperPrev" />
     <div class="w-820 h-782 relative overflow-hidden mx-auto mt-107">
       <Swiper :modules="modules" :slides-per-view="swiperOptions.slidesPerView"
         :space-between="swiperOptions.spaceBetween" :autoplay="swiperOptions.autoplay" :loop="swiperOptions.loop"
@@ -117,7 +117,7 @@ const slides = processedSlides
         <SwiperSlide v-for="(slide, index) in slides" :key="index">
           <div class="swiper-bg w-453 h-782 relative bg-cover-no-repeat pl-27 pt-45 slide-content">
             <div class="w-400 h-710">
-              <img :src="slide.bannerImg" class="w-full h-full" />
+              <img :src="getPcImageUrl(slide.bannerImg, '')" class="w-full h-full" />
             </div>
             <!-- <div class="w-full h-full bg-black opacity-50 absolute top-0 left-0">
           </div> -->
@@ -126,7 +126,7 @@ const slides = processedSlides
         </SwiperSlide>
       </Swiper>
     </div>
-    <img src="/pc/swiper-right.png" class="w-49 h-74  cursor-pointer   " @click="swiperNext" />
+    <img src="/assets/images/pc/swiper-right.png" class="w-49 h-74  cursor-pointer   " @click="swiperNext" />
   </div>
 
 </template>
@@ -197,9 +197,9 @@ const slides = processedSlides
   margin: 0 10px;
   transform: 0;
   box-sizing: border-box;
-  transform: scale(0.85) translateX(-300px);
-  mask: url('/pc/swiper-bg.png') center / 100% 100% no-repeat;
-  -webkit-mask: url('/pc/swiper-bg.png') center / 100% 100% no-repeat;
+  transform: scale(0.85) translateX(-300px) !important;
+  mask: url('/assets/images/pc/swiper-bg.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('/assets/images/pc/swiper-bg.png') center / 100% 100% no-repeat;
 
   /* transform: translateX(-30px); */
   &::after {
@@ -216,7 +216,7 @@ const slides = processedSlides
 }
 
 :deep(.swiper-slide-prev) {
-  transform: scale(0.85) translateX(300px);
+  transform: scale(0.85) translateX(300px) !important;
 }
 
 /* 重复slide的样式（loop模式） */
@@ -241,53 +241,7 @@ const slides = processedSlides
   bottom: 20px;
 }
 
-:deep(.swiper-pagination-bullet) {
-  /* background: rgba(255, 255, 255, 0.5);
-  opacity: 1;
-  margin: 0 6px;
-  width: 12px;
-  height: 12px;
-  transition: all 0.3s ease; */
-}
-
-:deep(.swiper-pagination-bullet-active) {
-  /* background: #fff;
-  transform: scale(1.2); */
-}
-
-/* 自定义导航按钮样式 */
-:deep(.swiper-button-next),
-:deep(.swiper-button-prev) {
-  /* color: #fff;
-  background: rgba(0, 0, 0, 0.3);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  opacity: 0;
-  visibility: hidden; */
-}
-
-/* 鼠标悬停时显示导航按钮 */
-.swiper-banner-pic:hover :deep(.swiper-button-next),
-.swiper-banner-pic:hover :deep(.swiper-button-prev) {
-  /* opacity: 1;
-  visibility: visible; */
-}
-
-:deep(.swiper-button-next:hover),
-:deep(.swiper-button-prev:hover) {
-  /* background: rgba(0, 0, 0, 0.5);
-  transform: scale(1.1); */
-}
-
-:deep(.swiper-button-next::after),
-:deep(.swiper-button-prev::after) {
-  /* font-size: 18px;
-  font-weight: bold; */
-}
-
 .swiper-bg {
-  background-image: url("/pc/swiper-bg.png");
+  background-image: url("/assets/images/pc/swiper-bg.png");
 }
 </style>

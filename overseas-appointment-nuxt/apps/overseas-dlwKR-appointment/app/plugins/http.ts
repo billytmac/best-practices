@@ -1,5 +1,5 @@
-import { setupHttp } from '~/api/http'
+// import { setupHttp } from '~/api/http'
 
-export default defineNuxtPlugin(() => {
-  setupHttp()
-})
+// export default defineNuxtPlugin(() => {
+//   setupHttp()
+// })

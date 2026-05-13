@@ -1,63 +1,42 @@
 <script setup lang="ts">
-definePageMeta({
-  name: "index",
-});
-import { isMobile, mobileSystem, formatNumber } from "~/utils/index.client"
-import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
+import useCommon from '~/composables/useCommon'
 import { useDebounceFn } from '@vueuse/core'
-import { useCustomStore } from "~/stores/custom"
-import { storeToRefs } from 'pinia'
+definePageMeta({
+  name: "pc",
+});
 
-const allImages = [
-  '/pc/people/nvqumo.png',
-  '/people/nvwu.png',
-  '/pc/people/baihu.png',
-  '/pc/people/jiuwei.png',
-  '/pc/people/youxia.png',
-  '/pc/people/stone.png',
-  '/pc/people/yandou.png',
-  '/pc/people/nanzhu.png',
-]
+const { openUrl,getPcImageUrl,getImageUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
 
-useHead({
-  link: allImages.map(href => ({
-    rel: 'preload',
-    as: 'image',
-    href
-  }))
-})
 
 const bannerArr = [
   {
-    bannerImg: '/pc/swiper-1.png',
+    bannerImg: 'swiper-1',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-2.png',
+    bannerImg: 'swiper-2',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-3.png',
+    bannerImg: 'swiper-3',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-4.png',
+    bannerImg: 'swiper-4',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-5.png',
+    bannerImg: 'swiper-5',
     bannerUrl: '',
   },
   {
-    bannerImg: '/pc/swiper-6.png',
+    bannerImg: 'swiper-6',
     bannerUrl: '',
   },
 ]
 
-const handleCutomStore = useCustomStore()
-const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
-const isIos = ref('')
-// console.log(window.navigator,'mobileSystem')
+const shopList = ['google', 'iphone', 'one', 'sanxing']
+
 
 const timeLineArr = ref([
   {
@@ -182,204 +161,17 @@ const navList = ref([
     isHover: false,
   },
 ]);
-const isShowNav = ref<boolean>(false)
-const isShowAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentPopup = ref<boolean>(false)
-const isShowPhoneAppointmentSuccessPopup = ref<boolean>(false)
-const isShowTipPopup = ref<boolean>(false)
-// 当前选中的导航项 (默认选中第一个：main-menu)
-const activeNav = ref('main-menu')
-
-const isShowAppointmentSuccessPopup = ref<boolean>(false)
-const isShowAnnouncementsPopup = ref<boolean>(false)
-const bindOs = ref('android')
-const isAgree = ref(false)
-const inputValue = ref('')
-const swiperInstance = ref(null)
-const currentRoleName = ref(rolesList.value[0])
-const tipText = ref('')
-const initData = ref({})
-const roleListRef = ref(null)
-const storagePhoneInfo = computed(() => ({
-  phone: userInfo.value?.phone,
-  bind_os: userInfo.value?.bind_os,
-}))
-
 
 // 是否正在程序化滚动（避免滚动监听器干扰手动导航）
 const isProgrammaticScroll = ref(false)
 
-
-// 是否显示底部预约弹窗（只在3,4,5屏显示）
-const showBottomPopup = computed(() => {
-  return ['activity', 'role', 'game-features'].includes(activeNav.value)
-})
-
-function openTipPopup(text: string) {
-  tipText.value = text
-  isShowTipPopup.value = true
-}
-
-function setIsShowNav(val: boolean) {
-  isShowNav.value = val
-}
-function setActivedNav(val: string) {
-  activeNav.value = val
-  const targetElement = document.getElementById(val)
-  if (targetElement) {
-    // 计算需要滚动的位置，考虑固定头部的高度（76px）
-    const offsetTop = targetElement.offsetTop - 86
-
-    // 平滑滚动到目标位置
-    window.scrollTo({
-      top: offsetTop,
-      behavior: 'smooth'
-    })
-
-    // 滚动完成后重置标志
-    // setTimeout(() => {
-    //   isProgrammaticScroll.value = false
-    // }, 1000)
-  }
-  // 关闭导航弹窗
-  isShowNav.value = false
-}
-
-const onMouse = (item, flag: boolean) => {
-  const isTouchDevice = 'ontouchstart' in window
-  if (isTouchDevice) return  // 移动端直接跳过
-  item.isHover = flag
-}
-
-const openStoreUrl = (type) => {
-  console.log(initData.value, 'initData')
-  const { store_url, store_ios_url } = initData.value?.store_url || {}
-  window.open(isIos ? store_ios_url : store_url)
-  if (type === 'PhoneAppointmentSuccessPopup') {
-    isShowPhoneAppointmentSuccessPopup.value = false
-  }
-  if (isAlreadyAppointment.value) {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    if (!isGoShop.value) {
-      handleCutomStore.setIsGoShop(true)
-    }
-    isShowPhoneAppointmentPopup.value = true
-  }
-}
-
-const appointment = async (type) => {
-  if (!/^\d{9}$/.test(inputValue.value)) {
-    openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
-    return
-  }
-
-  if (!isAgree.value) {
-    openTipPopup('개인정보 수집 및 이용 동의에 체크해 주세요.')
-    return
-  }
-
-  const loadingToast = showLoadingToast({
-    message: 'loading...',
-    forbidClick: true
-  })
-  const phoneInfo = {
-    phone: inputValue.value,
-    bind_os: bindOs.value
-  }
-  const res = await reservationPlayerReserve(phoneInfo).finally(() => {
-    loadingToast.close()
-  })
-  const isReserve = res.data?.is_reserve
-  handleCutomStore.setUserInfo(phoneInfo)
-  handleCutomStore.setIsAlreadyAppointment(true)
-
-  if (isReserve === 1) {
-    openTipPopup('이미 사전 예약을 완료하셨습니다.')
-  }
-  if (isGoShop.value) {
-    if (isReserve === 0) {
-      isShowAppointmentSuccessPopup.value = true
-    }
-  } else {
-    isShowPhoneAppointmentSuccessPopup.value = true
-  }
-
-  if (type === 'phonePopup') {
-    isShowPhoneAppointmentPopup.value = false
-  }
-  if (type === 'phoneAndShopPopup') {
-    isShowAppointmentPopup.value = false
-  }
-}
-
-
-
-const updateActiveNavByScroll = () => {
-  if (isProgrammaticScroll.value) return
-
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-  const viewportHeight = window.innerHeight
-
-  // 定义各屏幕区域的ID
-  const sectionIds = ['main-menu', 'preorder', 'activity', 'role', 'game-features']
-
-  // 遍历各个区域，找到当前在视窗中的区域
-  for (let i = sectionIds.length - 1; i >= 0; i--) {
-    let diffVal = 0
-    const sectionId = sectionIds[i]
-    const element = document.getElementById(sectionId)
-    if (element) {
-      switch (sectionId) {
-        case 'preorder':
-          diffVal = 1015
-          break;
-        case 'activity':
-          diffVal = 900
-          break;
-        case 'role':
-          diffVal = 920
-          break;
-        case 'game-features':
-          diffVal = 1000
-          break;
-      }
-      const elementTop = element.offsetTop + diffVal
-      // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
-      if (scrollTop >= elementTop - viewportHeight / 3) {
-        console.log(activeNav.value, 'activeNav.value')
-        activeNav.value = sectionId
-        break
-      }
-    }
-  }
-}
+const currentRoleName = ref(rolesList.value[0])
 
 // 创建防抖版本的滚动处理函数
 const debouncedScrollHandler = useDebounceFn(updateActiveNavByScroll, 100)
 
-// 滚动监听
-const handleScroll = () => {
-  debouncedScrollHandler()
-}
 
-
-const onSwiper = (swiper) => {
-  swiperInstance.value = swiper
-}
-
-const swiperPrev = () => {
-  swiperInstance.value?.slidePrev()
-}
-
-const swiperNext = () => {
-  swiperInstance.value?.slideNext()
-}
-
-const selectRole = (currentItem) => {
+function selectRole(currentItem) {
   // currentRoleName.value = {}
   // nextTick(() => {
   currentRoleName.value = currentItem
@@ -410,54 +202,6 @@ const selectRole = (currentItem) => {
   }
 
 }
-const reservationInitApi = async () => {
-  allowMultipleToast();
-  const loadingToast = showLoadingToast({
-    message: '로딩 중...',
-    forbidClick: true
-  })
-  const res = await reservationInit(storagePhoneInfo.value).finally(() => {
-    loadingToast.close()
-  })
-  const resData = res?.data || {}
-  console.log(resData, 'resData')
-  initData.value = resData
-}
-
-const toBindOs = system => {
-  console.log(system, 'system')
-  // if(isAlreadyAppointment.value) return
-  bindOs.value = system
-}
-const toAgree = () => {
-  // if(isAlreadyAppointment.value) return
-  isAgree.value = !isAgree.value
-}
-
-onMounted(() => {
-  if (isAlreadyAppointment.value) {
-    // inputValue.value = storagePhoneInfo.value?.phone
-    // bindOs.value = storagePhoneInfo.value?.bind_os
-    // isAgree.value = true
-    if (!isGoShop.value) {
-      isShowPhoneAppointmentSuccessPopup.value = true
-    }
-  } else {
-    isShowAppointmentPopup.value = true
-  }
-  isIos.value = mobileSystem() === 'ios'
-  if (isIos.value) {
-    bindOs.value = 'ios'
-  }
-  // 添加滚动监听器
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  updateActiveNavByScroll()
-  reservationInitApi()
-
-})
-
-
-const shopList = ['google', 'iphone', 'one', 'sanxing']
 
 
 function setActiveNav(val: string) {
@@ -491,8 +235,83 @@ function setActiveNav(val: string) {
 }
 
 
+function updateActiveNavByScroll() {
+  console.log(666666)
+  if (isProgrammaticScroll.value) return
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const viewportHeight = window.innerHeight
+
+  // 定义各屏幕区域的ID
+  const sectionIds = ['main-menu', 'preorder', 'activity', 'role', 'game-features']
+  console.log(sectionIds, 'sectionIds')
+
+  // 遍历各个区域，找到当前在视窗中的区域
+  for (let i = sectionIds.length - 1; i >= 0; i--) {
+    let diffVal = 0
+    const sectionId = sectionIds[i]
+    const element = document.getElementById(sectionId)
+    if (element) {
+      switch (sectionId) {
+        case 'preorder':
+          diffVal = 1015
+          break;
+        case 'activity':
+          diffVal = 900
+          break;
+        case 'role':
+          diffVal = 920
+          break;
+        case 'game-features':
+          diffVal = 1000
+          break;
+      }
+      const elementTop = element.offsetTop + diffVal
+      // 如果滚动位置超过了该区域的顶部，则该区域为当前活跃区域
+      if (scrollTop >= elementTop - viewportHeight / 3) {
+        console.log(activeNav.value, 'activeNav.value')
+        activeNav.value = sectionId
+        break
+      }
+    }
+  }
+}
 
 
+// 滚动监听
+function handleScroll() {
+  debouncedScrollHandler()
+}
+
+function clickShop(item) {
+  if (['google', 'iphone'].includes(item)) {
+    openStoreUrl(undefined, item)
+  }
+}
+
+onMounted(() => {
+  console.log(12312321)
+  console.log(isGoShop.value, 'isGoShop.value')
+  if (isAlreadyAppointment.value) {
+    if (!isGoShop.value) {
+      isShowPhoneAppointmentSuccessPopup.value = true
+    }
+  }
+  else {
+    if (isGoShop.value) {
+      isShowPhoneAppointmentPopup.value = true
+    } else {
+      isShowAppointmentPopup.value = true
+    }
+  }
+  isIos.value = mobileSystem() === 'ios'
+  if (isIos.value) {
+    bindOs.value = 'ios'
+  }
+  // 添加滚动监听器
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  updateActiveNavByScroll()
+  reservationInitApi()
+})
 
 
 
@@ -504,7 +323,7 @@ function setActiveNav(val: string) {
       <!-- 顶部固定栏 -->
       <div
         class="flex-items-center pl-26 pr-85 max-w-1920   bg-black h-80 w-full  top-0 fixed z-10 font-[DNF_Forged_Blade] font-300 text-[28px] color-white">
-        <img src="/pc/head-logo.png" class="h-70 w-181" />
+        <img src="/assets/images/pc/head-logo.png" class="h-70 w-181" />
         <div class="flex-1">
         </div>
         <div v-for="item in navList" :key="item.name" class="cursor-pointer whitespace-nowrap nav-item"
@@ -514,60 +333,61 @@ function setActiveNav(val: string) {
         </div>
         <div class="flex-1"></div>
         <div class="flex">
-          <img src="/pc/game.png" class="h-83 w-100 cursor-pointer mr-4" />
-          <img src="/pc/video.png" class="h-84 w-92 cursor-pointer   " />
+          <img src="/assets/images/pc/game.png" class="h-83 w-100 cursor-pointer mr-4" />
+          <img src="/assets/images/pc/video.png" class="h-84 w-92 cursor-pointer   " />
         </div>
       </div>
       <div
         class="w-192 h-229 fixed z-20 right-0 top-[49%] cursor-pointer animate__animated animate__pulse animate__infinite"
         @click="setActiveNav('preorder')" v-show="showBottomPopup">
-        <img src="/pc/fixed-icon.png" class="w-full h-full" />
+        <img src="/assets/images/pc/fixed-icon.png" class="w-full h-full" />
       </div>
       <!-- kv图 -->
       <div class="kv-bg bg-cover-no-repeat bg-no-repeat pt-134 h-1098 w-full pt-89" id="main-menu">
         <div class="absolute top-0 left-0 w-full  overflow-hidden z-0 pointer-events-none">
           <video class="w-full h-1098 object-cover" autoPlay loop muted playsInline>
-            <source src='/video/pc-kv.mp4' type="video/mp4" />
+            <source src='/assets/video/pc-kv.mp4' type="video/mp4" />
           </video>
         </div>
-        <img src="/pc/head-title-icon.png" class=" w-497 h-232 ml-729" />
-        <img src="/pc/head-title.png" class="ml-625 h-50 w-639" />
+        <img src="/assets/images/pc/head-title-icon.png" class=" w-497 h-232 ml-729" />
+        <img src="/assets/images/pc/head-title.png" class="ml-625 h-50 w-639" />
         <div class="ml-504 flex mt-454 gap-60">
-          <div v-for="item in shopList" :key="item" :class="`${item}-wrap`"
+          <div v-for="item in shopList" :key="item" :class="`${item}-wrap`" @click="clickShop(item)"
             class="w-183 h-55 cursor-pointer overflow-hidden shine-wrapper relative">
-            <img :src="`/pc/${item}.png`" class="h-full w-full" />
+            <img :src="getPcImageUrl(item, '')" class="h-full w-full" />
           </div>
         </div>
         <div class="mt-14 ml-803 relative">
-          <img src="/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer" @click="setActiveNav('preorder')" />
-          <img src="/animated-png/more-icon.png" class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
+          <img src="/assets/images/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer" @click="setActiveNav('preorder')" />
+          <img src="/assets/images/animated-png/more-icon.png" class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
         </div>
 
       </div>
       <div class="apppointment-bg bg-cover-no-repeat h-4884 absolute w-full top-[95%]">
         <!-- 第一部分 -->
-        <div id="preorder" class="pt-80">
+        <div id="preorder" class="pt-80 w-full h-943 bg-cover-no-repeat">
           <div class="step-title-1 bg-cover-no-repeat  mt-15 h-105 w-482 relative ml-720">
             <div
               class="text-[35px] text-[#C1D0FF] leading-[35px] font-[NotoSansSC] font-700 text-center w-170 right-[-1%] top-31.1% absolute">
               {{ formatNumber(initData?.reserved_count) }}
             </div>
-            <img src="/title-1-icon.png" class="h-105 w-106 right--19% top--8% absolute z-1" />
+            <img src="/assets/images/title-1-icon.png" class="h-105 w-106 right--19% top--8% absolute z-1" />
           </div>
           <div class="flex mt-63 ml-282">
             <div class="prize-list-bg bg-cover-no-repeat ml-5 mt-49 pt-121 h-462 w-674">
               <div class="ml-42 flex gap-32">
-                <img src="/pc/prize-1.png" class="w-177 h-218" />
-                <img src="/pc/prize-2.png" class="w-177 h-218" />
-                <img src="/pc/prize-3.png" class="w-176 h-218" />
+                <img src="/assets/images/pc/prize-1.png" class="w-177 h-218" />
+                <img src="/assets/images/pc/prize-2.png" class="w-177 h-218" />
+                <img src="/assets/images/pc/prize-3.png" class="w-176 h-218" />
               </div>
               <div class="mt-12 flex gap-6">
                 <div class="shine-wrapper overflow-hidden relative google-1-wrap w-279 h-100 ml-58"
-                  @click="openStoreUrl">
-                  <img src="/pc/google-1.png" class="w-full h-full   cursor-pointer" />
+                  @click="openStoreUrl(undefined, 'google')">
+                  <img src="/assets/images/pc/google-1.png" class="w-full h-full   cursor-pointer" />
                 </div>
-                <div class="shine-wrapper overflow-hidden relative iphone-2-wrap w-279 h-100" @click="openStoreUrl">
-                  <img src="/pc/iphone-2.png" class="w-full h-full  cursor-pointer" />
+                <div class="shine-wrapper overflow-hidden relative iphone-2-wrap w-279 h-100"
+                  @click="openStoreUrl(undefined, 'iphone')">
+                  <img src="/assets/images/pc/iphone-2.png" class="w-full h-full  cursor-pointer" />
                 </div>
               </div>
             </div>
@@ -599,7 +419,7 @@ function setActiveNav(val: string) {
                 <div
                   class="flex-items-center-center radio-bg bg-cover-no-repeat w-23 h-23 font-500 cursor-pointer relative"
                   @click="toAgree">
-                  <img src="/pc/tick.png" class="h-15 w-23 absolute right-[-7%]" v-show="isAgree" />
+                  <img src="/assets/images/pc/tick.png" class="h-15 w-23 absolute right-[-7%]" v-show="isAgree" />
                 </div>
                 <div
                   class="text-[#A7AABC] mt-1 text-[18px] leading-[18px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
@@ -609,89 +429,90 @@ function setActiveNav(val: string) {
                 </div>
               </div>
               <div class="mt-7 ml-193">
-                <img src="/appointment-btn1.png" class="h-87 w-234 cursor-pointer" @click="appointment" />
+                <img src="/assets/images/appointment-btn1.png" class="h-87 w-234 cursor-pointer" @click="appointment" />
               </div>
             </div>
           </div>
 
         </div>
         <!-- 第二部分 -->
-        <div id="activity">
-          <div class="step-title-2 bg-cover-no-repeat ml-751 mt-275 h-105 w-401 relative">
-            <img src="/title-2-icon.png" class="h-96 w-104 absolute z-1 left-[-22%] top-[-7%]" />
+        <div id="activity" class="h-1133 w-full bg-cover-no-repeat pt-130 mt--25">
+          <div class="step-title-2 bg-cover-no-repeat mx-auto  h-105 w-401 relative">
+            <img src="/assets/images/title-2-icon.png" class="h-96 w-104 absolute z-1 left-[-22%] top-[-7%]" />
           </div>
           <div class='flex mt-111 ml-273'>
-            <img src="/pc/10w.png" class="w-433 h-142 mr-56" />
-            <img src="/pc/50w.png" class="w-433 h-142 mr-57" />
-            <img src="/pc/100w.png" class="w-433 h-142" />
+            <img src="/assets/images/pc/10w.png" class="w-433 h-142 mr-56" />
+            <img src="/assets/images/pc/50w.png" class="w-433 h-142 mr-57" />
+            <img src="/assets/images/pc/100w.png" class="w-433 h-142" />
           </div>
           <div class="time-line bg-cover-no-repeat h-18 w-1496 relative ml-238 mt-88  pl-166">
             <div class="flex gap-176 absolute top-[-37px]">
               <div v-for="item in timeLineArr" :key="item.title" class=" z-1  h-90 w-91 ">
-                <img v-if="initData?.reserved_count >= item.num" src="/pc/line-reached.png" class="w-full h-full" />
-                <img v-else src="/pc/line-mark.png" class="w-full h-full" />
+                <img v-if="initData?.reserved_count >= item.num" src="/assets/images/pc/line-reached.png" class="w-full h-full" />
+                <img v-else src="/assets/images/pc/line-mark.png" class="w-full h-full" />
                 <!-- v-else -->
               </div>
             </div>
           </div>
           <div class="ml-546 mt-98 flex gap-84">
-            <img src="/pc/30w.png" class="w-433 h-142 " />
-            <img src="/pc/80w.png" class="w-433 h-142" />
+            <img src="/assets/images/pc/30w.png" class="w-433 h-142 " />
+            <img src="/assets/images/pc/80w.png" class="w-433 h-142" />
           </div>
 
           <div class="w-775 h-39 mt-135">
-            <img src="/animated-png/pc-line-top.png" class="w-full h-full" />
+            <img src="/assets/images/animated-png/pc-line-top.png" class="w-full h-full" />
           </div>
         </div>
         <!-- 第三部分 -->
-        <div class="mt-209" id="role">
-          <div class="step-title-3 bg-cover-no-repeat ml-728 h-105 w-257 relative mb-25">
-            <img src="/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
+        <div  id="role" class="  h-1432 w-full bg-cover-no-repeat mt--23 mx-auto pt-113px mt--23px"
+         >
+          <div class="step-title-3 bg-cover-no-repeat mx-auto h-105 w-257 relative mb-25">
+            <img src="/assets/images/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
           </div>
           <div class="title-3-bg w-1602 h-735 mt-94 ml-162 relative">
             <div class="absolute left-[827px] top-[-29px]  w-383 h-155">
-              <img :src="`/animated-png/${currentRoleName.name}.png`" class="w-full h-full" />
+              <img :src="getImageUrl(currentRoleName.name, 'animated-png')" class="w-full h-full" />
             </div>
             <div class="absolute z-2" :class="currentRoleName.sizeClass">
-              <img :src="`/pc/people/${currentRoleName.name}.png`" class="w-full h-full top--29 left--29"> </img>
+              <img :src="getPcImageUrl(currentRoleName.name, 'people')" class="w-full h-full top--29 left--29"> </img>
             </div>
             <div class="flex flex-col ml-735 pt-221">
               <div class="w-422 h-239 ml-142 mb-13">
-                <img :src="`/pc/people/${currentRoleName.name}-symbel.png`" class="w-full h-full " />
+                <img :src="getPcImageUrl(currentRoleName.name+'-symbel', 'people')" class="w-full h-full " />
               </div>
               <div class=" bg-cover-no-repeat " :class="currentRoleName.titleBgClass">
-                <img :src="`/pc/people/${currentRoleName.name}-intro.png`" class="w-450 h-109 mt-56 ml-246" />
+                <img :src="getPcImageUrl(currentRoleName.name+'-intro', 'people')" class="w-450 h-109 mt-56 ml-246" />
               </div>
             </div>
           </div>
           <div class="pl-369 mt-33 flex gap-9 w-full relative border-b-4 border-[#6024F8] pb-53">
             <div v-for="item in rolesList" :key="item.name" class="w-141 h-202 cursor-pointer flex-col-items-center"
               @click="selectRole(item)">
-              <img :src="`/pc/roles/${item.name}-selected.png`" v-show="item.isSelected" class="w-full h-full" />
-              <img :src="`/pc/roles/${item.name}.png`" v-show="!item.isSelected" class="w-full h-full" />
-              <img src="/pc/line-selected.png" v-show="item.isSelected" class="w-63 h-4 mt-53 mr-15" />
+              <img :src="getPcImageUrl(item.name+'-selected', 'roles')" v-show="item.isSelected" class="w-full h-full" />
+              <img :src="getPcImageUrl(item.name, 'roles')" v-show="!item.isSelected" class="w-full h-full" />
+              <img src="/assets/images/pc/line-selected.png" v-show="item.isSelected" class="w-63 h-4 mt-53 mr-15" />
             </div>
           </div>
           <!-- <div class='w-full h-4 bg-[#6024F8] opacity-80 mt-53  z-1 bottom-0'>
           </div> -->
         </div>
         <!-- 第四部分 -->
-        <div class="mt-96" id="game-features">
+        <div  id="game-features" class=" h-1432 w-full bg-cover-no-repeat mt--40px pt-35">
           <div class="w-909 h-39 ml-1011 mb-48">
-            <img src="/animated-png/pc-line-bottom.png" class="w-909 h-39" />
+            <img src="/assets/images/animated-png/pc-line-bottom.png" class="w-909 h-39" />
           </div>
           <div class="step-title-4 bg-cover-no-repeat ml-846 h-105 w-221 relative">
-            <img src="/title-4-icon.png" class="h-100 w-87 absolute z-1 left-[-34%] top-[-7%]" />
+            <img src="/assets/images/title-4-icon.png" class="h-100 w-87 absolute z-1 left-[-34%] top-[-7%]" />
           </div>
           <swiperPc :slides="bannerArr" />
           <!-- <div class="relative mt-90 ml-386 flex">
-            <img src="/pc/swiper-left.png" class="w-49 h-74 mr-107 cursor-pointer mt-365" />
+            <img src="/assets/images/pc/swiper-left.png" class="w-49 h-74 mr-107 cursor-pointer mt-365" />
             <div class="swiper-bg w-453 h-782 relative ml-83 bg-cover-no-repeat pl-27 pt-45">
               <div class="w-400 h-710">
-                <img src="/pc/swiper-1.png" class="w-full h-full" />
+                <img src="/assets/images/pc/swiper-1.png" class="w-full h-full" />
               </div>
             </div>
-            <img src="/pc/swiper-right.png" class="w-49 h-74 ml-107  cursor-pointer mt-365" />
+            <img src="/assets/images/pc/swiper-right.png" class="w-49 h-74 ml-107  cursor-pointer mt-365" />
           </div> -->
         </div>
 
@@ -699,9 +520,9 @@ function setActiveNav(val: string) {
           class="mt-133  pt-83
            w-full h-213 bg-[#08081D]  flex-col-items-center  absolute bottom-0 text-[24px] leading-[24px] text-[#fff]  font-[NotoSansSC]">
           <div class="tracking-[6px] flex ">
-            <span>이용약관</span>
+            <span @click="openUrl('serviceUrl')" class="cursor-pointer">이용약관</span>
             <span class="w-1 h-24 bg-white ml-20 mr-20"></span>
-            <span>개인정보처리방침</span>
+            <span @click="openUrl('priviateUrl')" class="cursor-pointer">개인정보처리방침</span>
           </div>
           <div class="mt-14">
             ©2026 DAWN BREAKING NETWORK TECHNOLOGY CO., LIMITED. ALL RIGHTS RESERVED.
@@ -714,34 +535,35 @@ function setActiveNav(val: string) {
         <div class="">
           <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679  ml-49 pt-228">
             <div class=" ml-69 relative">
-              <img src="/popup/appointment-title.png" class="w-530 h-101" />
-              <img src="/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
+              <img src="/assets/images/popup/appointment-title.png" class="w-530 h-101" />
+              <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
                 @click="isShowAppointmentPopup = false" />
             </div>
             <div class='ml-88 mt-42'>
-              <img src="/popup/step-1.png" class="w-479 h-38" />
+              <img src="/assets/images/popup/step-1.png" class="w-479 h-38" />
             </div>
             <div
               class="popup-prize-list-bg flex-items-between bg-cover-no-repeat h-173 w-491 ml-83 mt-16 pl-32 pr-28 pt-13">
               <div class="flex-col-items-center mt-20">
-                <img src="/popup/444-icon.png" class="w-100 h-93" />
-                <img src="/popup/444.png" class="w-105 h-29 mt-13" />
+                <img src="/assets/images/popup/444-icon.png" class="w-100 h-93" />
+                <img src="/assets/images/popup/444.png" class="w-105 h-29 mt-13" />
               </div>
               <div class="flex-col-items-center relative">
-                <img src="/popup/sizheng-icon.png" class="w-155 h-137" />
-                <img src="/popup/sizheng.png" class="w-145 h-29  absolute top-[126px] left-[11px]" />
+                <img src="/assets/images/popup/sizheng-icon.png" class="w-155 h-137" />
+                <img src="/assets/images/popup/sizheng.png" class="w-145 h-29  absolute top-[126px] left-[11px]" />
               </div>
               <div class="flex-col-items-center mt-18">
-                <img src="/popup/qianghua-icon.png" class="w-114 h-92" />
-                <img src="/popup/qianghua.png" class="w-106 h-29 mt-13 mt-16" />
+                <img src="/assets/images/popup/qianghua-icon.png" class="w-114 h-92" />
+                <img src="/assets/images/popup/qianghua.png" class="w-106 h-29 mt-13 mt-16" />
               </div>
 
             </div>
-            <div class="mt-13 ml-201">
-              <img src="/popup/google-appointment.png" class="w-255 h-92" />
+            <div class="mt-13 ml-70 w-255 h-92 flex cursor-pointer" >
+              <img src="/assets/images/popup/google-appointment.png"  class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','google')" />
+              <img src="/assets/images/popup/apple-appointment.png" class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','iphone')" />
             </div>
             <div class='ml-88 mt-4'>
-              <img src="/popup/step-2.png" class="w-479 h-38" />
+              <img src="/assets/images/popup/step-2.png" class="w-479 h-38" />
             </div>
             <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
               <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
@@ -768,7 +590,7 @@ function setActiveNav(val: string) {
             <div class="flex ml-65 mt-17">
               <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer"
                 @click="toAgree">
-                <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
+                <img src="/assets/images/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
                 class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
@@ -778,7 +600,7 @@ function setActiveNav(val: string) {
               </div>
             </div>
             <div class='ml-185 mt-8'>
-              <img src="/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer"
+              <img src="/assets/images/popup/appoitment-comfirm.png" class="w-273 h-83 cursor-pointer"
                 @click="appointment('phoneAndShopPopup')" />
             </div>
           </div>
@@ -790,16 +612,16 @@ function setActiveNav(val: string) {
         class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center overflow-auto '>
         <div class="h-full pt-74">
           <div class="ml-46 relative ">
-            <img src="/popup/phone-title.png" class="w-636 h-94" />
-            <img src="/popup/close.png" class="w-84 h-85 absolute right-3.9% top--9% cursor-pointer"
+            <img src="/assets/images/popup/phone-title.png" class="w-636 h-94" />
+            <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-3.9% top--9% cursor-pointer"
               @click="isShowPhoneAppointmentPopup = false" />
           </div>
           <div class="phone-appointment-popup-bg bg-cover-no-repeat h-707 w-683 mt-13 ml-21 pt-54">
             <div class=" ml-340">
-              <img src="/popup/phone-info.png" class="w-333 h-165" />
+              <img src="/assets/images/popup/phone-info.png" class="w-333 h-165" />
             </div>
             <div class="mt-4 ml-324">
-              <img src="/popup/phone-dialog.png" class="w-339 h-117" />
+              <img src="/assets/images/popup/phone-dialog.png" class="w-339 h-117" />
             </div>
             <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
               <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
@@ -826,7 +648,7 @@ function setActiveNav(val: string) {
             <div class="flex ml-110 mt-14">
               <div class="flex-items-center-center popup-radio-bg bg-cover-no-repeat w-25 h-25 font-500 cursor-pointer"
                 @click="toAgree">
-                <img src="/tick.png" class="h-16 w-24" v-show="isAgree" />
+                <img src="/assets/images/tick.png" class="h-16 w-24" v-show="isAgree" />
               </div>
               <div
                 class="text-[#381076] font-500 mt-1 text-[19px] leading-[19px] font-[NotoSansSC] font-500 ml-12 tracking-[-1px] cursor-pointer">
@@ -836,7 +658,7 @@ function setActiveNav(val: string) {
               </div>
             </div>
             <div class='ml-225 mt-24'>
-              <img src="/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" @click="appointment('phonePopup')" />
+              <img src="/assets/images/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" @click="appointment('phonePopup')" />
             </div>
           </div>
         </div>
@@ -848,20 +670,22 @@ function setActiveNav(val: string) {
         <div class="w-full">
           <div class="phone-appointment-success-popup-bg bg-cover-no-repeat h-947 w-655  pt-256 mx-auto ">
             <div class="relative">
-              <img src="/popup/phone-success-title.png" class="w-636 h-94" />
-              <img src="/popup/close.png" class="w-84 h-85 absolute right--2.9% top--9% cursor-pointer"
+              <img src="/assets/images/popup/phone-success-title.png" class="w-636 h-94" />
+              <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right--2.9% top--9% cursor-pointer"
                 @click="isShowPhoneAppointmentSuccessPopup = false" />
             </div>
-            <img src="/popup/phone-go-market-title.png" class="w-564 h-42 mt-74 ml-48" />
+            <img src="/assets/images/popup/phone-go-market-title.png" class="w-564 h-42 mt-74 ml-48" />
             <div class='ml-30 mt-42 flex'>
-              <img src="/popup/phone-prize-1.png" class="w-207 h-224" />
-              <img src="/popup/phone-prize-2.png" class="w-207 h-224" />
-              <img src="/popup/phone-prize-3.png" class="w-207 h-224" />
+              <img src="/assets/images/popup/phone-prize-1.png" class="w-207 h-224" />
+              <img src="/assets/images/popup/phone-prize-2.png" class="w-207 h-224" />
+              <img src="/assets/images/popup/phone-prize-3.png" class="w-207 h-224" />
             </div>
-            <img v-if='isIos' src="/popup/phone-apple.png" class="w-300 h-89 mt-47 ml-176"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
-            <img v-else src="/popup/phone-google.png" class="w-300 h-89 mt-47 ml-176"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup')" />
+            <div class="flex justify-center  mt-47">
+              <img  src="/assets/images/popup/phone-google.png" class="w-300 h-89 cursor-pointer"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup','google')" />
+              <img src="/assets/images/popup/phone-apple.png" class="w-300 h-89 cursor-pointer"
+              @click="openStoreUrl('PhoneAppointmentSuccessPopup','iphone')" />
+            </div>
           </div>
         </div>
       </div>
@@ -870,7 +694,7 @@ function setActiveNav(val: string) {
         class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center'>
         <div>
           <div class="relative ml-46">
-            <img src="/popup/announcements-title.png" class="w-636 h-94" />
+            <img src="/assets/images/popup/announcements-title.png" class="w-636 h-94" />
           </div>
           <div class="announcements-popup-bg bg-cover-no-repeat h-584 w-655  ml-49 pt-51 mt-13">
             <div
@@ -902,7 +726,7 @@ function setActiveNav(val: string) {
                 벤트 관련 프로모션 정보를 문자(SMS) 등으로 수신하는 데 동의합니다.
               </div>
             </div>
-            <img src="/popup/announcements-confirm.png" class="w-185 h-71 cursor-pointer mt-18 mx-auto"
+            <img src="/assets/images/popup/announcements-confirm.png" class="w-185 h-71 cursor-pointer mt-18 mx-auto"
               @click='isShowAnnouncementsPopup = false' />
           </div>
         </div>
@@ -911,10 +735,10 @@ function setActiveNav(val: string) {
       <!-- 系统弹窗 -->
       <div v-show="isShowTipPopup" class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-items-center-center'>
         <div class='relative'>
-          <img src="/popup/close.png" class="w-84 h-85 absolute right-4.1% top--20% cursor-pointer"
+          <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-4.1% top--20% cursor-pointer"
             @click="isShowTipPopup = false" />
           <div class="tip-bg bg-cover-no-repeat h-414 w-657 pt-70">
-            <img src="/popup/tip-title.png" class="w-98 h-59 mx-auto " />
+            <img src="/assets/images/popup/tip-title.png" class="w-98 h-59 mx-auto " />
             <div class="font-500 text-[21px] leading-[21px] font-[NotoSansSC] color-[#281378] text-center mt-97">
               {{ tipText }}</div>
           </div>
@@ -925,19 +749,19 @@ function setActiveNav(val: string) {
         class='h-full bg-black/80  z-40 fixed w-full top-0 left-0 flex-justify-center overflow-auto' z-index="40">
         <div class="pt-200 h-full">
           <div class="ml-116 flex">
-            <img src="/popup/success-title.png" class="w-514 h-94" />
-            <img src="/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
+            <img src="/assets/images/popup/success-title.png" class="w-514 h-94" />
+            <img src="/assets/images/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
               @click="isShowAppointmentSuccessPopup = false" />
           </div>
           <div class="success-popup-bg bg-cover-no-repeat h-414 w-657 mt-9 ml-47 pt-31">
             <div class="ml-142">
-              <img src="/popup/success-icon.png" class="w-380 h-206" />
+              <img src="/assets/images/popup/success-icon.png" class="w-380 h-206" />
             </div>
             <div class="text-[24px] text-[#281378] leading-[24px] font-500 font-[NotoSansSC] ml-103 mt-31">공식 라운지에서 더
               많은
               이벤트에 참여하세요!</div>
             <div class="mt-12 ml-180">
-              <img src="/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
+              <img src="/assets/images/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
             </div>
           </div>
         </div>
@@ -952,35 +776,50 @@ function setActiveNav(val: string) {
 
 <style scoped>
 .apppointment-bg {
-  background-image: url("/pc/bg.png");
+  /* background-image: url("/assets/images/pc/bg.png"); */
 }
 
 /* .apppointment-bg-wrap {
   overflow: auto;
 } */
 
+#preorder {
+  background-image: url("/assets/images/pc/bg-1.png");
+}
+#activity {
+  background-image: url("/assets/images/pc/bg-2.png");
+}
+#role {
+  background-image: url("/assets/images/pc/bg-3.png");
+}
+#game-features {
+  background-image: url("/assets/images/pc/bg-4.png");
+}
+
+
+
 .kv-bg {
-  background-image: url("/pc/kv-img.png");
+  background-image: url("/assets/images/pc/kv-img.png");
 }
 
 .step-title-1 {
-  background-image: url("/animated-png/step-title-1.png");
+  background-image: url("/assets/images/animated-png/step-title-1.png");
 }
 
 .prize-list-bg {
-  background-image: url("/pc/prize-list-bg.png");
+  background-image: url("/assets/images/pc/prize-list-bg.png");
 }
 
 .popup-prize-list-bg {
-  background-image: url("/popup/prize-list-bg.png");
+  background-image: url("/assets/images/popup/prize-list-bg.png");
 }
 
 .appointment-input-bg {
-  background-image: url("/pc/appointment-input-bg.png");
+  background-image: url("/assets/images/pc/appointment-input-bg.png");
 }
 
 .download-bg {
-  background-image: url("/download-bg.png");
+  background-image: url("/assets/images/download-bg.png");
 }
 
 .number-input::placeholder {
@@ -996,55 +835,55 @@ function setActiveNav(val: string) {
 }
 
 .radio-bg {
-  background-image: url("/pc/radio-bg.png");
+  background-image: url("/assets/images/pc/radio-bg.png");
 }
 
 .step-title-2 {
-  background-image: url("/animated-png/step-title-2.png");
+  background-image: url("/assets/images/animated-png/step-title-2.png");
 }
 
 .step-title-3 {
-  background-image: url("/animated-png/step-title-3.png");
+  background-image: url("/assets/images/animated-png/step-title-3.png");
 }
 
 .step-title-4 {
-  background-image: url("/animated-png/step-title-4.png");
+  background-image: url("/assets/images/animated-png/step-title-4.png");
 }
 
 .time-line {
-  background-image: url("/pc/time-line.png");
+  background-image: url("/assets/images/pc/time-line.png");
 }
 
 .title-3-bg {
-  background-image: url("/pc/title-3-bg.png");
+  background-image: url("/assets/images/pc/title-3-bg.png");
 }
 
 .title-3-decorate {
-  background-image: url("/title-3-decorate.png");
+  background-image: url("/assets/images/title-3-decorate.png");
 }
 
 .swiper-bg {
-  background-image: url("/pc/swiper-bg.png");
+  background-image: url("/assets/images/pc/swiper-bg.png");
 }
 
 .bottom-bg {
-  background-image: url("/bottom-bg.png");
+  background-image: url("/assets/images/bottom-bg.png");
 }
 
 .appointment-popup-bg {
-  background-image: url("/popup/appointment-bg.png");
+  background-image: url("/assets/images/popup/appointment-bg.png");
 }
 
 .phone-appointment-popup-bg {
-  background-image: url("/popup/phone-bg.png");
+  background-image: url("/assets/images/popup/phone-bg.png");
 }
 
 .popup-radio-bg {
-  background-image: url("/popup/radio-bg.png");
+  background-image: url("/assets/images/popup/radio-bg.png");
 }
 
 .success-popup-bg {
-  background-image: url("/popup/success-bg.png");
+  background-image: url("/assets/images/popup/success-bg.png");
 }
 
 .nav-item:hover {
@@ -1052,7 +891,7 @@ function setActiveNav(val: string) {
 }
 
 .nvqumo-title-bg {
-  background-image: url("/pc/people/nvqumo-title-bg.png");
+  background-image: url("/assets/images/pc/people/nvqumo-title-bg.png");
   width: 757px;
   height: 203px;
 }
@@ -1064,37 +903,37 @@ function setActiveNav(val: string) {
 }
 
 .baihu-title-bg {
-  background-image: url("/pc/people/baihu-title-bg.png");
+  background-image: url("/assets/images/pc/people/baihu-title-bg.png");
   width: 768px;
   height: 203px;
 }
 
 .jiuwei-title-bg {
-  background-image: url("/pc/people/jiuwei-title-bg.png");
+  background-image: url("/assets/images/pc/people/jiuwei-title-bg.png");
   width: 575px;
   height: 203px;
 }
 
 .youxia-title-bg {
-  background-image: url("/pc/people/youxia-title-bg.png");
+  background-image: url("/assets/images/pc/people/youxia-title-bg.png");
   width: 575px;
   height: 204px;
 }
 
 .stone-title-bg {
-  background-image: url("/pc/people/stone-title-bg.png");
+  background-image: url("/assets/images/pc/people/stone-title-bg.png");
   width: 774px;
   height: 203px;
 }
 
 .yandou-title-bg {
-  background-image: url("/pc/people/yandou-title-bg.png");
+  background-image: url("/assets/images/pc/people/yandou-title-bg.png");
   width: 562px;
   height: 204px;
 }
 
 .nanzhu-title-bg {
-  background-image: url("/pc/people/nanzhu-title-bg.png");
+  background-image: url("/assets/images/pc/people/nanzhu-title-bg.png");
   width: 774px;
   height: 203px;
 }
@@ -1125,34 +964,34 @@ function setActiveNav(val: string) {
 
 
 .google-wrap {
-  -webkit-mask: url('/pc/google.png') center / 100% 100% no-repeat;
-  mask: url('/pc/google.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('/assets/images/pc/google.png') center / 100% 100% no-repeat;
+  mask: url('/assets/images/pc/google.png') center / 100% 100% no-repeat;
 }
 
 .iphone-wrap {
-  -webkit-mask: url('/pc/iphone.png') center / 100% 100% no-repeat;
-  mask: url('/pc/iphone.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('/assets/images/pc/iphone.png') center / 100% 100% no-repeat;
+  mask: url('/assets/images/pc/iphone.png') center / 100% 100% no-repeat;
 }
 
 .one-wrap {
-  -webkit-mask: url('/pc/one.png') center / 100% 100% no-repeat;
-  mask: url('/pc/one.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('/assets/images/pc/one.png') center / 100% 100% no-repeat;
+  mask: url('/assets/images/pc/one.png') center / 100% 100% no-repeat;
 }
 
 .sanxing-wrap {
-  -webkit-mask: url('/pc/sanxing.png') center / 100% 100% no-repeat;
-  mask: url('/pc/sanxing.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('/assets/images/pc/sanxing.png') center / 100% 100% no-repeat;
+  mask: url('/assets/images/pc/sanxing.png') center / 100% 100% no-repeat;
 }
 
 .phone-appointment-success-popup-bg {
-  background-image: url("/popup/phone-success-bg.png");
+  background-image: url("/assets/images/popup/phone-success-bg.png");
 }
 
 .announcements-popup-bg {
-  background-image: url("/popup/announcements-bg.png");
+  background-image: url("/assets/images/popup/announcements-bg.png");
 }
 
 .tip-bg {
-  background-image: url("/popup/tip-bg.png");
+  background-image: url("/assets/images/popup/tip-bg.png");
 }
 </style>
