@@ -411,7 +411,7 @@ onMounted(() => {
                 <div class="text-[32px]">010</div>
                 <div class="w-1 h-30 bg-[#9189FA] ml-21 mr-21"></div>
                 <div class="flex-1">
-                  <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                  <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" maxlength="8"
                     class="outline-none bg-transparent number-input text-[28px] w-full" placeholder="휴대폰 번호 입력" />
                 </div>
               </div>
@@ -583,7 +583,7 @@ onMounted(() => {
               class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" maxlength="8"
                   class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>
@@ -641,7 +641,7 @@ onMounted(() => {
               class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" maxlength="8"
                   class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>

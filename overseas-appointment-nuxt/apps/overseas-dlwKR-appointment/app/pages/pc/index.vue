@@ -443,7 +443,9 @@ onMounted(() => {
                 <img :src="getPcImageUrl(currentRoleName.name + '-symbel', 'people')" class="w-full h-full " />
               </div>
               <div class=" bg-cover-no-repeat " :class="currentRoleName.titleBgClass">
-                <img :src="getPcImageUrl(currentRoleName.name + '-intro', 'people')" class="w-450 h-109 mt-56 ml-246" />
+                <div class='w-627 h-112 mt-56 ml-147'>
+                  <img :src="getPcImageUrl(currentRoleName.name + '-intro', 'people')" class="max-w-full max-h-full " />
+                </div>
               </div>
             </div>
           </div>
@@ -552,7 +554,7 @@ onMounted(() => {
               class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                <input type="tel" pattern="[0-9]*" maxlength="8" inputmode="numeric" v-model="inputValue"
                   class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>
@@ -610,7 +612,7 @@ onMounted(() => {
               class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
               <div class="flex-1">
-                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue" maxlength="8"
                   class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
               </div>
             </div>
@@ -736,7 +738,7 @@ onMounted(() => {
               많은
               이벤트에 참여하세요!</div>
             <div class="mt-12 ml-180">
-              <img src="/assets/images/popup/success-btn.png" class="w-302 h-71 cursor-pointer" />
+              <img src="/assets/images/popup/success-btn.png" class="w-302 h-71 cursor-pointer" @click="openUrl('loungeUrl')" />
             </div>
           </div>
         </div>

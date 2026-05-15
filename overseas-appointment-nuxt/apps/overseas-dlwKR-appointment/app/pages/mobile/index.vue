@@ -610,7 +610,7 @@ onMounted(() => {
         <div class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
           <div class="text-[38px] mr-115">010</div>
           <div class="flex-1">
-            <input v-model="inputValue" type="tel" pattern="[0-9]*" inputmode="numeric"
+            <input v-model="inputValue" type="tel" maxlength="8" pattern="[0-9]*" inputmode="numeric" 
               class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
           </div>
         </div>
@@ -723,7 +723,7 @@ onMounted(() => {
           이벤트에 참여하세요!</div>
         <div class="mt-12 ml-180">
           <img src="/assets/images/popup/success-btn.png"
-            class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite" />
+            class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite" @click="openUrl('loungeUrl')" />
         </div>
       </div>
 
