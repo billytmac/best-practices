@@ -4,12 +4,13 @@ import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
 import { fbe, ga4, ttq, gge } from '@/composables/mediaTagging'
+import { mobileSystem } from "~/utils/index.client"
 
 
 export default function useCommon() {
     const handleCutomStore = useCustomStore()
     const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
-    const isIos = ref('')
+    const isIos = ref(false)
     // console.log(window.navigator,'mobileSystem')
     const isShowAppointmentPopup = ref<boolean>(false)
     const isShowPhoneAppointmentPopup = ref<boolean>(false)
@@ -21,7 +22,11 @@ export default function useCommon() {
     const urlObj = {
         priviateUrl: 'https://cdn-overseas.dawnbreaking.com/overseasCdn/privacyAgreement/privacy_hanYu_53.html',
         serviceUrl: 'https://cdn-overseas.dawnbreaking.com/overseasCdn/privacyAgreement/operate_hanYu_54.html',
+        loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
+        youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
     }
+
+    const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
 
     const isShowAppointmentSuccessPopup = ref<boolean>(false)
     const isShowAnnouncementsPopup = ref<boolean>(false)
@@ -42,71 +47,71 @@ export default function useCommon() {
         return ['activity', 'role', 'game-features'].includes(activeNav.value)
     })
 
-    const getPcImageUrl = (name,type) => {
+    const getPcImageUrl = (name, type) => {
         // 第一个参数是相对路径，第二个参数是基础URL
         // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
         // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
         // eager: true 表示立即导入，而不是异步导入
-        
+
         // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-       let images = ''
-       let path = ''
-       switch(type) {
-        case 'people':
-            images = import.meta.glob(`../assets/images/pc/people/*.png`, { eager: true });
-            path = `../assets/images/pc/people/${name}.png`;
-            break;
-        case 'roles':
-            images = import.meta.glob(`../assets/images/pc/roles/*.png`, { eager: true });
-            path = `../assets/images/pc/roles/${name}.png`;
-            break;
-        default:
-            console.log(name, 'name')
-            images = import.meta.glob(`../assets/images/pc/*.png`, { eager: true });
-            path = `../assets/images/pc/${name}.png`;
-            break;
-       }
-    
+        let images = ''
+        let path = ''
+        switch (type) {
+            case 'people':
+                images = import.meta.glob(`../assets/images/pc/people/*.png`, { eager: true });
+                path = `../assets/images/pc/people/${name}.png`;
+                break;
+            case 'roles':
+                images = import.meta.glob(`../assets/images/pc/roles/*.png`, { eager: true });
+                path = `../assets/images/pc/roles/${name}.png`;
+                break;
+            default:
+                console.log(name, 'name')
+                images = import.meta.glob(`../assets/images/pc/*.png`, { eager: true });
+                path = `../assets/images/pc/${name}.png`;
+                break;
+        }
+
         // 2. 匹配对应的完整路径
         // const pathName = `${path}/${name}.png`;
         // 3. 返回处理后的路径（通常包含 Hash）
         return images[path]?.default ?? '';
     }
-    const getImageUrl = (name,type) => {
+    const getImageUrl = (name, type) => {
         // 第一个参数是相对路径，第二个参数是基础URL
         // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
         // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
         // eager: true 表示立即导入，而不是异步导入
-        
+
         // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-       let images = ''
-       let path = ''
-       switch(type) {
-        case 'animated-png':
-            images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-            path = `../assets/images/animated-png/${name}.png`;
-            break;
-        case 'people':
-            images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
-            path = `../assets/images/people/${name}.png`;
-            break;
-        case 'roles':
-            images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
-            path = `../assets/images/roles/${name}.png`;
-            break;
-        case 'popup':
-            images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
-            path = `../assets/images/popup/${name}.png`;
-            break;
-        default:
-            console.log(name, 'name')
-            images = import.meta.glob(`../assets/images/*.png`, { eager: true });
-            path = `../assets/images/${name}.png`;
-            break;
-       }
-       console.log(images, 'images')
-       console.log(path, 'path111')
-       console.log(images[path], 'images11')
+        let images = ''
+        let path = ''
+        switch (type) {
+            case 'animated-png':
+                images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+                path = `../assets/images/animated-png/${name}.png`;
+                break;
+            case 'people':
+                images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
+                path = `../assets/images/people/${name}.png`;
+                break;
+            case 'roles':
+                images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
+                path = `../assets/images/roles/${name}.png`;
+                break;
+            case 'popup':
+                images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
+                path = `../assets/images/popup/${name}.png`;
+                break;
+            default:
+                console.log(name, 'name')
+                images = import.meta.glob(`../assets/images/*.png`, { eager: true });
+                path = `../assets/images/${name}.png`;
+                break;
+        }
+        console.log(images, 'images')
+        console.log(path, 'path111')
+        console.log(images[path], 'images11')
         // 2. 匹配对应的完整路径
         // const pathName = `${path}/${name}.png`;
         // 3. 返回处理后的路径（通常包含 Hash）
@@ -143,7 +148,7 @@ export default function useCommon() {
                 url = store_ios_url
             }
         } else {
-            if (isIos) {
+            if (isIos.value) {
                 fbe('MO_ios')
                 ga4('MO_ios')
                 url = store_ios_url
@@ -153,7 +158,7 @@ export default function useCommon() {
                 url = store_url
             }
         }
-        console.log(url, 'url')
+        console.log(url, 'url111')
         window.open(url)
 
         switch (type) {
@@ -198,6 +203,9 @@ export default function useCommon() {
 
     function openUrl(type) {
         window.open(urlObj[type])
+        if(type === 'loungeUrl') {
+            reservationEventApi('hw_yry_like_count')
+        } 
     }
 
     function openTipPopup(text: string) {
@@ -207,7 +215,7 @@ export default function useCommon() {
 
     async function appointment(type) {
         reservationEventApi('hw_yry_reservation_count')
-        if (!/^\d{9}$/.test(inputValue.value)) {
+        if (!/^\d{8}$/.test(inputValue.value)) {
             openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
             return
         }
@@ -239,6 +247,7 @@ export default function useCommon() {
             ga4('CompleteRegistration')
             fbe('CompleteRegistration')
             ttq('CompleteRegistration')
+            reservationInitApi()
         }
         if (isGoShop.value) {
             if (isReserve === 0) {
@@ -300,7 +309,25 @@ export default function useCommon() {
     }
 
     onMounted(() => {
+        if (isAlreadyAppointment.value) {
+            if (!isGoShop.value) {
+                isShowPhoneAppointmentSuccessPopup.value = true
+            }
+            gge(storagePhoneInfo.value?.phone)
+        }
+        else {
+            if (isGoShop.value) {
+                isShowPhoneAppointmentPopup.value = true
+            } else {
+                isShowAppointmentPopup.value = true
+            }
+        }
         reservationEventApi('hw_yry_PV')
+        isIos.value = mobileSystem() === 'ios'
+        if (isIos.value) {
+            bindOs.value = 'ios'
+        }
+        reservationInitApi()
     })
 
 
@@ -334,7 +361,8 @@ export default function useCommon() {
         openUrl,
         storagePhoneInfo,
         getImageUrl,
-        getPcImageUrl
+        getPcImageUrl,
+        bannerArr
     }
 
 }

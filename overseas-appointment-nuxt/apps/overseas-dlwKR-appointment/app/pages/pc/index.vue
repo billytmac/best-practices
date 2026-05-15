@@ -5,35 +5,10 @@ definePageMeta({
   name: "pc",
 });
 
-const { openUrl,getPcImageUrl,getImageUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
+const { bannerArr, openUrl, getPcImageUrl, getImageUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
 
 
-const bannerArr = [
-  {
-    bannerImg: 'swiper-1',
-    bannerUrl: '',
-  },
-  {
-    bannerImg: 'swiper-2',
-    bannerUrl: '',
-  },
-  {
-    bannerImg: 'swiper-3',
-    bannerUrl: '',
-  },
-  {
-    bannerImg: 'swiper-4',
-    bannerUrl: '',
-  },
-  {
-    bannerImg: 'swiper-5',
-    bannerUrl: '',
-  },
-  {
-    bannerImg: 'swiper-6',
-    bannerUrl: '',
-  },
-]
+
 
 const shopList = ['google', 'iphone', 'one', 'sanxing']
 
@@ -289,28 +264,9 @@ function clickShop(item) {
 }
 
 onMounted(() => {
-  console.log(12312321)
-  console.log(isGoShop.value, 'isGoShop.value')
-  if (isAlreadyAppointment.value) {
-    if (!isGoShop.value) {
-      isShowPhoneAppointmentSuccessPopup.value = true
-    }
-  }
-  else {
-    if (isGoShop.value) {
-      isShowPhoneAppointmentPopup.value = true
-    } else {
-      isShowAppointmentPopup.value = true
-    }
-  }
-  isIos.value = mobileSystem() === 'ios'
-  if (isIos.value) {
-    bindOs.value = 'ios'
-  }
   // 添加滚动监听器
   window.addEventListener('scroll', handleScroll, { passive: true })
   updateActiveNavByScroll()
-  reservationInitApi()
 })
 
 
@@ -333,8 +289,8 @@ onMounted(() => {
         </div>
         <div class="flex-1"></div>
         <div class="flex">
-          <img src="/assets/images/pc/game.png" class="h-83 w-100 cursor-pointer mr-4" />
-          <img src="/assets/images/pc/video.png" class="h-84 w-92 cursor-pointer   " />
+          <img @click="openUrl('loungeUrl')" src="/assets/images/pc/game.png" class="h-83 w-100 cursor-pointer mr-4" />
+          <img @click="openUrl('youtubeUrl')" src="/assets/images/pc/video.png" class="h-84 w-92 cursor-pointer   " />
         </div>
       </div>
       <div
@@ -349,8 +305,12 @@ onMounted(() => {
             <source src='/assets/video/pc-kv.mp4' type="video/mp4" />
           </video>
         </div>
-        <img src="/assets/images/pc/head-title-icon.png" class=" w-497 h-232 ml-729" />
-        <img src="/assets/images/pc/head-title.png" class="ml-625 h-50 w-639" />
+        <div class="relative  w-497 h-232">
+          <img src="/assets/images/pc/head-title-icon.png" class="w-full h-full ml-729" />
+        </div>
+        <div class="relative  w-639 h-50">
+          <img src="/assets/images/pc/head-title.png" class="ml-625 w-full h-full" />
+        </div>
         <div class="ml-504 flex mt-454 gap-60">
           <div v-for="item in shopList" :key="item" :class="`${item}-wrap`" @click="clickShop(item)"
             class="w-183 h-55 cursor-pointer overflow-hidden shine-wrapper relative">
@@ -358,8 +318,10 @@ onMounted(() => {
           </div>
         </div>
         <div class="mt-14 ml-803 relative">
-          <img src="/assets/images/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer" @click="setActiveNav('preorder')" />
-          <img src="/assets/images/animated-png/more-icon.png" class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
+          <img src="/assets/images/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer"
+            @click="setActiveNav('preorder')" />
+          <img src="/assets/images/animated-png/more-icon.png"
+            class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
         </div>
 
       </div>
@@ -411,7 +373,7 @@ onMounted(() => {
                 <div class="text-[32px]">010</div>
                 <div class="w-1 h-30 bg-[#9189FA] ml-21 mr-21"></div>
                 <div class="flex-1">
-                  <input type="tel" pattern="[0-9]*" inputmode="numeric" v-model="inputValue"
+                  <input type="tel" pattern="[0-9]*" maxlength="8" inputmode="numeric" v-model="inputValue"
                     class="outline-none bg-transparent number-input text-[28px] w-full" placeholder="휴대폰 번호 입력" />
                 </div>
               </div>
@@ -448,7 +410,8 @@ onMounted(() => {
           <div class="time-line bg-cover-no-repeat h-18 w-1496 relative ml-238 mt-88  pl-166">
             <div class="flex gap-176 absolute top-[-37px]">
               <div v-for="item in timeLineArr" :key="item.title" class=" z-1  h-90 w-91 ">
-                <img v-if="initData?.reserved_count >= item.num" src="/assets/images/pc/line-reached.png" class="w-full h-full" />
+                <img v-if="initData?.reserved_count >= item.num" src="/assets/images/pc/line-reached.png"
+                  class="w-full h-full" />
                 <img v-else src="/assets/images/pc/line-mark.png" class="w-full h-full" />
                 <!-- v-else -->
               </div>
@@ -464,8 +427,7 @@ onMounted(() => {
           </div>
         </div>
         <!-- 第三部分 -->
-        <div  id="role" class="  h-1432 w-full bg-cover-no-repeat mt--23 mx-auto pt-113px mt--23px"
-         >
+        <div id="role" class="  h-1432 w-full bg-cover-no-repeat mt--23 mx-auto pt-113px mt--23px">
           <div class="step-title-3 bg-cover-no-repeat mx-auto h-105 w-257 relative mb-25">
             <img src="/assets/images/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
           </div>
@@ -478,17 +440,18 @@ onMounted(() => {
             </div>
             <div class="flex flex-col ml-735 pt-221">
               <div class="w-422 h-239 ml-142 mb-13">
-                <img :src="getPcImageUrl(currentRoleName.name+'-symbel', 'people')" class="w-full h-full " />
+                <img :src="getPcImageUrl(currentRoleName.name + '-symbel', 'people')" class="w-full h-full " />
               </div>
               <div class=" bg-cover-no-repeat " :class="currentRoleName.titleBgClass">
-                <img :src="getPcImageUrl(currentRoleName.name+'-intro', 'people')" class="w-450 h-109 mt-56 ml-246" />
+                <img :src="getPcImageUrl(currentRoleName.name + '-intro', 'people')" class="w-450 h-109 mt-56 ml-246" />
               </div>
             </div>
           </div>
           <div class="pl-369 mt-33 flex gap-9 w-full relative border-b-4 border-[#6024F8] pb-53">
             <div v-for="item in rolesList" :key="item.name" class="w-141 h-202 cursor-pointer flex-col-items-center"
               @click="selectRole(item)">
-              <img :src="getPcImageUrl(item.name+'-selected', 'roles')" v-show="item.isSelected" class="w-full h-full" />
+              <img :src="getPcImageUrl(item.name + '-selected', 'roles')" v-show="item.isSelected"
+                class="w-full h-full" />
               <img :src="getPcImageUrl(item.name, 'roles')" v-show="!item.isSelected" class="w-full h-full" />
               <img src="/assets/images/pc/line-selected.png" v-show="item.isSelected" class="w-63 h-4 mt-53 mr-15" />
             </div>
@@ -497,7 +460,7 @@ onMounted(() => {
           </div> -->
         </div>
         <!-- 第四部分 -->
-        <div  id="game-features" class=" h-1432 w-full bg-cover-no-repeat mt--40px pt-35">
+        <div id="game-features" class=" h-1432 w-full bg-cover-no-repeat mt--40px pt-35">
           <div class="w-909 h-39 ml-1011 mb-48">
             <img src="/assets/images/animated-png/pc-line-bottom.png" class="w-909 h-39" />
           </div>
@@ -558,9 +521,15 @@ onMounted(() => {
               </div>
 
             </div>
-            <div class="mt-13 ml-70 w-255 h-92 flex cursor-pointer" >
-              <img src="/assets/images/popup/google-appointment.png"  class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','google')" />
-              <img src="/assets/images/popup/apple-appointment.png" class="w-full h-full" @click="openStoreUrl('phoneAndShopPopup','iphone')" />
+            <div class="mt-13 ml-70 flex ">
+              <div class="mt-13 w-255 h-92 flex cursor-pointer shine-wrapper overflow-hidden relative ">
+                <img src="/assets/images/popup/google-appointment.png" class="w-full h-full"
+                  @click="openStoreUrl('phoneAndShopPopup', 'google')" />
+              </div>
+              <div class="mt-13 w-255 h-92 flex cursor-pointer shine-wrapper overflow-hidden relative ">
+                <img src="/assets/images/popup/apple-appointment.png" class="w-full h-full"
+                  @click="openStoreUrl('phoneAndShopPopup', 'iphone')" />
+              </div>
             </div>
             <div class='ml-88 mt-4'>
               <img src="/assets/images/popup/step-2.png" class="w-479 h-38" />
@@ -658,7 +627,8 @@ onMounted(() => {
               </div>
             </div>
             <div class='ml-225 mt-24'>
-              <img src="/assets/images/popup/phone-confim.png" class="w-260 h-57 cursor-pointer" @click="appointment('phonePopup')" />
+              <img src="/assets/images/popup/phone-confim.png" class="w-260 h-57 cursor-pointer"
+                @click="appointment('phonePopup')" />
             </div>
           </div>
         </div>
@@ -681,10 +651,14 @@ onMounted(() => {
               <img src="/assets/images/popup/phone-prize-3.png" class="w-207 h-224" />
             </div>
             <div class="flex justify-center  mt-47">
-              <img  src="/assets/images/popup/phone-google.png" class="w-300 h-89 cursor-pointer"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup','google')" />
-              <img src="/assets/images/popup/phone-apple.png" class="w-300 h-89 cursor-pointer"
-              @click="openStoreUrl('PhoneAppointmentSuccessPopup','iphone')" />
+              <div class="w-300 h-89 flex cursor-pointer shine-wrapper overflow-hidden relative "
+                @click="openStoreUrl('PhoneAppointmentSuccessPopup', 'google')">
+                <img src="/assets/images/popup/phone-google.png" class="w-full h-full" />
+              </div>
+              <div class="w-300 h-89 flex cursor-pointer shine-wrapper overflow-hidden relative "
+                @click="openStoreUrl('PhoneAppointmentSuccessPopup', 'iphone')">
+                <img src="/assets/images/popup/phone-apple.png" class="w-full h-full" />
+              </div>
             </div>
           </div>
         </div>
@@ -708,7 +682,8 @@ onMounted(() => {
             </div>
             <div class="font-[NotoSansSC] text-[20px] font-normal color-[#F8F7FF] ">
               <div class='flex-col flex gap-15  ml-40 mt-27'>
-                <div class='w-578 h-42 bg-[#8A7ED8] text-center leading-[42px]'>1. 수집 및 이용 목적: 사전예약 진행 및 이벤트/프로모션 알림 안내
+                <div class='w-578 h-42 bg-[#8A7ED8] text-center leading-[42px]'>1. 수집 및 이용 목적: 사전예약 진행 및 이벤트/프로모션 알림
+                  안내
                 </div>
                 <div class='w-578 h-42 bg-[#8A7ED8] text-center leading-[42px]'>2. 수집 항목: 휴대폰 번호</div>
                 <div class='w-578 h-42 bg-[#8A7ED8] text-center leading-[42px]'>3. 보유 및 이용기간: 수집일로부터 1년</div>
@@ -786,12 +761,15 @@ onMounted(() => {
 #preorder {
   background-image: url("/assets/images/pc/bg-1.png");
 }
+
 #activity {
   background-image: url("/assets/images/pc/bg-2.png");
 }
+
 #role {
   background-image: url("/assets/images/pc/bg-3.png");
 }
+
 #game-features {
   background-image: url("/assets/images/pc/bg-4.png");
 }
@@ -993,5 +971,10 @@ onMounted(() => {
 
 .tip-bg {
   background-image: url("/assets/images/popup/tip-bg.png");
+}
+
+.shop-appointment-wrap {
+  -webkit-mask: url('/assets/images/pc/google-appointment.png') center / 100% 100% no-repeat;
+  mask: url('/assets/images/pc/google-appointment.png') center / 100% 100% no-repeat;
 }
 </style>

@@ -67,7 +67,7 @@ const autoplayConfig = computed(() => ({
 // Swiper配置
 const swiperOptions = computed(() => ({
   // 自动切换配置
-  autoplay: false, // 只有一个slide时禁用自动播放
+  autoplay: true, // 只有一个slide时禁用自动播放
   loop: true, // 有足够数据时启用loop
   loopAdditionalSlides: 0, // 固定额外slide数量
   centeredSlides: true, // 居中显示
@@ -117,7 +117,7 @@ const slides = processedSlides
         <SwiperSlide v-for="(slide, index) in slides" :key="index">
           <div class="swiper-bg w-453 h-782 relative bg-cover-no-repeat pl-27 pt-45 slide-content">
             <div class="w-400 h-710">
-              <img :src="getPcImageUrl(slide.bannerImg, '')" class="w-full h-full" />
+              <img :src="getPcImageUrl(slide, '')" class="w-full h-full" />
             </div>
             <!-- <div class="w-full h-full bg-black opacity-50 absolute top-0 left-0">
           </div> -->
