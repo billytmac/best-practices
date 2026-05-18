@@ -9,7 +9,7 @@ import { useCustomStore } from "~/stores/custom"
 import useCommon from '~/composables/useCommon'
 
 
-const { bannerArr,getImageUrl, storagePhoneInfo, openUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
+const { bannerArr,getImageUrl, initOperation, storagePhoneInfo, openUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
 
 
 
@@ -252,6 +252,7 @@ onMounted(() => {
   // 添加滚动监听器
   window.addEventListener('scroll', handleScroll, { passive: true })
   updateActiveNavByScroll()
+  initOperation()
 })
 
 

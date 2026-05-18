@@ -203,9 +203,9 @@ export default function useCommon() {
 
     function openUrl(type) {
         window.open(urlObj[type])
-        if(type === 'loungeUrl') {
+        if (type === 'loungeUrl') {
             reservationEventApi('hw_yry_like_count')
-        } 
+        }
     }
 
     function openTipPopup(text: string) {
@@ -308,7 +308,7 @@ export default function useCommon() {
         reservationEvent(eventName)
     }
 
-    onMounted(() => {
+    function initOperation() {
         if (isAlreadyAppointment.value) {
             if (!isGoShop.value) {
                 isShowPhoneAppointmentSuccessPopup.value = true
@@ -328,12 +328,15 @@ export default function useCommon() {
             bindOs.value = 'ios'
         }
         reservationInitApi()
-    })
+    }
+
+ 
 
 
 
 
     return {
+        initOperation,
         reservationEventApi,
         reservationInitApi,
         isGoShop,
