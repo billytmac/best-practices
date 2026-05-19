@@ -198,6 +198,9 @@ export default function useCommon() {
             }
             isShowPhoneAppointmentPopup.value = true
         }
+        if(isShowAppointmentPopup.value) {
+            isShowAppointmentPopup.value = false
+        }
     }
 
 
