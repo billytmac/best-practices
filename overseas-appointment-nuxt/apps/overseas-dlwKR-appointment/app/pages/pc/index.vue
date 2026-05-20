@@ -260,6 +260,8 @@ function handleScroll() {
 function clickShop(item) {
   if (['google', 'iphone'].includes(item)) {
     openStoreUrl(undefined, item)
+  } else {
+    openUrl(item)
   }
 }
 

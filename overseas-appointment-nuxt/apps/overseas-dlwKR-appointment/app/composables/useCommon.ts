@@ -24,6 +24,8 @@ export default function useCommon() {
         serviceUrl: 'https://cdn-overseas.dawnbreaking.com/overseasCdn/privacyAgreement/operate_hanYu_54.html',
         loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
         youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
+        one: 'https://m.onestore.co.kr/v2/ko-kr/app/0001004178',
+        sanxing:'https://galaxystore.samsung.com/preorder/000008918737?cntyCd=KOR'
     }
 
     const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
@@ -229,7 +231,7 @@ export default function useCommon() {
         }
 
         const loadingToast = showLoadingToast({
-            message: 'loading...',
+            message: '로딩 중...',
             forbidClick: true
         })
         const phoneInfo = {
