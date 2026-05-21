@@ -10,7 +10,7 @@ const { bannerArr, openUrl, getPcImageUrl, getImageUrl,initOperation, reservatio
 
 
 
-const shopList = ['google', 'iphone', 'one', 'sanxing']
+const shopList = ref(['google', 'iphone', 'one', 'sanxing'])
 
 
 const timeLineArr = ref([
@@ -945,8 +945,7 @@ onMounted(() => {
   }
 }
 
-
-.google-wrap {
+/* .google-wrap {
   -webkit-mask: url('/assets/images/pc/google.png') center / 100% 100% no-repeat;
   mask: url('/assets/images/pc/google.png') center / 100% 100% no-repeat;
 }
@@ -964,7 +963,7 @@ onMounted(() => {
 .sanxing-wrap {
   -webkit-mask: url('/assets/images/pc/sanxing.png') center / 100% 100% no-repeat;
   mask: url('/assets/images/pc/sanxing.png') center / 100% 100% no-repeat;
-}
+} */
 
 .phone-appointment-success-popup-bg {
   background-image: url("/assets/images/popup/phone-success-bg.png");
