@@ -7,10 +7,15 @@ import { currentLocales } from './i18n/i18n'
 // 通过 BUILD_TARGET 环境变量切换 PC / Mobile 打包配置
 // pc:    cdnURL -> .../pc      maxDisplayWidth: 750
 // mobile: cdnURL -> .../mobile  maxDisplayWidth: 480
-const buildTarget = (process.env.BUILD_TARGET === 'mobile' ? 'mobile' : 'pc') as 'pc' | 'mobile'
-const isPc = buildTarget === 'pc'
+const buildTarget = process.env.BUILD_TARGET as 'pc' | 'mobile' | 'spre'
+const isPc = buildTarget?  buildTarget.includes('pc') : true
 const cdnURL = `https://cdn.dawnbreaking.com/reserve-dlw-korea-pre/${buildTarget}`
 const maxDisplayWidth = isPc ? 750 : 480
+const baseURLMap: Record<string, string> = {
+  pc: '/',
+  mobile: '/',
+  spre: '/spre',
+}
 
 export default defineNuxtConfig({
   modules: [
@@ -27,6 +32,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
+      buildTarget: process.env.BUILD_TARGET ?? 'pc',
     },
   },
 
@@ -122,7 +128,7 @@ export default defineNuxtConfig({
       ],
     },
     cdnURL,
-    baseURL: "/"
+    baseURL: baseURLMap[buildTarget] ?? '/'
   },
 
   vite: {
@@ -136,6 +142,9 @@ export default defineNuxtConfig({
         '@vue/devtools-core',
         '@vue/devtools-kit',
       ],
+    },
+    define: {
+      __BUILD_TARGET__: JSON.stringify(process.env.BUILD_TARGET ?? 'pc'),
     },
   },
 
@@ -164,10 +173,13 @@ export default defineNuxtConfig({
 
   hooks: {
     'pages:extend': function (pages) {
+      console.log(buildTarget,'buildTarget123')
+      if (!buildTarget) return
       const rootPage = pages.find(p => p.path === '/')
       if (rootPage?.file) {
         const pagesDir = path.dirname(String(rootPage.file))
         rootPage.file = path.join(pagesDir, buildTarget, 'index.vue')
+        console.log(rootPage.file, 'rootPage.file')
       }
     },
   },

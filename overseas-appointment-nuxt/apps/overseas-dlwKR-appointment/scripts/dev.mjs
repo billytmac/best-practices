@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * 跨平台启动 dev server，按目标平台设置环境变量
- * 用法：node scripts/dev.mjs pc | mobile
+ * 用法：node scripts/dev.mjs pc | mobile | spre
  */
 import { execSync } from 'node:child_process'
 import process from 'node:process'
 
-const ALL_TARGETS = ['pc', 'mobile']
+const ALL_TARGETS = ['pc', 'mobile', 'spre']
 const target = process.argv[2] || 'pc'
 
 if (!ALL_TARGETS.includes(target)) {

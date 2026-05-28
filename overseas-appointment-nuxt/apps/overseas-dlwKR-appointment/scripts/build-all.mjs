@@ -34,7 +34,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '..')
 
-const ALL_TARGETS = ['pc', 'mobile']
+const ALL_TARGETS = ['pc', 'mobile', 'spre']
 
 const argTargets = process.argv.slice(2).filter(Boolean)
 const targets = argTargets.length > 0 ? argTargets : ALL_TARGETS

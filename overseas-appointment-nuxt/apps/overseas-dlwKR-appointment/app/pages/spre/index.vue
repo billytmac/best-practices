@@ -15,7 +15,7 @@ const { bannerArr,getImageUrl, initOperation, storagePhoneInfo, openUrl, reserva
 
 
 definePageMeta({
-  name: "mobile",
+  name: "spre",
 });
 const modules = [Navigation, Autoplay]
 // console.log(window.navigator,'mobileSystem')
@@ -260,11 +260,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="apppointment-bg bg-cover-no-repeat h-6235 " id="apppointment-mobile">
+  <div class=" bg-cover-no-repeat h-6235 " id="apppointment-mobile">
     <!-- 顶部固定栏 -->
     <div class="flex-items-center-between pl-18 pr-53 pt-8 bg-black h-86 w-full max-w-750 top-0 fixed z-30">
       <img src="/assets/images/head-logo.png" class="h-70 w-181" />
-      <img src="/assets/images/head-nav.png" class="h-30 w-56 cursor-pointer" @click="setIsShowNav(true)" />
     </div>
     <!-- kv图 -->
     <!-- pt-134 -->
@@ -274,245 +273,18 @@ onMounted(() => {
           <source src='/assets/video/mobile-kv.mp4' type="video/mp4" />
         </video>
       </div>
-      <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" />
+      <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 bottom-67" />
 
-      <!-- mt-1046  -->
-      <div class="ml-32 flex absolute z-1 top-1222">
-        <div class=" h-120 w-330 cursor-pointer mr-30">
-          <img @click="setActivedNav('preorder')" src="/assets/images/appointment-btn.png" class="w-full h-full" />
-        </div>
-        <div class="shine-wrapper overflow-hidden relative" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'"
-          @click="openStoreUrl('main-menu')">
-          <img v-show='isIos' src="/assets/images/apple-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
-          <img v-show="!isIos" src="/assets/images/google-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
-        </div>
-      </div>
     </div>
-    <div>
-      <img src="/assets/images/animated-png/more-icon.png" class="mx-auto mt-18 h-97 w-88" />
-    </div>
-    <!-- 第一部分 -->
-    <div id="preorder">
-      <div class="step-title-1 bg-cover-no-repeat  mt-15 h-105 w-482 relative ml-105">
-        <div
-          class="text-[35px] text-[#C1D0FF] leading-[35px] font-[NotoSansSC] font-700 text-center w-170 right-[-1%] top-31.1% absolute">
-          {{ formatNumber(initData?.reserved_count) }}
-        </div>
-        <img src="/assets/images/title-1-icon.png" class="h-105 w-106 right--19% top--8% absolute z-1" />
-      </div>
-      <div class="prize-list-bg bg-cover-no-repeat ml-5 mt-42 pt-131 h-501 w-731">
-        <div class="ml-47 flex gap-35">
-          <img src="/assets/images/prize-1.png" class="h-236 w-191" />
-          <img src="/assets/images/prize-2.png" class="h-236 w-191" />
-          <img src="/assets/images/prize-3.png" class="h-236 w-191" />
-        </div>
-        <div class="shine-wrapper overflow-hidden relative  ml-215 w-300 h-105 mt-15"
-          :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'" @click="openStoreUrl('preorder')">
-          <img v-show='isIos' src="/assets/images/apple-1.png" class="w-full h-full cursor-pointer" />
-          <img v-show="!isIos" src="/assets/images/google-1.png" class="w-full h-full cursor-pointer" />
-        </div>
-      </div>
-      <div class="appointment-input-bg bg-cover-no-repeat ml-23 mt-20 pt-310 h-557 w-702 relative">
-        <img src="/assets/images/people-talk.png" class="ml-30 h-185 w-649 top-105 absolute z-1" />
-        <div class="text-[21px] text-[#D0C8FF] leading-[21px] font-500 flex left-33% top-48% absolute z-2">
 
-          <div class="mr-75 flex cursor-pointer" @click="toBindOs('android')">
-            <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
-              <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'android'" />
-            </div>
-            <div>AOS</div>
-          </div>
 
-          <div class="flex cursor-pointer" @click="toBindOs('ios')">
-            <div class="flex-items-center-center mr-13 border border-[#D0C8FF] rounded-full h-18 w-18 ">
-              <div class="rounded-full bg-[#D0C8FF] h-10 w-10" v-show="bindOs === 'ios'" />
-            </div>
-            <div>IOS</div>
-          </div>
-        </div>
-        <div
-          class="download-bg bg-cover-no-repeat h-80 w-621 ml-40 pl-52 font-500 text-[#5C47DD] flex-items-center font-[NotoSansSC]">
-          <div class="text-[38px]">010</div>
-          <div class="w-2 h-36 bg-[#9189FA] ml-25 mr-25"></div>
-          <div class="flex-1">
-
-            <!-- :disabled="isAlreadyAppointment" -->
-            <input type="tel" pattern="[0-9]*" inputmode="numeric" maxlength="8" v-model="inputValue"
-              class="outline-none bg-transparent number-input text-[34px] w-full appearant-none"
-              placeholder="휴대폰 번호 입력" />
-          </div>
-        </div>
-        <div class="flex ml-65 mt-17">
-
-          <div class="flex radio-bg bg-cover-no-repeat w-28 h-28 font-500 pt-5 pl-3 cursor-pointer" @click="toAgree">
-            <img src="/assets/images/tick.png" class="h-17 w-27 " v-show="isAgree" />
-          </div>
-          <div
-            class="text-[#A7AABC] mt-2 text-[22px] leading-[22px] font-[NotoSansSC] font-500 ml-14 tracking-[-1px] underline-offset-[6px]">
-
-            <span class="cursor-pointer" @click="toAgree">개인정보 수집, 이용 및 프로모션 알림 수신 동의</span>
-            <span class="ml-10 underline cursor-pointer" @click='isShowAnnouncementsPopup = true'>유의사항</span>
-          </div>
-        </div>
-        <div class="mt-11 ml-218">
-
-          <!-- <img v-if='isAlreadyAppointment' src="/appointment-btn1-disabled.png"
-              class="h-100 w-277 cursor-pointer" /> -->
-          <!-- v-else -->
-          <img src="/assets/images/appointment-btn1.png" class="h-100 w-277 cursor-pointer" @click="appointment" />
-        </div>
-      </div>
-    </div>
-    <!-- 第二部分 -->
-    <div id="activity">
-      <div class="step-title-2 bg-cover-no-repeat ml-218 mt-54 h-105 w-401 relative">
-        <img src="/assets/images/title-2-icon.png" class="h-96 w-104 absolute z-1 left-[-22%] top-[-7%]" />
-      </div>
-      <div class="mt-42 flex relative">
-        <div class="time-line bg-cover-no-repeat h-747 w-15 relative ml-90 mt-94  ">
-
-          <div class="absolute  flex flex-col gap-92 top-[-8%] left-[-38px]">
-            <div v-for="item in timeLineArr" :key="item.title" class="  h-90 w-91">
-              <img v-if="initData?.reserved_count >= item.num" src="/assets/images/line-reached.png"
-                class="w-full h-full" />
-              <img v-else src="/assets/images/line-mark.png" class="w-full h-full" />
-            </div>
-          </div>
-
-        </div>
-        <div class="gap-13 flex flex-col ml-55">
-          <img v-for="item in timeLineArr" :key="item.title" :src="getImageUrl(item.image, '')" class="w-517 h-169" />
-        </div>
-      </div>
-    </div>
-    <!-- 第三部分 -->
-    <div class="mt-47" id="role">
-      <div class="h-30 w-full">
-        <img src="/assets/images/animated-png/line-top.png" class="w-full h-full" />
-      </div>
-      <div class="title-3-bg w-full h-1051 bg-cover-no-repeat pt-33 relative mt-8">
-        <div class="step-title-3 bg-cover-no-repeat ml-230 h-105 w-257 relative mb-25">
-          <img src="/assets/images/title-3-icon.png" class="h-98 w-91 absolute z-1 right--28% top--8%" />
-        </div>
-
-        <div class="absolute left-[45%] top-[12%] w-383 h-155">
-          <img :src="getImageUrl(currentRoleName.name, 'animated-png')" class="w-full h-full" />
-        </div>
-        <div class="title-3-decorate bg-cover-no-repeat w-full h-626 relative">
-          <div>
-            <img :src="getImageUrl(currentRoleName.name, 'people')" class="absolute z-1 "
-              :class='currentRoleName.sizeClass' preload />
-          </div>
-          <img :src="getImageUrl(currentRoleName.name + '-intro', 'people')"
-            class="w-auto h-93 absolute z-2 bottom-6% right-1%" />
-          <img :src="getImageUrl(currentRoleName.name + '-symbel', 'people')"
-            class="w-255 h-145 absolute right-6% top-42%" />
-        </div>
-        <div class="relative h-307">
-          <div class="ml-51 mr-39 flex gap-5 mt-30  overflow-auto pb-12 absolute z-2 " ref="roleListRef">
-            <div v-for="item in rolesList" :key="item.name" class="flex-shrink-0  cursor-pointer flex-col flex"
-              @click="selectRole(item)">
-
-              <img :src="getImageUrl(item.name + '-selected', 'roles')" v-show="item.isSelected" class="w-128 h-184" />
-              <img :src="getImageUrl(item.name, 'roles')" v-show="!item.isSelected" class="w-128 h-184" />
-              <img v-show="item.isSelected" src="/assets/images/line-selected.png" class="w-35 h-2 mt-15  ml-33" />
-            </div>
-          </div>
-          <div class='w-652 h-2 ml-50 bg-[#645991] absolute z-1 bottom-[24.6%]'>
-          </div>
-        </div>
-
-      </div>
-      <div class="h-30 w-full mt-20">
-        <img src="/assets/images/animated-png/line-bottom.png" class="w-full h-full" />
-      </div>
-    </div>
-    <!-- 第四部分 -->
-    <div class="mt-30" id="game-features">
-      <div class="step-title-4 bg-cover-no-repeat ml-310 h-105 w-221 relative">
-        <img src="/assets/images/title-4-icon.png" class="h-100 w-87 absolute z-1 left-[-34%] top-[-7%]" />
-      </div>
-
-      <div class="swiper-bg w-579 h-903 relative ml-83 bg-cover-no-repeat  pt-81">
-        <img src="/assets/images/swiper-left.png" class="w-52 h-78 absolute top-45% left-[-6%] cursor-pointer"
-          @click="swiperPrev" />
-        <img src="/assets/images/swiper-right.png" class="w-52 h-78 absolute top-45% right-[-6%] cursor-pointer"
-          @click="swiperNext" />
-        <swiper :modules="modules" :navigation="false" :loop="true" :autoplay="{
-          delay: 5000,
-          disableOnInteraction: false,
-        }" @swiper="onSwiper" class="w-423 h-751">
-          <swiper-slide v-for="item in bannerArr" :key="item">
-            <img :src="getImageUrl(item, '')" alt="" class="w-423 h-751" />
-          </swiper-slide>
-        </swiper>
-        <!-- <div class="w-423 h-751">
-            <img src="/swiper-1.png" class="w-full h-full" />
-          </div> -->
-      </div>
-    </div>
-    <div class="pt-34 pb-15  
-           w-full  flex-col-items-center   text-[#fff]  font-[NotoSansSC]">
-      <div class="tracking-[6px] flex text-[18px]  leading-[18px]">
-        <span @click="openUrl('serviceUrl')" class="cursor-pointer">이용약관</span>
-        <span class="w-1 h-21 bg-white ml-20 mr-20"></span>
-        <span @click="openUrl('priviateUrl')" class="cursor-pointer">개인정보처리방침</span>
-      </div>
-      <div class="mt-9 text-[14px]">
-        ©2026 DAWN BREAKING NETWORK TECHNOLOGY CO., LIMITED. ALL RIGHTS RESERVED.
-      </div>
-    </div>
-    <div class="h-128"></div>
-    <!-- 底部固定栏 -->
-    <div class="h-128 w-full max-w-750 bottom-0 fixed z-30 flex bottom-bg" v-show="showBottomPopup">
-      <img src="/assets/images/bottom-role.png"
-        class="h-255 w-228 absolute left-[5px] top-[-127px] animate__animated animate__pulse animate__infinite" />
-      <img src="/assets/images/bottom-text.png" class="h-41 w-237 ml-226 mt-42" />
-
-      <div class="shine-wrapper overflow-hidden relative h-101 w-282 "
-        :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl('fixed-bottom')">
-        <img v-show='isIos' src="/assets/images/apple-bottom.png" class="w-full h-full cursor-pointer mt-12" />
-        <img v-show="!isIos" src="/assets/images/google-bottom.png" class="w-full h-full cursor-pointer mt-12" />
-      </div>
-    </div>
-    <!-- 导航弹窗 -->
-    <van-popup v-model:show="isShowNav" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
-      overlay-class='!bg-black/80' :close-on-click-overlay="false">
-      <div class='text-right pt-5 pr-40 flex flex-row-reverse'>
-        <img src="/assets/images/popup/close.png" class="w-84 h-85 cursor-pointer" @click="setIsShowNav(false)" />
-      </div>
-      <div class="ml-138">
-        <img src="/assets/images/popup/nav-icon.png" class="w-481 h-188 " />
-      </div>
-      <div class="flex flex-col items-center font-500 font-[NotoSansSC] text-[48px]  text-[#fff] pt-71">
-        <div class="cursor-pointer relative " v-for="item in navList" :key="item.name" @mouseenter="onMouse(item, true)"
-          @mouseleave="onMouse(item, false)" @click="setActivedNav(item.image)"
-          :class="{ 'mt-71': item.mt === 71, 'mt-70': item.mt === 70, 'mt-72': item.mt === 72, 'mt-85': item.mt === 85 }">
-          <img v-show="item.isHover || activeNav === item.image" :src="getImageUrl(item.image, 'popup')"
-            class="w-184 h-59  " />
-          <div v-show="!item.isHover && !(activeNav === item.image)"
-            class="w-184 h-59 whitespace-nowrap flex-items-center-center">
-            <span>{{ item.name }}</span>
-          </div>
-
-        </div>
-      </div>
-      <div class="mt-73 pl-79">
-        <img src="/assets/images/popup/nav-line.png" class="w-583 h-12 " />
-      </div>
-      <div class="flex ml-219 pt-24">
-        <img @click="openUrl('loungeUrl')" src="/assets/images/popup/line.png" class="w-143 h-115 mr-26 mt-7 cursor-pointer" />
-        <img @click="openUrl('youtubeUrl')" src="/assets/images/popup/youtube.png" class="w-144 h-126 cursor-pointer" />
-      </div>
-    </van-popup>
+  
     <!-- 预约弹窗(商店和手机) -->
     <van-popup v-model:show="isShowAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
       overlay-class='!bg-black/80' :close-on-click-overlay="false">
       <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679 mt-129 ml-49 pt-228">
         <div class=" ml-69 relative">
           <img src="/assets/images/popup/appointment-title.png" class="w-530 h-101" />
-          <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
-            @click="isShowAppointmentPopup = false" />
         </div>
         <div class='ml-88 mt-42'>
           <img src="/assets/images/popup/step-1.png" class="w-479 h-38" />
@@ -584,8 +356,6 @@ onMounted(() => {
       z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
       <div class="ml-46 relative mt-365">
         <img src="/assets/images/popup/phone-title.png" class="w-636 h-94" />
-        <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-3.9% top--9% cursor-pointer"
-          @click="isShowPhoneAppointmentPopup = false" />
       </div>
       <div class="phone-appointment-popup-bg bg-cover-no-repeat h-707 w-683 mt-13 ml-21 pt-54">
         <div class=" ml-340">
@@ -638,8 +408,6 @@ onMounted(() => {
       <div class="phone-appointment-success-popup-bg bg-cover-no-repeat h-947 w-655  ml-49 pt-256 mt-109">
         <div class="relative">
           <img src="/assets/images/popup/phone-success-title.png" class="w-636 h-94" />
-          <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right--2.9% top--9% cursor-pointer"
-            @click="isShowPhoneAppointmentSuccessPopup = false" />
         </div>
         <img src="/assets/images/popup/phone-go-market-title.png" class="w-564 h-42 mt-74 ml-48" />
         <div class='ml-30 mt-42 flex'>
@@ -713,8 +481,6 @@ onMounted(() => {
       z-index="40" overlay-class='!bg-black/80' :close-on-click-overlay="false">
       <div class="  mt-449 ml-116 flex">
         <img src="/assets/images/popup/success-title.png" class="w-514 h-94" />
-        <img src="/assets/images/popup/close.png" class="w-84 h-85 ml-7 mt-1   cursor-pointer"
-          @click="isShowAppointmentSuccessPopup = false" />
       </div>
       <div class="success-popup-bg bg-cover-no-repeat h-414 w-657 mt-9 ml-47 pt-31">
         <div class="ml-142">

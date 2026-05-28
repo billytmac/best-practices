@@ -3,7 +3,8 @@ import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/a
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
-import { fbe, ga4, ttq, gge } from '@/composables/mediaTagging'
+import { fbe,  ttq,  } from '@/composables/mediaTagging'
+// ga4
 import { mobileSystem } from "~/utils/index.client"
 
 
@@ -127,13 +128,12 @@ export default function useCommon() {
     const openStoreUrl = (type, customStoreType) => {
         reservationEventApi('hw_yry_shopping_count')
         if (isAlreadyAppointment.value) {
-            gge(storagePhoneInfo.value?.phone)
+            // gge(storagePhoneInfo.value?.phone)
         }
         fbe('AddToCart')
-        ga4('AddToCart')
-
+        // ga4('AddToCart')
         fbe('Lead')
-        ga4('Lead')
+        // ga4('Lead')
 
         ttq('ClickButton')
 
@@ -142,21 +142,21 @@ export default function useCommon() {
         if (customStoreType) {
             if (customStoreType === 'google') {
                 url = store_url
-                fbe('MO_ios')
-                ga4('MO_ios')
+                fbe('ST_MO_ios')
+                // ga4('MO_ios')
             } else {
-                fbe('MO_gp')
-                ga4('MO_gp')
+                fbe('ST_MO_gp')
+                // ga4('MO_gp')
                 url = store_ios_url
             }
         } else {
             if (isIos.value) {
-                fbe('MO_ios')
-                ga4('MO_ios')
+                fbe('ST_MO_ios')
+                // ga4('MO_ios')
                 url = store_ios_url
             } else {
-                fbe('MO_gp')
-                ga4('MO_gp')
+                fbe('ST_MO_gp')
+                // ga4('MO_gp')
                 url = store_url
             }
         }
@@ -164,23 +164,23 @@ export default function useCommon() {
         window.open(url)
 
         switch (type) {
-            case 'main-menu':
-                fbe('MO_1')
-                break
-            case 'preorder':
-                fbe('MO_1_1')
-                break
-            case 'fixed-bottom':
-                fbe('MO_1_2')
-                break
+            // case 'main-menu':
+            //     fbe('MO_1')
+            //     break
+            // case 'preorder':
+            //     fbe('MO_1_1')
+            //     break
+            // case 'fixed-bottom':
+            //     fbe('MO_1_2')
+            //     break
             case 'phoneAndShopPopup':
-                fbe('MO_2')
-                ga4('MO_2')
+                fbe('ST_MO_2')
+                // ga4('MO_2')
                 ttq('Search')
                 break
             case 'PhoneAppointmentSuccessPopup':
-                fbe('MO_3')
-                ga4('MO_2')
+                fbe('ST_MO_3')
+                // ga4('MO_2')
                 ttq('Search')
                 isShowPhoneAppointmentSuccessPopup.value = false
                 break
@@ -248,9 +248,10 @@ export default function useCommon() {
         if (isReserve === 1) {
             openTipPopup('이미 사전 예약을 완료하셨습니다.')
         } else {
-            gge(phoneInfo.phone)
-            ga4('CompleteRegistration')
+            // gge(phoneInfo.phone)
+            // ga4('CompleteRegistration')
             fbe('CompleteRegistration')
+            fbe('ST_CompleteRegistration')
             ttq('CompleteRegistration')
             reservationInitApi()
         }
@@ -266,18 +267,18 @@ export default function useCommon() {
             case 'phonePopup':
                 isShowPhoneAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration4')
+                    // fbe('CompleteRegistration4')
                 }
                 break;
             case 'phoneAndShopPopup':
                 isShowAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration3')
+                    // fbe('CompleteRegistration3')
                 }
                 break;
             default:
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration2')
+                    // fbe('CompleteRegistration2')
                 }
                 break;
         }
@@ -318,7 +319,7 @@ export default function useCommon() {
             if (!isGoShop.value) {
                 isShowPhoneAppointmentSuccessPopup.value = true
             }
-            gge(storagePhoneInfo.value?.phone)
+            // gge(storagePhoneInfo.value?.phone)
         }
         else {
             if (isGoShop.value) {

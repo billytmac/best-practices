@@ -12,6 +12,7 @@ const ERROR_CODE = {
 }
 
 
+
 // 500、1001、1002、3001、3002---网络异常
 // 3105---預約活動未開始
 // 3106---預約活動已結束
@@ -28,6 +29,7 @@ const request = axios.create({
   // API 请求的默认前缀
   baseURL: 'https://media.wonderent.net',
 })
+const isSpre =  __BUILD_TARGET__ === 'spre'
 
 
 // 请求拦截器
@@ -44,7 +46,8 @@ request.interceptors.request.use(
       os,
       device_type,
       channel: getUrlParam('channel'),
-      page_id: 37,
+      // 37
+      page_id: isSpre ? 38 : 37,
       phone: (userInfo.value as any)?.phone || '',
       area_code: '010'
     }
