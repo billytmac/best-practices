@@ -33,7 +33,7 @@ export default function useCommon() {
     const isShowAppointmentSuccessPopup = ref<boolean>(false)
     const isShowAnnouncementsPopup = ref<boolean>(false)
     const bindOs = ref('android')
-    const isAgree = ref(false)
+    const isAgree = ref(true)
     const inputValue = ref('')
     const tipText = ref('')
     const initData = ref({})
