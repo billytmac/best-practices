@@ -2,7 +2,7 @@
 import { kakaoPixelTrackId , wcsAccountId} from '../constants/index'
 export default defineNuxtPlugin(() => {
     // 开发环境跳过
-    // if (import.meta.dev) return
+    if (import.meta.dev) return
      console.log(__BUILD_TARGET__,'__BUILD_TARGET__')
      if(['pc','mobile'].includes(__BUILD_TARGET__)) {
       useHead({
