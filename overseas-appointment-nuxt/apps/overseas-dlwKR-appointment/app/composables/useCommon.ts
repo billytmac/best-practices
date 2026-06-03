@@ -3,7 +3,7 @@ import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/a
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
-import { fbe, ga4, ttq, gge } from '@/composables/mediaTagging'
+import { fbe, ga4, ttq, gge, kke, naverWcs } from '@/composables/mediaTagging'
 import { mobileSystem } from "~/utils/index.client"
 
 
@@ -131,6 +131,8 @@ export default function useCommon() {
         }
         fbe('AddToCart')
         ga4('AddToCart')
+        kke('addToCart')
+        naverWcs('lead')
 
         fbe('Lead')
         ga4('Lead')
@@ -142,21 +144,29 @@ export default function useCommon() {
         if (customStoreType) {
             if (customStoreType === 'google') {
                 url = store_url
-                fbe('MO_ios')
-                ga4('MO_ios')
-            } else {
                 fbe('MO_gp')
+                kke('viewCart')
                 ga4('MO_gp')
+                naverWcs('view_content')
+            } else {
+                fbe('MO_ios')
+                kke('search')
+                ga4('MO_ios')
+                naverWcs('search')
                 url = store_ios_url
             }
         } else {
             if (isIos.value) {
                 fbe('MO_ios')
+                kke('search')
                 ga4('MO_ios')
+                naverWcs('search')
                 url = store_ios_url
             } else {
                 fbe('MO_gp')
+                kke('viewCart')
                 ga4('MO_gp')
+                naverWcs('view_content')
                 url = store_url
             }
         }
@@ -252,6 +262,8 @@ export default function useCommon() {
             ga4('CompleteRegistration')
             fbe('CompleteRegistration')
             ttq('CompleteRegistration')
+            kke('completeRegistration')
+            naverWcs('sign_up')
             reservationInitApi()
         }
         if (isGoShop.value) {
@@ -328,6 +340,7 @@ export default function useCommon() {
             }
         }
         reservationEventApi('hw_yry_PV')
+        kke('pageView')
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
             bindOs.value = 'ios'

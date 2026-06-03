@@ -1,26 +1,55 @@
 // plugins/tracking.client.ts
+import { kakaoPixelTrackId , wcsAccountId} from '../constants/index'
 export default defineNuxtPlugin(() => {
     // 开发环境跳过
     // if (import.meta.dev) return
-  
+     console.log(__BUILD_TARGET__,'__BUILD_TARGET__')
+     if(['pc','mobile'].includes(__BUILD_TARGET__)) {
+      useHead({
+        script: [
+            // Kakao Pixel
+            {
+              key: 'kakao-pixel-script',
+              src: '//t1.daumcdn.net/kas/static/kp.js',
+              type: 'text/javascript',
+              onload: `
+                window.kakaoPixel('${kakaoPixelTrackId}').pageView();
+              `,
+            },
+            {
+              key: 'wcs-log-script',
+              src: '//wcs.naver.net/wcslog.js',
+              type: 'text/javascript',
+              onload: `
+                  if (!wcs_add) var wcs_add={};
+                  wcs_add["wa"] = "${wcsAccountId}";
+                  if (!_nasa) var _nasa={};
+                  if(window.wcs){
+                    wcs.inflow('khunter.dawnbreaking.com');
+                    wcs_do();
+                  }
+              `,
+            },
+                // ── Google Analytics + Google Ads ──────────────────
+            {
+              key: 'gtag-script',
+              src: 'https://www.googletagmanager.com/gtag/js?id=G-8E354RMPNS',
+              async: true,
+            },
+            {
+              key: 'gtag-init',
+              innerHTML: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-8E354RMPNS');
+              `,
+            },
+        ],
+      })
+     }
     useHead({
       script: [
-        // ── Google Analytics + Google Ads ──────────────────
-        {
-          key: 'gtag-script',
-          src: 'https://www.googletagmanager.com/gtag/js?id=G-8E354RMPNS',
-          async: true,
-        },
-        {
-          key: 'gtag-init',
-          innerHTML: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){ dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'G-8E354RMPNS');
-          `,
-        },
-  
         // ── Meta Pixel ─────────────────────────────────────
         {
           key: 'fb-pixel',

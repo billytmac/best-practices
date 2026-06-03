@@ -9,7 +9,7 @@ import { useCustomStore } from "~/stores/custom"
 import useCommon from '~/composables/useCommon'
 
 
-const { bannerArr,getImageUrl, initOperation, storagePhoneInfo, openUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
+const { bannerArr, getImageUrl, initOperation, storagePhoneInfo, openUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
 
 
 
@@ -260,25 +260,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class=" bg-cover-no-repeat h-6235 " id="apppointment-mobile">
+  <div class=" bg-cover-no-repeat  " id="apppointment-mobile">
     <!-- 顶部固定栏 -->
     <div class="flex-items-center-between pl-18 pr-53 pt-8 bg-black h-86 w-full max-w-750 top-0 fixed z-30">
       <img src="/assets/images/head-logo.png" class="h-70 w-181" />
     </div>
     <!-- kv图 -->
     <!-- pt-134 -->
-    <div class="kv-bg bg-cover-no-repeat  h-1334 w-full relative" id="main-menu">
-      <div>
-        <video autoPlay loop muted playsInline>
-          <source src='/assets/video/mobile-kv.mp4' type="video/mp4" />
-        </video>
-      </div>
-      <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 bottom-67" />
+    <div class="flex flex-col">
+      <div class="kv-bg bg-cover-no-repeat  h-1334 w-full relative " id="main-menu">
+        <div>
+          <video autoPlay loop muted playsInline>
+            <source src='/assets/video/mobile-kv.mp4' type="video/mp4" />
+          </video>
+        </div>
+        <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 bottom-67" />
 
+      </div>
+      <div class="w-full bg-black h-[calc(100vh-177.86vw)]">
+        <!-- <img src="/assets/images/kv-bottom-img.png" class="h-full w-full" /> -->
+      </div>
     </div>
 
 
-  
+
+
     <!-- 预约弹窗(商店和手机) -->
     <van-popup v-model:show="isShowAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
       overlay-class='!bg-black/80' :close-on-click-overlay="false">
@@ -381,7 +387,7 @@ onMounted(() => {
         <div class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
           <div class="text-[38px] mr-115">010</div>
           <div class="flex-1">
-            <input v-model="inputValue" type="tel" maxlength="8" pattern="[0-9]*" inputmode="numeric" 
+            <input v-model="inputValue" type="tel" maxlength="8" pattern="[0-9]*" inputmode="numeric"
               class="outline-none bg-transparent popup-number-input text-[38px] w-full" placeholder="휴대폰 번호 입력" />
           </div>
         </div>
@@ -417,7 +423,7 @@ onMounted(() => {
         </div>
         <div class="w-300 h-89 mt-47 ml-176 phone-store-wrap shine-wrapper overflow-hidden relative"
           @click="openStoreUrl('PhoneAppointmentSuccessPopup')">
-          <img  v-show="isIos" src="/assets/images/popup/phone-apple.png" class="w-full h-full " />
+          <img v-show="isIos" src="/assets/images/popup/phone-apple.png" class="w-full h-full " />
           <img v-show="!isIos" src="/assets/images/popup/phone-google.png" class="w-full h-full" />
         </div>
       </div>
@@ -490,7 +496,8 @@ onMounted(() => {
           이벤트에 참여하세요!</div>
         <div class="mt-12 ml-180">
           <img src="/assets/images/popup/success-btn.png"
-            class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite" @click="openUrl('loungeUrl')" />
+            class="w-302 h-71 cursor-pointer animate__animated animate__pulse animate__infinite"
+            @click="openUrl('loungeUrl')" />
         </div>
       </div>
 

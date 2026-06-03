@@ -1,3 +1,4 @@
+import { kakaoPixelTrackId } from '../constants/index'
 
 // fb媒体埋点
 export const fbe = (event, isCustom = true) => {
@@ -21,5 +22,23 @@ export const gge = (info) => {
 export const ttq = (event) => {
     // eslint-disable-next-line no-undef
     window?.ttq && window?.ttq.track(event)
+}
+
+export const kke = (event) => {
+    // eslint-disable-next-line no-undef
+    console.log(window.kakaoPixel,'kakaoPixel')
+    window?.kakaoPixel &&  window.kakaoPixel?.(kakaoPixelTrackId)[event]()
+}
+
+
+export const naverWcs = (event) => {
+    console.log(window.wcs,'wcs')
+    if (window.wcs) {
+        if (!wcs_add) var wcs_add = {};
+        wcs_add["wa"] = "2505984";
+        var _conv = {};
+        _conv.type = event;
+        window.wcs.trans(_conv);
+    }
 }
 

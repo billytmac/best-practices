@@ -142,10 +142,12 @@ export default function useCommon() {
         if (customStoreType) {
             if (customStoreType === 'google') {
                 url = store_url
-                fbe('ST_MO_ios')
+                fbe('ST_MO_gp')
+
                 // ga4('MO_ios')
             } else {
-                fbe('ST_MO_gp')
+                fbe('ST_MO_ios')
+
                 // ga4('MO_gp')
                 url = store_ios_url
             }
