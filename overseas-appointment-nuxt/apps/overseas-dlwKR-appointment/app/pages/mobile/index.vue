@@ -263,7 +263,7 @@ onMounted(() => {
   <div class="apppointment-bg bg-cover-no-repeat h-6235 " id="apppointment-mobile">
     <!-- 顶部固定栏 -->
     <div class="flex-items-center-between pl-18 pr-53 pt-8 bg-black h-86 w-full max-w-750 top-0 fixed z-30">
-      <img src="/assets/images/head-logo.png" class="h-70 w-181" />
+      <img src="/assets/images/head-logo.png" class="h-64 w-156" />
       <img src="/assets/images/head-nav.png" class="h-30 w-56 cursor-pointer" @click="setIsShowNav(true)" />
     </div>
     <!-- kv图 -->
