@@ -282,7 +282,7 @@ onMounted(() => {
       <!-- 顶部固定栏 -->
       <div
         class="flex-items-center pl-26 pr-85 max-w-1920   bg-black h-80 w-full  top-0 fixed z-10 font-[DNF_Forged_Blade] font-300 text-[28px] color-white">
-        <img src="/assets/images/pc/head-logo.png" class="h-70 w-181" />
+        <img src="/assets/images/pc/head-logo.png" class="h-69 w-167" />
         <div class="flex-1">
         </div>
         <div v-for="item in navList" :key="item.name" class="cursor-pointer whitespace-nowrap nav-item"
@@ -308,7 +308,7 @@ onMounted(() => {
             <source src='/assets/video/pc-kv.mp4' type="video/mp4" />
           </video>
         </div>
-        <div class="relative  w-497 h-232">
+        <div class="relative  w-502 h-232">
           <img src="/assets/images/pc/head-title-icon.png" class="w-full h-full ml-729" />
         </div>
         <div class="relative  w-639 h-50">

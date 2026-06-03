@@ -1,5 +1,6 @@
 // plugins/tracking.client.ts
 import { kakaoPixelTrackId , wcsAccountId} from '../constants/index'
+
 export default defineNuxtPlugin(() => {
     // 开发环境跳过
     if (import.meta.dev) return
