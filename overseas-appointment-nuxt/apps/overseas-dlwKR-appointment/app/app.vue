@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import type { ConfigProviderTheme } from 'vant'
 import useKeepalive from '~/composables/keepalive'
-import { appName } from '~/constants'
+import { appName,appDescription,appKeywords } from '~/constants'
 
 useHead({
   title: appName,
+  meta: [
+    { name: 'description', content: appDescription },
+    {name: 'keywords', content: appKeywords},
+  ],
 })
 
 const colorMode = useColorMode()

@@ -1,4 +1,5 @@
 export const appName = '시티 데몬헌터즈: 각성자들'
 export const appDescription = '퇴근 후 즐기는 도심 속 데몬 사냥 RPG'
+export const appKeywords = '시티,각성,데몬헌터,방치형,RPG,판타지,자동전투,사전예약,idlerpg,신규게임,hunter,방치형RPG,키우기RPG,퇴마,데몬,헌터,사신,AFK,사이버,도시,키우기,스톤에이지키우기,갓깨비키우기,나혼자만레벨업,메이플키우기,세븐나이츠키우기,버섯커키우기,전우치키우기,데몬헌터키우기,광전사키우기,슬레이어키우기,헌터키우기,변신키우기,귀판오분전,창세기전키우기,고스트헌터,퇴마사키우기,사신키우기,던전앤파이터,던'
 export const kakaoPixelTrackId = '3833306768309925624'
 export const wcsAccountId = '2505984'
