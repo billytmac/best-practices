@@ -117,7 +117,7 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/x-icon',
-          href: '/favicon.ico?v=' + new Date().getTime()
+          href: `${process.env.NODE_ENV === 'development' ? '' : cdnURL}/favicon.ico?v=` + new Date().getTime()
         }
       ],
       meta: [
