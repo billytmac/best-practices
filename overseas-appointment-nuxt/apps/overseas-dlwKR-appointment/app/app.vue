@@ -3,13 +3,6 @@ import type { ConfigProviderTheme } from 'vant'
 import useKeepalive from '~/composables/keepalive'
 import { appName,appDescription,appKeywords } from '~/constants'
 
-useHead({
-  title: appName,
-  meta: [
-    { name: 'description', content: appDescription },
-    {name: 'keywords', content: appKeywords},
-  ],
-})
 
 const colorMode = useColorMode()
 

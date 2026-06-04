@@ -1,6 +1,6 @@
 import path from 'node:path'
 import process from 'node:process'
-import { appDescription } from './app/constants/index'
+import { appDescription, appName, appKeywords } from './app/constants/index'
 import preload from './app/utils/preload'
 import { currentLocales } from './i18n/i18n'
 
@@ -112,17 +112,23 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      viewport: 'width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=false,maximumScale=1',
+      title: appName,
       link: [
-        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico?v=' + new Date().getTime()
+        }
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover,user-scalable=false,maximumScale=1' },
         { name: 'description', content: appDescription },
+        {name: 'keywords', content: appKeywords},
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#ffffff' },
         { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#222222' },
       ],
+      viewport: 'width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=false,maximumScale=1',
       script: [
         { innerHTML: preload(), type: 'text/javascript', tagPosition: 'head' },
       ],
