@@ -269,13 +269,16 @@ onMounted(() => {
     <!-- kv图 -->
     <!-- pt-134 -->
     <div class="kv-bg bg-cover-no-repeat  h-1334 w-full relative" id="main-menu">
+    <!--
       <div>
         <video autoPlay loop muted playsInline>
           <source src='/assets/video/mobile-kv.mp4' type="video/mp4" />
         </video>
       </div>
-      <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" />
-
+    -->
+    <!-- <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" /> -->
+      <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-1115" />
+     
       <!-- mt-1046  -->
       <div class="ml-32 flex absolute z-1 top-1222">
         <div class=" h-120 w-330 cursor-pointer mr-30">
