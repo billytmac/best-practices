@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/lib",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./index": "./index.ts",
+    "./errorCode": "./errorCode.ts",
+    "./useLogin": "./useLogin.ts",
+    "./useCommonStore": "./useCommonStore.ts",
+    "./toast": "./toast.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "antd-mobile": "^5.37.0",
+    "js-md5": "^0.8.3",
+    "zustand": "^5.0.10"
+  }
+}

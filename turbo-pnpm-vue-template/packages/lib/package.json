@@ -1,0 +1,17 @@
+{
+  "name": "@workspace/lib",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./index": "./index.ts",
+    "./errorCode": "./errorCode.ts",
+    "./useCommonStore": "./useCommonStore.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "js-md5": "^0.8.3"
+  }
+}

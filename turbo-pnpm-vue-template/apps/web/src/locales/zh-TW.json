@@ -1,0 +1,9 @@
+{
+    "netWorkError": "網絡异常",
+    "tooManyReuests": "请求过于频繁",
+    "preRegistrationFirst": "請先預約",
+    "preRegistrationNotStarted": "預約活動未開始",
+    "preRegistrationNotEnded": "預約活動已結束",
+    "taskAlreadyCompleted": "任務已完成，請勿重複提交",
+    "notWithinTheEventPeriod": "不在活動期內"
+ }

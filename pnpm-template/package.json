@@ -1,0 +1,26 @@
+{
+  "name": "pnpm-changeset-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A simple pnpm + changeset monorepo template",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r --parallel run dev",
+    "lint": "eslint . --ext .ts,.tsx",
+    "clean": "pnpm -r run clean && rimraf node_modules",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish": "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.1"
+}
+

@@ -1,0 +1,9 @@
+{
+   "netWorkError": "Network error. Please check your connection.",
+   "tooManyReuests": "Too many requests. Please try again later.",
+   "preRegistrationFirst": "Please complete the pre-registration first.",
+   "preRegistrationNotStarted": "The pre-registration event hasn’t started yet.",
+   "preRegistrationNotEnded": "The pre-registration event has ended.",
+   "taskAlreadyCompleted": "Task already completed. Please don’t submit again.",
+   "notWithinTheEventPeriod": "Not within the event period."
+}

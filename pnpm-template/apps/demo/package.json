@@ -1,0 +1,21 @@
+{
+  "name": "@mylib/demo",
+  "version": "1.0.2",
+  "private": true,
+  "description": "Demo application showing how to use the shared packages",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@mylib/core": "workspace:*",
+    "@mylib/utils": "workspace:*",
+    "@mylib/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

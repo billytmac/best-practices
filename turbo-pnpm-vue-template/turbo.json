@@ -1,0 +1,42 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build",
+        "typecheck"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
+    },
+    "build:test": {
+      "dependsOn": [
+        "^build",
+        "typecheck"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
+    },
+    "fmt": {},
+    "lint": {},
+    "lint:fix": {},
+    "typecheck": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

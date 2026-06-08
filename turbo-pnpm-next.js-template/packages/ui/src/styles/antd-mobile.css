@@ -1,0 +1,14 @@
+.mask-z-index {
+  z-index: 1001 !important;
+}
+.toast-mask {
+  z-index: 1010 !important;
+}
+.mask-draw-z-index {
+  z-index: 800 !important;
+}
+
+.adm-swiper {
+  border-radius: 50%;
+  height: 100%;
+}
