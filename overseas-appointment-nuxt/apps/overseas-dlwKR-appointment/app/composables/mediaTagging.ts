@@ -1,4 +1,4 @@
-import { kakaoPixelTrackId } from '../constants/index'
+import { kakaoPixelTrackId, wcsAccountId } from '../constants/index'
 
 // fb媒体埋点
 export const fbe = (event, isCustom = true) => {
@@ -35,7 +35,7 @@ export const naverWcs = (event) => {
     console.log(window.wcs,'wcs')
     if (window.wcs) {
         if (!wcs_add) var wcs_add = {};
-        wcs_add["wa"] = "2505984";
+        wcs_add["wa"] = "s_1b725f1d0a18";
         var _conv = {};
         _conv.type = event;
         window.wcs.trans(_conv);

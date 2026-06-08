@@ -268,15 +268,21 @@ onMounted(() => {
     </div>
     <!-- kv图 -->
     <!-- pt-134 -->
+      <!-- 官方版 -->
+    <!-- <div class="kv-bg1 bg-cover-no-repeat  h-1334 w-full relative" id="main-menu"> -->
+     <!-- 明星版 -->
     <div class="kv-bg bg-cover-no-repeat  h-1334 w-full relative" id="main-menu">
-    <!--
-      <div>
+
+      <!-- 官方版 -->
+      <!-- <div>
         <video autoPlay loop muted playsInline>
           <source src='/assets/video/mobile-kv.mp4' type="video/mp4" />
         </video>
-      </div>
-    -->
+      </div> -->
+   
+      <!-- 官方版 -->
     <!-- <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-134" /> -->
+     <!-- 明星版 -->
       <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-1115" />
      
       <!-- mt-1046  -->
@@ -746,6 +752,9 @@ onMounted(() => {
 
 .kv-bg {
   background-image: url("/assets/images/kv-img.png");
+}
+.kv-bg1 {
+  background-image: url("/assets/images/kv-img1.png");
 }
 
 .step-title-1 {

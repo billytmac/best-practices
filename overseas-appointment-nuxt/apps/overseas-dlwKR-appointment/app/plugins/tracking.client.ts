@@ -17,18 +17,25 @@ export default defineNuxtPlugin(() => {
                 window.kakaoPixel('${kakaoPixelTrackId}').pageView();
               `,
             },
+           // 第一个：内联提前定义 wcs_add
+            {
+              key: 'wcs-add-init',
+              innerHTML: `
+                if (!window.wcs_add) window.wcs_add = {};
+                window.wcs_add["wa"] = "s_1b725f1d0a18";
+              `,
+            },
+            // 第二个：加载脚本，onload 里只做 inflow 和 wcs_do
             {
               key: 'wcs-log-script',
               src: '//wcs.naver.net/wcslog.js',
               type: 'text/javascript',
               onload: `
-                  if (!wcs_add) var wcs_add={};
-                  wcs_add["wa"] = "${wcsAccountId}";
-                  if (!_nasa) var _nasa={};
-                  if(window.wcs){
-                    wcs.inflow('khunter.dawnbreaking.com');
-                    wcs_do();
-                  }
+                if (!window._nasa) window._nasa = {};
+                if (window.wcs) {
+                  wcs.inflow('khunter.dawnbreaking.com');
+                  wcs_do();
+                }
               `,
             },
                 // ── Google Analytics + Google Ads ──────────────────
