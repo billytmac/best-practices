@@ -517,7 +517,7 @@ onMounted(() => {
     <!-- 预约弹窗(商店和手机) -->
     <van-popup v-model:show="isShowAppointmentPopup" class='h-full !bg-transparent !w-full !max-w-750 ' z-index="40"
       overlay-class='!bg-black/80' :close-on-click-overlay="false">
-      <div class="appointment-popup-bg bg-cover-no-repeat h-1050 w-679 mt-129 ml-49 pt-228">
+      <div class="appointment-popup-bg1 bg-cover-no-repeat h-1106 w-679 mt-129 ml-49 pt-300">
         <div class=" ml-69 relative">
           <img src="/assets/images/popup/appointment-title.png" class="w-530 h-101" />
           <img src="/assets/images/popup/close.png" class="w-84 h-85 absolute right-[1.3%] top-0 cursor-pointer"
@@ -825,8 +825,8 @@ onMounted(() => {
   background-image: url("/assets/images/bottom-bg.png");
 }
 
-.appointment-popup-bg {
-  background-image: url("/assets/images/popup/appointment-bg.png");
+.appointment-popup-bg1 {
+  background-image: url("/assets/images/popup/appointment-bg1.png");
 }
 
 .phone-appointment-popup-bg {
