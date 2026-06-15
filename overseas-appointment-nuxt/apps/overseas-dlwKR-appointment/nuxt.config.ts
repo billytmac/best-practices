@@ -1,21 +1,18 @@
 import path from 'node:path'
 import process from 'node:process'
-import { appDescription, appName, appKeywords } from './app/constants/index'
+import { appDescription, appName, appKeywords, baseURLMap } from './app/constants/index'
 import preload from './app/utils/preload'
 import { currentLocales } from './i18n/i18n'
+import type { BuildTarget } from './app/types/global.d.ts'
 
 // 通过 BUILD_TARGET 环境变量切换 PC / Mobile 打包配置
 // pc:    cdnURL -> .../pc      maxDisplayWidth: 750
 // mobile: cdnURL -> .../mobile  maxDisplayWidth: 480
-const buildTarget = process.env.BUILD_TARGET as 'pc' | 'mobile' | 'spre'
+const buildTarget = process.env.BUILD_TARGET as BuildTarget
 const isPc = buildTarget?  buildTarget.includes('pc') : true
 const cdnURL = `https://cdn.dawnbreaking.com/reserve-dlw-korea-pre/${buildTarget}`
 const maxDisplayWidth = isPc ? 750 : 480
-const baseURLMap: Record<string, string> = {
-  pc: '/',
-  mobile: '/',
-  spre: '/spre',
-}
+
 
 export default defineNuxtConfig({
   modules: [
@@ -27,8 +24,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/image',
+    // '@teages/nuxt-legacy'
   ],
-
+  
+  // legacy: {
+  //   vite: {}, // `@vitejs/plugin-legacy` options
+  // },
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
@@ -156,6 +157,7 @@ export default defineNuxtConfig({
 
   experimental: {
     typedPages: true,
+    // entryImportMap: false
   },
 
   devtools: {

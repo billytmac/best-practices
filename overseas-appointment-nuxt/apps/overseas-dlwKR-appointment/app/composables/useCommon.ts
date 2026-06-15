@@ -111,9 +111,9 @@ export default function useCommon() {
                 path = `../assets/images/${name}.png`;
                 break;
         }
-        console.log(images, 'images')
-        console.log(path, 'path111')
-        console.log(images[path], 'images11')
+        // console.log(images, 'images')
+        // console.log(path, 'path111')
+        // console.log(images[path], 'images11')
         // 2. 匹配对应的完整路径
         // const pathName = `${path}/${name}.png`;
         // 3. 返回处理后的路径（通常包含 Hash）
@@ -148,6 +148,7 @@ export default function useCommon() {
                 kke('viewCart')
                 ga4('MO_gp')
                 naverWcs('view_content')
+                ttq('AddToWishlist')
             } else {
                 fbe('MO_ios')
                 kke('search')
@@ -167,6 +168,7 @@ export default function useCommon() {
                 kke('viewCart')
                 ga4('MO_gp')
                 naverWcs('view_content')
+                ttq('AddToWishlist')
                 url = store_url
             }
         }
@@ -263,6 +265,7 @@ export default function useCommon() {
             fbe('CompleteRegistration')
             ttq('CompleteRegistration')
             kke('completeRegistration')
+            ttq('Subscribe')
             naverWcs('sign_up')
             reservationInitApi()
         }

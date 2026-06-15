@@ -12,10 +12,12 @@
     "dev:pc": "node scripts/dev.mjs pc",
     "dev:mobile": "node scripts/dev.mjs mobile",
     "dev:spre": "node scripts/dev.mjs spre",
+    "dev:xpre": "node scripts/dev.mjs xpre",
     "generate": "nuxt generate",
     "generate:pc": "node scripts/build-all.mjs pc",
     "generate:mobile": "node scripts/build-all.mjs mobile",
     "generate:spre": "node scripts/build-all.mjs spre",
+    "generate:xpre": "node scripts/build-all.mjs xpre",
     "generate:all": "node scripts/build-all.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -64,6 +66,7 @@
     "*": "eslint --fix"
   },
   "browserslist": [
-    "defaults"
+    "defaults",
+    "safari >= 12"
   ]
 }

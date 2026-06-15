@@ -143,7 +143,7 @@ export default function useCommon() {
             if (customStoreType === 'google') {
                 url = store_url
                 fbe('ST_MO_gp')
-
+                ttq('AddToWishlist')
                 // ga4('MO_ios')
             } else {
                 fbe('ST_MO_ios')
@@ -158,6 +158,7 @@ export default function useCommon() {
                 url = store_ios_url
             } else {
                 fbe('ST_MO_gp')
+                ttq('AddToWishlist')
                 // ga4('MO_gp')
                 url = store_url
             }
@@ -255,6 +256,7 @@ export default function useCommon() {
             fbe('CompleteRegistration')
             fbe('ST_CompleteRegistration')
             ttq('CompleteRegistration')
+            ttq('Subscribe')
             reservationInitApi()
         }
         if (isGoShop.value) {

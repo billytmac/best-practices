@@ -5,8 +5,9 @@
  */
 import { execSync } from 'node:child_process'
 import process from 'node:process'
+import { ALL_TARGETS } from '../app/constants/index.ts'
 
-const ALL_TARGETS = ['pc', 'mobile', 'spre']
+
 const target = process.argv[2] || 'pc'
 
 if (!ALL_TARGETS.includes(target)) {

@@ -6,6 +6,8 @@
  *   node scripts/build-all.mjs            # 构建全部 (pc + mobile)
  *   node scripts/build-all.mjs pc         # 只构建 pc
  *   node scripts/build-all.mjs mobile     # 只构建 mobile
+ *   node scripts/build-all.mjs spre     # 只构建 spre
+ *   node scripts/build-all.mjs xpre     # 只构建 xpre
  *
  * 构建流程：
  *   对每个目标 (pc / mobile)：
@@ -29,12 +31,12 @@ import {
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-
+import { ALL_TARGETS } from '../app/constants/index.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '..')
 
-const ALL_TARGETS = ['pc', 'mobile', 'spre']
+
 
 const argTargets = process.argv.slice(2).filter(Boolean)
 const targets = argTargets.length > 0 ? argTargets : ALL_TARGETS

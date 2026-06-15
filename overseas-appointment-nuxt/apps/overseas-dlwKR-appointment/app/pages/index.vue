@@ -12,6 +12,7 @@ const toMobile = () => {
 const toSpre = () => {
   navigateTo('/spre')
 }
+
 </script>
 <template>
   <div>

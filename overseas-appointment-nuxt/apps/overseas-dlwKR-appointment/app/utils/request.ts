@@ -31,6 +31,13 @@ const request = axios.create({
 })
 const isSpre =  __BUILD_TARGET__ === 'spre'
 
+const PAGE_ID = {
+  spre: 38,
+  xpre: 39,
+  pc: 37,
+  mobile: 37,
+}
+
 
 // 请求拦截器
 request.interceptors.request.use(
@@ -47,7 +54,7 @@ request.interceptors.request.use(
       device_type,
       channel: getUrlParam('channel'),
       // 37
-      page_id: isSpre ? 38 : 37,
+      page_id: PAGE_ID[__BUILD_TARGET__],
       phone: (userInfo.value as any)?.phone || '',
       area_code: '010'
     }

@@ -1,11 +1,11 @@
 // plugins/tracking.client.ts
-import { kakaoPixelTrackId , wcsAccountId} from '../constants/index'
+import { kakaoPixelTrackId , wcsAccountId,  tiktokPixelTrackId} from '../constants/index'
 
 export default defineNuxtPlugin(() => {
     // 开发环境跳过
-    if (import.meta.dev) return
+    // if (import.meta.dev) return
      console.log(__BUILD_TARGET__,'__BUILD_TARGET__')
-     if(['pc','mobile'].includes(__BUILD_TARGET__)) {
+     if(['pc','mobile','xpre'].includes(__BUILD_TARGET__)) {
       useHead({
         script: [
             // Kakao Pixel
@@ -22,7 +22,7 @@ export default defineNuxtPlugin(() => {
               key: 'wcs-add-init',
               innerHTML: `
                 if (!window.wcs_add) window.wcs_add = {};
-                window.wcs_add["wa"] = "s_1b725f1d0a18";
+                window.wcs_add["wa"] = "${wcsAccountId}";
               `,
             },
             // 第二个：加载脚本，onload 里只做 inflow 和 wcs_do
@@ -115,7 +115,7 @@ export default defineNuxtPlugin(() => {
                 e = document.getElementsByTagName("script")[0]
                 e.parentNode.insertBefore(n, e)
               }
-              ttq.load('D7VAK6JC77UEO91ITQ0G')
+              ttq.load('${tiktokPixelTrackId[__BUILD_TARGET__]}')
               ttq.page()
             }(window, document, 'ttq')
           `,

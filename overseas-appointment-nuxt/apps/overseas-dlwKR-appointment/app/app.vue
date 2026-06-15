@@ -1,4 +1,14 @@
 <script setup lang="ts">
+onErrorCaptured((err, instance, info) => {
+  document.body.innerHTML = `
+    <pre style="color:red;padding:20px;font-size:14px;white-space:pre-wrap;">
+      Error: ${err.message}
+      Info: ${info}
+      Stack: ${err.stack}
+    </pre>
+  `
+  return false
+})
 import type { ConfigProviderTheme } from 'vant'
 import useKeepalive from '~/composables/keepalive'
 import { appName,appDescription,appKeywords } from '~/constants'
