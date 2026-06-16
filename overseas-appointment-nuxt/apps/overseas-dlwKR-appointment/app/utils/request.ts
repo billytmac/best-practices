@@ -2,6 +2,7 @@ import axios from 'axios'
 import { mobileSystem, isMobile, getUrlParam } from  "~/utils/index.client"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
+import { PAGE_ID } from '~/constants'
 
 const ERROR_CODE = {
   3003: '네트워크 오류가 발생했습니다. 연결 상태를 확인해주세요.',
@@ -29,14 +30,7 @@ const request = axios.create({
   // API 请求的默认前缀
   baseURL: 'https://media.wonderent.net',
 })
-const isSpre =  __BUILD_TARGET__ === 'spre'
 
-const PAGE_ID = {
-  spre: 38,
-  xpre: 39,
-  pc: 37,
-  mobile: 37,
-}
 
 
 // 请求拦截器

@@ -1,5 +1,5 @@
 
-import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
+import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
@@ -231,7 +231,7 @@ export default function useCommon() {
     }
 
     async function appointment(type) {
-        reservationEventApi('hw_yry_reservation_count')
+        reservationAppointmentEvent('hw_yry_reservation_count',inputValue.value)
         if (!/^\d{8}$/.test(inputValue.value)) {
             openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
             return

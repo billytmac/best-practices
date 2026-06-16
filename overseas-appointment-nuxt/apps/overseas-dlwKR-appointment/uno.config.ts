@@ -21,6 +21,7 @@ export default defineConfig({
     ['flex-items-center', 'flex items-center'],
     ['flex-justify-center', 'flex justify-center'],
     ['flex-col-items-center', 'flex flex-col items-center'],
+    ['flex-col-items-center-center', 'flex flex-col items-center justify-center'],
     ['flex-items-center-between', 'flex items-center justify-between'],
     ['flex-items-between', 'flex justify-between'],
     ['flex-items-center-center', 'flex items-center justify-center '],

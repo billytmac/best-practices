@@ -9,12 +9,22 @@ export const tiktokPixelTrackId = {
   xpre: 'D8LNG5RC77U580P27J3G',
   pc: 'D7VAK6JC77UEO91ITQ0G',
   mobile: 'D7VAK6JC77UEO91ITQ0G',
+  ypre: 'D8NSD5BC77UFPM6ENNI0',
 }
 export const wcsAccountId = 's_1b725f1d0a18'
-export const ALL_TARGETS:BuildTarget[] = ['pc', 'mobile', 'spre','xpre']
+export const ALL_TARGETS:BuildTarget[] = ['pc', 'mobile', 'spre','xpre','ypre']
 export const baseURLMap: Record<string, string> = {
   pc: '/',
   mobile: '/',
   spre: '/spre',
   xpre: '/xpre',
+  ypre: '/ypre',
+}
+
+export const PAGE_ID = {
+  spre: 38,
+  xpre: 39,
+  pc: 37,
+  ypre: 40,
+  mobile: 37,
 }

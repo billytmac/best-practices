@@ -10,6 +10,10 @@ export const reservationEvent = event => {
   return request.post(`/${commonApiName}/event`, {event,url:window.location.href})
 }
 
+export const reservationAppointmentEvent = (event,phone) => {
+  return request.post(`/${commonApiName}/event`, {event,url:window.location.href,phone})
+}
+
 export const reservationPlayerReserve = data => {
   return request.post(`/${commonApiName}/player_reserve`, data)
 }
