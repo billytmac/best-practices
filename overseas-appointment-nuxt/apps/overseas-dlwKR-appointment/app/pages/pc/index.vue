@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import useCommon from '~/composables/useCommon'
+import usePcCommon from '~/composables/usePcCommon'
 import { useDebounceFn } from '@vueuse/core'
 definePageMeta({
   name: "pc",
 });
 
-const { bannerArr, openUrl, getPcImageUrl, getImageUrl,initOperation, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()
+const { bannerArr, openUrl, getPcImageUrl, getImageUrl,initOperation, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = usePcCommon()
 
 
 

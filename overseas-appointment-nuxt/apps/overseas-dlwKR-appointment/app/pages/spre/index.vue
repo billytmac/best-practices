@@ -6,7 +6,7 @@ import { useDebounceFn } from '@vueuse/core'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useCustomStore } from "~/stores/custom"
-import useCommon from '~/composables/useCommon'
+import useCommon from '~/composables/usePcCommon'
 
 
 const { bannerArr, getImageUrl, initOperation, storagePhoneInfo, openUrl, reservationInitApi, isIos, isAlreadyAppointment, isGoShop, openStoreUrl, toBindOs, toAgree, appointment, roleListRef, activeNav, isShowTipPopup, tipText, initData, showBottomPopup, isShowAppointmentPopup, isShowPhoneAppointmentPopup, isShowPhoneAppointmentSuccessPopup, isShowAppointmentSuccessPopup, isShowAnnouncementsPopup, bindOs, isAgree, inputValue } = useCommon()

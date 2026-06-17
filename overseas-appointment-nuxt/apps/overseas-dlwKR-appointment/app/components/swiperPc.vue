@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 // import Swiper core and required modules
 import { Autoplay } from 'swiper/modules'
-import useCommon from '~/composables/useCommon'
+import useCommon from '~/composables/usePcCommon'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
