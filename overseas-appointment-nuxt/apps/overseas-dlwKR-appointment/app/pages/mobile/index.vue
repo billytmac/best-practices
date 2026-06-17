@@ -260,7 +260,7 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   updateActiveNavByScroll()
   initOperation()
-  setActivedNav('preorder')
+  // setActivedNav('preorder')
 })
 
 

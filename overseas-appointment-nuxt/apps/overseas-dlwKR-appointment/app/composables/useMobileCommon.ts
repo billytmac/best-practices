@@ -329,19 +329,19 @@ export default function useCommon() {
     }
 
     function initOperation() {
-        // if (isAlreadyAppointment.value) {
-        //     if (!isGoShop.value) {
-        //         isShowPhoneAppointmentSuccessPopup.value = true
-        //     }
-        //     gge(storagePhoneInfo.value?.phone)
-        // }
-        // else {
-        //     if (isGoShop.value) {
-        //         isShowPhoneAppointmentPopup.value = true
-        //     } else {
-        //         isShowAppointmentPopup.value = true
-        //     }
-        // }
+        if (isAlreadyAppointment.value) {
+            if (!isGoShop.value) {
+                isShowPhoneAppointmentSuccessPopup.value = true
+            }
+            gge(storagePhoneInfo.value?.phone)
+        }
+        else {
+            if (isGoShop.value) {
+                isShowPhoneAppointmentPopup.value = true
+            } else {
+                isShowAppointmentPopup.value = true
+            }
+        }
         reservationEventApi('hw_yry_PV')
         kke('pageView')
         isIos.value = mobileSystem() === 'ios'
