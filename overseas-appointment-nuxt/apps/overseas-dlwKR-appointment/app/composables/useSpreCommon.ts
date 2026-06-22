@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
 import { fbe,  ttq,  } from '@/composables/mediaTagging'
 // ga4
-import { mobileSystem } from "~/utils/index.client"
+import { mobileSystem, waitForUrlParam } from "~/utils/index.client"
 
 
 export default function useCommon() {
@@ -332,12 +332,15 @@ export default function useCommon() {
                 isShowAppointmentPopup.value = true
             }
         }
-        reservationEventApi('hw_yry_PV')
+     
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
             bindOs.value = 'ios'
         }
-        reservationInitApi()
+        waitForUrlParam('channel').finally(() => {
+            reservationEventApi('hw_yry_PV')
+            reservationInitApi()
+        })
     }
 
  

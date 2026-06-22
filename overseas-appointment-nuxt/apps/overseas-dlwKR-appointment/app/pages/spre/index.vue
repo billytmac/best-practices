@@ -316,11 +316,11 @@ onMounted(() => {
           <img v-show='isIos' src="/assets/images/popup/apple-appointment.png" class="w-full h-full" />
           <img v-show="!isIos" src="/assets/images/popup/google-appointment.png" class="w-full h-full" />
         </div>
-        <div class='ml-88 mt-4'>
+        <div class='ml-88 mt-34'>
           <img src="/assets/images/popup/step-2.png" class="w-479 h-38" />
         </div>
         <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
-          <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
+          <!-- <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
             <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
             </div>
@@ -331,7 +331,7 @@ onMounted(() => {
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
             </div>
             <div>IOS</div>
-          </div>
+          </div> -->
         </div>
         <div class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
           <div class="text-[38px] mr-115">010</div>
@@ -370,8 +370,8 @@ onMounted(() => {
         <div class="mt-4 ml-324">
           <img src="/assets/images/popup/phone-dialog.png" class="w-339 h-117" />
         </div>
-        <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
-          <div class="mr-99 flex cursor-pointer" @click="bindOs = 'android'">
+        <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-109">
+          <!-- <div class="mr-99 flex cursor-pointer" @click="bindOs = 'android'">
             <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
             </div>
@@ -382,7 +382,7 @@ onMounted(() => {
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
             </div>
             <div class="mt-1">IOS</div>
-          </div>
+          </div> -->
         </div>
         <div class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
           <div class="text-[38px] mr-115">010</div>

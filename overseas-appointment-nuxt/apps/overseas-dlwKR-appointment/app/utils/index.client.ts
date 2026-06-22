@@ -30,13 +30,61 @@ export function mobileSystem() {
     }
   }
   
-  export function getUrlParam(name) {
+  export function getUrlParam(name: string) {
     const url = new URL(window.location.href)
-    return url.searchParams.get(name)
+    const searchValue = url.searchParams.get(name)
+
+    if (searchValue) {
+      if (name === 'channel') {
+        sessionStorage.setItem('channel', searchValue)
+      }
+      return searchValue
+    }
+
+    const hash = window.location.hash
+    const hashQuery = hash.includes('?') ? hash.slice(hash.indexOf('?')) : ''
+    const hashValue = hashQuery ? new URLSearchParams(hashQuery).get(name) : null
+
+    if (hashValue) {
+      if (name === 'channel') {
+        sessionStorage.setItem('channel', hashValue)
+      }
+      return hashValue
+    }
+
+    if (name === 'channel') {
+      return sessionStorage.getItem('channel')
+    }
+
+    return null
   }
+
+  export function waitForUrlParam(name: string, timeout = 1500, interval = 100) {
+    return new Promise<string | null>((resolve) => {
+      const startTime = Date.now()
+
+      const check = () => {
+        const value = getUrlParam(name)
+
+        if (value || Date.now() - startTime >= timeout) {
+          resolve(value)
+          return
+        }
+
+        window.setTimeout(check, interval)
+      }
+
+      check()
+    })
+  }
+
+  // export function getUrlParam(name) {
+  //   const url = new URL(window.location.href)
+  //   return url.searchParams.get(name)
+  // }
   
   // 数字格式化 - 添加千位分隔符
-  export function formatNumber(num) {
+  export function formatNumber(num: number | string | null | undefined) {
     if (num === null || num === undefined) {
       return '0'
     }

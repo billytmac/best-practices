@@ -1,5 +1,5 @@
 
-import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api"
+import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api/index"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'

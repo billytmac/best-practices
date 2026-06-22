@@ -3,7 +3,7 @@ import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
 import { fbe, ga4, ttq, gge, kke, naverWcs } from '@/composables/mediaTagging'
-import { mobileSystem } from "~/utils/index.client"
+import { mobileSystem, waitForUrlParam } from "~/utils/index.client"
 
 
 export default function useCommon() {
@@ -342,13 +342,15 @@ export default function useCommon() {
                 isShowAppointmentPopup.value = true
             }
         }
-        reservationEventApi('hw_yry_PV')
         kke('pageView')
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
             bindOs.value = 'ios'
         }
-        reservationInitApi()
+        waitForUrlParam('channel').finally(() => {
+            reservationEventApi('hw_yry_PV')
+            reservationInitApi()
+        })
     }
 
  

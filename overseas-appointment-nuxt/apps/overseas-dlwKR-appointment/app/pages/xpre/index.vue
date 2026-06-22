@@ -350,7 +350,7 @@ onMounted(() => {
         </div>
         <div class="appointment-input-bg bg-cover-no-repeat ml-23 mt-20 pt-310 h-557 w-702 relative">
           <img src="/assets/images/xpre/people-talk.png" class="ml-30 h-185 w-649 top-105 absolute z-1" />
-          <div class="text-[21px] text-[#D0C8FF] leading-[21px] font-500 flex left-33% top-48% absolute z-2">
+          <!-- <div class="text-[21px] text-[#D0C8FF] leading-[21px] font-500 flex left-33% top-48% absolute z-2">
 
             <div class="mr-75 flex cursor-pointer" @click="toBindOs('android')">
               <div class="flex-items-center-center mr-13 border border-[#000] rounded-full h-18 w-18 ">
@@ -365,7 +365,7 @@ onMounted(() => {
               </div>
               <div class=" text-[#000] font-500">IOS</div>
             </div>
-          </div>
+          </div> -->
           <div
             class="download-bg bg-cover-no-repeat h-77 w-529 mx-auto pl-47 font-500 text-[#5C47DD] flex-items-center font-[NotoSansSC] ">
             <div class="text-[38px]">010</div>
@@ -589,7 +589,7 @@ onMounted(() => {
         <div class=' mt-4'>
           <img src="/assets/images/xpre/popup/step-2.png" class="w-479 h-38" />
         </div>
-        <div class="text-[26px] text-white leading-[26px] font-500 flex  mt-15">
+        <!-- <div class="text-[26px] text-white leading-[26px] font-500 flex  mt-15">
           <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
             <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
@@ -602,7 +602,7 @@ onMounted(() => {
             </div>
             <div>IOS</div>
           </div>
-        </div>
+        </div> -->
         <div class=" bg-white h-60 w-551  pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
           <div class="text-[38px] mr-115">010</div>
           <div class="flex-1">
@@ -644,7 +644,7 @@ onMounted(() => {
           <img src="/assets/images/xpre/popup/phone-dialog.png" class="w-339 h-117" />
         </div> -->
         <div class="text-[26px] text-white leading-[26px] font-500 flex-justify-center mt-530">
-          <div class="mr-99 flex cursor-pointer" @click="bindOs = 'android'">
+          <!-- <div class="mr-99 flex cursor-pointer" @click="bindOs = 'android'">
             <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
             </div>
@@ -655,7 +655,7 @@ onMounted(() => {
               <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'ios'" />
             </div>
             <div class="mt-1">IOS</div>
-          </div>
+          </div> -->
         </div>
         <div
           class=" bg-white h-60 w-551 pl-48 font-500 text-[#301A72] mx-auto flex-items-center font-[NotoSansSC] mt-15">

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import usePcCommon from '~/composables/usePcCommon'
 import { useDebounceFn } from '@vueuse/core'
+import {  getUrlParam } from  "~/utils/index.client"
+
 definePageMeta({
   name: "pc",
 });
@@ -265,7 +267,8 @@ function clickShop(item) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  console.log( getUrlParam('channel'),"getUrlParam('channel')")
   // 添加滚动监听器
   window.addEventListener('scroll', handleScroll, { passive: true })
   updateActiveNavByScroll()
@@ -357,7 +360,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="appointment-input-bg bg-cover-no-repeat ml-55  pt-268 h-511 w-609 relative">
-              <div class="text-[17px] text-[#D0C8FF] font-[NotoSansSC] leading-[17px] font-500 flex ml-211">
+              <!-- <div class="text-[17px] text-[#D0C8FF] font-[NotoSansSC] leading-[17px] font-500 flex ml-211">
                 <div class="mr-75 flex cursor-pointer" @click="toBindOs('android')">
                   <div class="flex-items-center-center mr-10 border border-[#D0C8FF] rounded-full h-16 w-16">
                     <div class="rounded-full bg-[#D0C8FF] h-8 w-8" v-show="bindOs === 'android'" />
@@ -370,7 +373,7 @@ onMounted(() => {
                   </div>
                   <div class="mt--1">IOS</div>
                 </div>
-              </div>
+              </div> -->
               <div
                 class="download-bg bg-cover-no-repeat mt-19 h-67 w-517 ml-49 pl-44 font-500 text-[#5C47DD] flex-items-center font-[NotoSansSC]">
                 <div class="text-[32px]">010</div>
@@ -539,7 +542,7 @@ onMounted(() => {
             <div class='ml-88 mt-4'>
               <img src="/assets/images/popup/step-2.png" class="w-479 h-38" />
             </div>
-            <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
+            <!-- <div class="text-[26px] text-white leading-[26px] font-500 flex ml-190 mt-15">
               <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
                   <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
@@ -552,7 +555,7 @@ onMounted(() => {
                 </div>
                 <div>IOS</div>
               </div>
-            </div>
+            </div> -->
             <div
               class=" bg-white h-60 w-551 ml-50 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
@@ -597,7 +600,7 @@ onMounted(() => {
             <div class="mt-4 ml-324">
               <img src="/assets/images/popup/phone-dialog.png" class="w-339 h-117" />
             </div>
-            <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
+            <!-- <div class="text-[26px] text-white leading-[26px] font-500 flex ml-218 mt-85">
               <div class="mr-99 flex cursor-pointer" @click="toBindOs('android')">
                 <div class="flex-items-center-center mr-16 border border-[#fff] rounded-full h-24 w-24">
                   <div class="rounded-full bg-[#fff] h-16 w-16" v-show="bindOs === 'android'" />
@@ -610,7 +613,7 @@ onMounted(() => {
                 </div>
                 <div class="mt--1">IOS</div>
               </div>
-            </div>
+            </div> -->
             <div
               class=" bg-white h-60 w-551 ml-80 pl-48 font-500 text-[#301A72] flex-items-center font-[NotoSansSC] mt-15">
               <div class="text-[38px] mr-115">010</div>
