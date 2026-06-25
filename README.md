@@ -16,12 +16,11 @@
 ```text
 best-practices/
 ├── README.md
-├── TECHNICAL_DOCUMENTATION.md
 ├── pnpm-template/
 ├── turbo-pnpm-template/
 ├── turbo-pnpm-vue-template/
 ├── turbo-pnpm-next.js-template/
-├── overseas-appointment-nuxt/
+├── turbo-pnpm-nuxt-template/
 
 ```
 
@@ -31,7 +30,7 @@ best-practices/
 | `turbo-pnpm-template` | 通用 Turborepo 模板 | 基于 pnpm + Turbo 的多应用、多包工程模板。 |
 | `turbo-pnpm-vue-template` | Vue Turborepo 模板 | 面向 Vue 3 应用的 Turborepo 前端模板。 |
 | `turbo-pnpm-next.js-template` | Next.js Turborepo 模板 | 面向 Next.js / React 应用的 Turborepo 前端模板。 |
-| `overseas-appointment-nuxt` | Nuxt 业务项目模板 | 面向海外预约活动页的 Nuxt Monorepo 项目。 |
+| `turbo-pnpm-nuxt-template` | Nuxt 业务项目模板 | 面向海外预约活动页的 Nuxt Monorepo 项目。 |
 
 ## 3. 技术栈总览
 
@@ -44,13 +43,13 @@ best-practices/
 ### 3.2 Monorepo 编排
 
 - `pnpm-template` 使用 `pnpm -r` 递归执行子包脚本。
-- `turbo-pnpm-*` 和 `overseas-appointment-nuxt` 使用 `turbo` 编排 `build`、`dev`、`lint`、`fmt`、`typecheck` 等任务。
+- `turbo-pnpm-*` 和 `turbo-pnpm-nuxt-template` 使用 `turbo` 编排 `build`、`dev`、`lint`、`fmt`、`typecheck` 等任务。
 - Turbo 模板适合中大型前端仓库，通过任务缓存和依赖拓扑提升构建效率。
 
 ### 3.3 前端框架
 
 - Vue 方向：`turbo-pnpm-vue-template`。
-- Nuxt 方向：`overseas-appointment-nuxt`。
+- Nuxt 方向：`turbo-pnpm-nuxt-template`。
 - React / Next.js 方向：`turbo-pnpm-next.js-template`。
 - 通用工程化方向：`pnpm-template`、`turbo-pnpm-template`。
 
@@ -219,14 +218,14 @@ pnpm lint
 pnpm typecheck
 ```
 
-### 4.5 `overseas-appointment-nuxt`
+### 4.5 `turbo-pnpm-nuxt-template`
 
-`overseas-appointment-nuxt` 是一个 Nuxt 方向的业务项目模板，当前主应用为 `apps/overseas-dlwKR-appointment`，适合海外预约活动页或营销页项目。
+`turbo-pnpm-nuxt-template` 是一个 Nuxt 方向的业务项目模板，当前主应用为 `apps/overseas-dlwKR-appointment`，适合海外预约活动页或营销页项目。
 
 核心结构：
 
 ```text
-overseas-appointment-nuxt/
+turbo-pnpm-nuxt-template/
 ├── apps/
 │   └── overseas-dlwKR-appointment/
 ├── packages/
@@ -445,7 +444,7 @@ packages/
 2. 需要通用前端工程骨架：选择 `turbo-pnpm-template`。
 3. 需要 Vue 3 项目：选择 `turbo-pnpm-vue-template`。
 4. 需要 Next.js / React 项目：选择 `turbo-pnpm-next.js-template`。
-5. 需要 Nuxt 活动页或预约页项目：选择 `overseas-appointment-nuxt`。
+5. 需要 Nuxt 活动页或预约页项目：选择 `turbo-pnpm-nuxt-template`。
 
 选择模板后，建议先完成以下动作：
 

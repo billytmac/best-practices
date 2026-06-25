@@ -1,4 +1,3 @@
-
 import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
@@ -25,7 +24,7 @@ export default function useCommon() {
         loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
         youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
         one: 'https://m.onestore.co.kr/v2/ko-kr/app/0001004178',
-        sanxing:'https://galaxystore.samsung.com/preorder/000008918737?cntyCd=KOR'
+        sanxing:'https://galaxystore.samsung.com/detail/com.dlw.kr.sx'
     }
 
     const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
@@ -51,26 +50,26 @@ export default function useCommon() {
 
     const getPcImageUrl = (name, type) => {
         // 第一个参数是相对路径，第二个参数是基础URL
-        // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
+        // return new URL(`../assets/images/xpre/${pathName}/${name}.png`, import.meta.url).href;
         // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
         // eager: true 表示立即导入，而不是异步导入
 
-        // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+        // const images = import.meta.glob(`../assets/images/xpre/animated-png/*.png`, { eager: true });
         let images = ''
         let path = ''
         switch (type) {
             case 'people':
-                images = import.meta.glob(`../assets/images/pc/people/*.png`, { eager: true });
-                path = `../assets/images/pc/people/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/pc/people/*.png`, { eager: true });
+                path = `../assets/images/xpre/pc/people/${name}.png`;
                 break;
             case 'roles':
-                images = import.meta.glob(`../assets/images/pc/roles/*.png`, { eager: true });
-                path = `../assets/images/pc/roles/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/pc/roles/*.png`, { eager: true });
+                path = `../assets/images/xpre/pc/roles/${name}.png`;
                 break;
             default:
                 console.log(name, 'name')
-                images = import.meta.glob(`../assets/images/pc/*.png`, { eager: true });
-                path = `../assets/images/pc/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/pc/*.png`, { eager: true });
+                path = `../assets/images/xpre/pc/${name}.png`;
                 break;
         }
 
@@ -80,35 +79,36 @@ export default function useCommon() {
         return images[path]?.default ?? '';
     }
     const getImageUrl = (name, type) => {
+        console.log(name, 'name')
         // 第一个参数是相对路径，第二个参数是基础URL
-        // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
+        // return new URL(`../assets/images/xpre/${pathName}/${name}.png`, import.meta.url).href;
         // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
         // eager: true 表示立即导入，而不是异步导入
 
-        // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+        // const images = import.meta.glob(`../assets/images/xpre/animated-png/*.png`, { eager: true });
         let images = ''
         let path = ''
         switch (type) {
             case 'animated-png':
-                images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-                path = `../assets/images/animated-png/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/animated-png/*.png`, { eager: true });
+                path = `../assets/images/xpre/animated-png/${name}.png`;
                 break;
             case 'people':
-                images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
-                path = `../assets/images/people/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/people/*.png`, { eager: true });
+                path = `../assets/images/xpre/people/${name}.png`;
                 break;
             case 'roles':
-                images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
-                path = `../assets/images/roles/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/roles/*.png`, { eager: true });
+                path = `../assets/images/xpre/roles/${name}.png`;
                 break;
             case 'popup':
-                images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
-                path = `../assets/images/popup/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/popup/*.png`, { eager: true });
+                path = `../assets/images/xpre/popup/${name}.png`;
                 break;
             default:
                 console.log(name, 'name')
-                images = import.meta.glob(`../assets/images/*.png`, { eager: true });
-                path = `../assets/images/${name}.png`;
+                images = import.meta.glob(`../assets/images/xpre/*.png`, { eager: true });
+                path = `../assets/images/xpre/${name}.png`;
                 break;
         }
         // console.log(images, 'images')
@@ -342,7 +342,6 @@ export default function useCommon() {
                 isShowAppointmentPopup.value = true
             }
         }
-  
         kke('pageView')
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
@@ -353,7 +352,6 @@ export default function useCommon() {
             reservationInitApi()
         })
     }
-
 
  
 

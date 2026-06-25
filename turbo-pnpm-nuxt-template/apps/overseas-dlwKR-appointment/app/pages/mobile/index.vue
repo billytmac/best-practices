@@ -307,14 +307,14 @@ onMounted(() => {
         <img src="/assets/images/head-title.png" class="ml-66 h-50 w-639 absolute z-1 top-1115" />
 
         <!-- mt-1046  -->
-        <div class="ml-32 flex absolute z-1 top-1222">
-          <div class=" h-120 w-330 cursor-pointer mr-30">
+        <div class=" flex absolute z-1 top-1222 w-full">
+          <!-- <div class=" h-120 w-330 cursor-pointer mr-30">
             <img @click="setActivedNav('preorder')" src="/assets/images/appointment-btn.png" class="w-full h-full" />
-          </div>
-          <div class="shine-wrapper overflow-hidden relative" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'"
+          </div> -->
+          <div class="shine-wrapper overflow-hidden relative h-115 w-330 mx-auto" :class="isIos ? 'apple-head-wrap' : 'google-head-wrap'"
             @click="openStoreUrl('main-menu')">
-            <img v-show='isIos' src="/assets/images/apple-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
-            <img v-show="!isIos" src="/assets/images/google-head.png" class="mt-3 h-115 w-330 cursor-pointer" />
+            <img v-show='isIos' src="/assets/images/apple-head1.png" class="mt-3 h-full w-full cursor-pointer" />
+            <img v-show="!isIos" src="/assets/images/google-head1.png" class="mt-3 h-full w cursor-pointer" />
           </div>
         </div>
       </div>
@@ -338,8 +338,8 @@ onMounted(() => {
           </div>
           <div class="shine-wrapper overflow-hidden relative  ml-215 w-300 h-105 mt-15"
             :class="isIos ? 'apple-1-wrap' : 'google-1-wrap'" @click="openStoreUrl('preorder')">
-            <img v-show='isIos' src="/assets/images/apple-1.png" class="w-full h-full cursor-pointer" />
-            <img v-show="!isIos" src="/assets/images/google-1.png" class="w-full h-full cursor-pointer" />
+            <img v-show='isIos' src="/assets/images/apple-1-1.png" class="w-full h-full cursor-pointer" />
+            <img v-show="!isIos" src="/assets/images/google-1-1.png" class="w-full h-full cursor-pointer" />
           </div>
         </div>
         <div class="appointment-input-bg bg-cover-no-repeat ml-23 mt-20 pt-310 h-557 w-702 relative">
@@ -495,15 +495,16 @@ onMounted(() => {
       </div>
       <div class="h-128"></div>
       <!-- 底部固定栏 -->
-      <div class="h-128 w-full max-w-750 bottom-0 fixed z-30 flex bottom-bg" v-show="showBottomPopup">
-        <img src="/assets/images/bottom-role.png"
+      <div class="h-128 w-full max-w-750 bottom-0 fixed z-30 flex-items-between bottom-bg pr-7" v-show="showBottomPopup">
+        <div>
+          <img src="/assets/images/bottom-role.png"
           class="h-255 w-228 absolute left-[5px] top-[-127px] animate__animated animate__pulse animate__infinite" />
-        <img src="/assets/images/bottom-text.png" class="h-41 w-237 ml-226 mt-42" />
-
+          <img src="/assets/images/bottom-text-1.png" class="h-43 w-185 ml-226 mt-42" />
+        </div>
         <div class="shine-wrapper overflow-hidden relative h-101 w-282 "
           :class="isIos ? 'apple-bottom-wrap' : 'google-bottom-wrap'" @click="openStoreUrl('fixed-bottom')">
-          <img v-show='isIos' src="/assets/images/apple-bottom.png" class="w-full h-full cursor-pointer mt-12" />
-          <img v-show="!isIos" src="/assets/images/google-bottom.png" class="w-full h-full cursor-pointer mt-12" />
+          <img v-show='isIos' src="/assets/images/apple-bottom-1.png" class="w-full h-full cursor-pointer mt-12" />
+          <img v-show="!isIos" src="/assets/images/google-bottom-1.png" class="w-full h-full cursor-pointer mt-12" />
         </div>
       </div>
       <!-- 导航弹窗 -->

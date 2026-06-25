@@ -1,13 +1,14 @@
 
-import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api"
+import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
-import { fbe, ga4, ttq, gge, kke, naverWcs } from '@/composables/mediaTagging'
+import { fbe,  ttq,  } from '@/composables/mediaTagging'
+// ga4
 import { mobileSystem, waitForUrlParam } from "~/utils/index.client"
 
 
-export default function useYpreCommon() {
+export default function useCommon() {
     const handleCutomStore = useCustomStore()
     const { userInfo, isAlreadyAppointment, isGoShop } = storeToRefs(handleCutomStore)
     const isIos = ref(false)
@@ -25,12 +26,10 @@ export default function useYpreCommon() {
         loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
         youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
         one: 'https://m.onestore.co.kr/v2/ko-kr/app/0001004178',
-        sanxing:'https://galaxystore.samsung.com/preorder/000008918737?cntyCd=KOR'
+        sanxing:'https://galaxystore.samsung.com/detail/com.dlw.kr.sx'
     }
 
     const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
-    const popupRolesArr = ['heidaoqianjin', 'xiaolanren', 'hanguonvzhu', 'hanguonanzhu', 'jixieqianjin']
-
 
     const isShowAppointmentSuccessPopup = ref<boolean>(false)
     const isShowAnnouncementsPopup = ref<boolean>(false)
@@ -40,22 +39,10 @@ export default function useYpreCommon() {
     const tipText = ref('')
     const initData = ref({})
     const roleListRef = ref(null)
-    const currentPopupRoleName = ref('hanguonvzhu')
     const storagePhoneInfo = computed(() => ({
         phone: userInfo.value?.phone,
         bind_os: userInfo.value?.bind_os,
     }))
-
-    // 模块顶层定义，只执行一次
-   const imageGlobs: Record<string, Record<string, { default: string }>> = {
-    'animated-png': import.meta.glob('../assets/images/animated-png/*.png', { eager: true }),
-    'people':       import.meta.glob('../assets/images/people/*.png',       { eager: true }),
-    'roles':        import.meta.glob('../assets/images/roles/*.png',        { eager: true }),
-    'popup':        import.meta.glob('../assets/images/popup/*.png',        { eager: true }),
-    'ypre':         import.meta.glob('../assets/images/ypre/*.png',        { eager: true }),
-    'default':      import.meta.glob('../assets/images/*.png',              { eager: true }),
-  };
-  
 
 
     // 是否显示底部预约弹窗（只在3,4,5屏显示）
@@ -93,55 +80,46 @@ export default function useYpreCommon() {
         // 3. 返回处理后的路径（通常包含 Hash）
         return images[path]?.default ?? '';
     }
-    // const getImageUrl = (name, type) => {
-    //     // 第一个参数是相对路径，第二个参数是基础URL
-    //     // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
-    //     // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
-    //     // eager: true 表示立即导入，而不是异步导入
+    const getImageUrl = (name, type) => {
+        // 第一个参数是相对路径，第二个参数是基础URL
+        // return new URL(`../assets/images/${pathName}/${name}.png`, import.meta.url).href;
+        // 1. 使用 glob 贪婪匹配 images 文件夹下所有的 png
+        // eager: true 表示立即导入，而不是异步导入
 
-    //     // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-    //     let images = ''
-    //     let path = ''
-    //     switch (type) {
-    //         case 'animated-png':
-    //             images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
-    //             path = `../assets/images/animated-png/${name}.png`;
-    //             break;
-    //         case 'people':
-    //             images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
-    //             path = `../assets/images/people/${name}.png`;
-    //             break;
-    //         case 'roles':
-    //             images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
-    //             path = `../assets/images/roles/${name}.png`;
-    //             break;
-    //         case 'popup':
-    //             images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
-    //             path = `../assets/images/popup/${name}.png`;
-    //             break;
-    //         default:
-    //             console.log(name, 'name')
-    //             images = import.meta.glob(`../assets/images/*.png`, { eager: true });
-    //             path = `../assets/images/${name}.png`;
-    //             break;
-    //     }
-    //     // console.log(images, 'images')
-    //     // console.log(path, 'path111')
-    //     // console.log(images[path], 'images11')
-    //     // 2. 匹配对应的完整路径
-    //     // const pathName = `${path}/${name}.png`;
-    //     // 3. 返回处理后的路径（通常包含 Hash）
-    //     return images[path]?.default ?? '';
-    // }
-    const getImageUrl = (name: string, type: string): string => {
-        console.log(name, type, 'name, type')
-        const isKnownType = type in imageGlobs && type !== 'default';
-        const folder = isKnownType ? `${type}/` : '';
-        const images = imageGlobs[type] ?? imageGlobs['default'];
-        const path = `../assets/images/${folder}${name}.png`;
-       console.log(path,'path123')
+        // const images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+        let images = ''
+        let path = ''
+        switch (type) {
+            case 'animated-png':
+                images = import.meta.glob(`../assets/images/animated-png/*.png`, { eager: true });
+                path = `../assets/images/animated-png/${name}.png`;
+                break;
+            case 'people':
+                images = import.meta.glob(`../assets/images/people/*.png`, { eager: true });
+                path = `../assets/images/people/${name}.png`;
+                break;
+            case 'roles':
+                images = import.meta.glob(`../assets/images/roles/*.png`, { eager: true });
+                path = `../assets/images/roles/${name}.png`;
+                break;
+            case 'popup':
+                images = import.meta.glob(`../assets/images/popup/*.png`, { eager: true });
+                path = `../assets/images/popup/${name}.png`;
+                break;
+            default:
+                console.log(name, 'name')
+                images = import.meta.glob(`../assets/images/*.png`, { eager: true });
+                path = `../assets/images/${name}.png`;
+                break;
+        }
+        console.log(images, 'images')
+        console.log(path, 'path111')
+        console.log(images[path], 'images11')
+        // 2. 匹配对应的完整路径
+        // const pathName = `${path}/${name}.png`;
+        // 3. 返回处理后的路径（通常包含 Hash）
         return images[path]?.default ?? '';
-    };
+    }
 
 
 
@@ -150,15 +128,12 @@ export default function useYpreCommon() {
     const openStoreUrl = (type, customStoreType) => {
         reservationEventApi('hw_yry_shopping_count')
         if (isAlreadyAppointment.value) {
-            gge(storagePhoneInfo.value?.phone)
+            // gge(storagePhoneInfo.value?.phone)
         }
         fbe('AddToCart')
-        ga4('AddToCart')
-        kke('addToCart')
-        naverWcs('lead')
-
+        // ga4('AddToCart')
         fbe('Lead')
-        ga4('Lead')
+        // ga4('Lead')
 
         ttq('ClickButton')
 
@@ -167,31 +142,24 @@ export default function useYpreCommon() {
         if (customStoreType) {
             if (customStoreType === 'google') {
                 url = store_url
-                fbe('MO_gp')
-                kke('viewCart')
-                ga4('MO_gp')
-                naverWcs('view_content')
+                fbe('ST_MO_gp')
                 ttq('AddToWishlist')
+                // ga4('MO_ios')
             } else {
-                fbe('MO_ios')
-                kke('search')
-                ga4('MO_ios')
-                naverWcs('search')
+                fbe('ST_MO_ios')
+
+                // ga4('MO_gp')
                 url = store_ios_url
             }
         } else {
             if (isIos.value) {
-                fbe('MO_ios')
-                kke('search')
-                ga4('MO_ios')
-                naverWcs('search')
+                fbe('ST_MO_ios')
+                // ga4('MO_ios')
                 url = store_ios_url
             } else {
-                fbe('MO_gp')
-                kke('viewCart')
-                ga4('MO_gp')
-                naverWcs('view_content')
+                fbe('ST_MO_gp')
                 ttq('AddToWishlist')
+                // ga4('MO_gp')
                 url = store_url
             }
         }
@@ -199,23 +167,23 @@ export default function useYpreCommon() {
         window.open(url)
 
         switch (type) {
-            case 'main-menu':
-                fbe('MO_1')
-                break
-            case 'preorder':
-                fbe('MO_1_1')
-                break
-            case 'fixed-bottom':
-                fbe('MO_1_2')
-                break
+            // case 'main-menu':
+            //     fbe('MO_1')
+            //     break
+            // case 'preorder':
+            //     fbe('MO_1_1')
+            //     break
+            // case 'fixed-bottom':
+            //     fbe('MO_1_2')
+            //     break
             case 'phoneAndShopPopup':
-                fbe('MO_2')
-                ga4('MO_2')
+                fbe('ST_MO_2')
+                // ga4('MO_2')
                 ttq('Search')
                 break
             case 'PhoneAppointmentSuccessPopup':
-                fbe('MO_3')
-                ga4('MO_2')
+                fbe('ST_MO_3')
+                // ga4('MO_2')
                 ttq('Search')
                 isShowPhoneAppointmentSuccessPopup.value = false
                 break
@@ -240,10 +208,6 @@ export default function useYpreCommon() {
         }
     }
 
-    function changeRole(item) {
-        currentPopupRoleName.value = item
-    }
-
 
     function openUrl(type) {
         window.open(urlObj[type])
@@ -258,7 +222,7 @@ export default function useYpreCommon() {
     }
 
     async function appointment(type) {
-        reservationAppointmentEvent('hw_yry_reservation_count',inputValue.value)
+        reservationEventApi('hw_yry_reservation_count')
         if (!/^\d{8}$/.test(inputValue.value)) {
             openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
             return
@@ -275,8 +239,7 @@ export default function useYpreCommon() {
         })
         const phoneInfo = {
             phone: inputValue.value,
-            change_role: currentPopupRoleName.value,
-            // bind_os: bindOs.value
+            bind_os: bindOs.value
         }
         const res = await reservationPlayerReserve(phoneInfo).finally(() => {
             loadingToast.close()
@@ -288,13 +251,12 @@ export default function useYpreCommon() {
         if (isReserve === 1) {
             openTipPopup('이미 사전 예약을 완료하셨습니다.')
         } else {
-            gge(phoneInfo.phone)
-            ga4('CompleteRegistration')
+            // gge(phoneInfo.phone)
+            // ga4('CompleteRegistration')
             fbe('CompleteRegistration')
+            fbe('ST_CompleteRegistration')
             ttq('CompleteRegistration')
-            kke('completeRegistration')
             ttq('Subscribe')
-            naverWcs('sign_up')
             reservationInitApi()
         }
         if (isGoShop.value) {
@@ -309,18 +271,18 @@ export default function useYpreCommon() {
             case 'phonePopup':
                 isShowPhoneAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration4')
+                    // fbe('CompleteRegistration4')
                 }
                 break;
             case 'phoneAndShopPopup':
                 isShowAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration3')
+                    // fbe('CompleteRegistration3')
                 }
                 break;
             default:
                 if (isReserve === 0) {
-                    fbe('CompleteRegistration2')
+                    // fbe('CompleteRegistration2')
                 }
                 break;
         }
@@ -361,7 +323,7 @@ export default function useYpreCommon() {
             if (!isGoShop.value) {
                 isShowPhoneAppointmentSuccessPopup.value = true
             }
-            gge(storagePhoneInfo.value?.phone)
+            // gge(storagePhoneInfo.value?.phone)
         }
         else {
             if (isGoShop.value) {
@@ -370,8 +332,7 @@ export default function useYpreCommon() {
                 isShowAppointmentPopup.value = true
             }
         }
- 
-        kke('pageView')
+     
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
             bindOs.value = 'ios'
@@ -417,10 +378,7 @@ export default function useYpreCommon() {
         storagePhoneInfo,
         getImageUrl,
         getPcImageUrl,
-        bannerArr,
-        popupRolesArr,
-        changeRole,
-        currentPopupRoleName
+        bannerArr
     }
 
 }

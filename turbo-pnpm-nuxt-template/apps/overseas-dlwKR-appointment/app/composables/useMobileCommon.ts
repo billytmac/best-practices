@@ -25,7 +25,7 @@ export default function useCommon() {
         loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
         youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
         one: 'https://m.onestore.co.kr/v2/ko-kr/app/0001004178',
-        sanxing:'https://galaxystore.samsung.com/preorder/000008918737?cntyCd=KOR'
+        sanxing:'https://galaxystore.samsung.com/detail/com.dlw.kr.sx'
     }
 
     const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
@@ -194,26 +194,26 @@ export default function useCommon() {
                 fbe('MO_3')
                 ga4('MO_2')
                 ttq('Search')
-                isShowPhoneAppointmentSuccessPopup.value = false
+                // isShowPhoneAppointmentSuccessPopup.value = false
                 break
             case 'PhoneAppointmentPopup':
-                isShowAppointmentPopup.value = false
+                // isShowAppointmentPopup.value = false
                 break
         }
 
         if (isAlreadyAppointment.value) {
             if (!isGoShop.value) {
                 handleCutomStore.setIsGoShop(true)
-                isShowAppointmentSuccessPopup.value = true
+                // isShowAppointmentSuccessPopup.value = true
             }
         } else {
             if (!isGoShop.value) {
                 handleCutomStore.setIsGoShop(true)
             }
-            isShowPhoneAppointmentPopup.value = true
+            // isShowPhoneAppointmentPopup.value = true
         }
         if(isShowAppointmentPopup.value) {
-            isShowAppointmentPopup.value = false
+            // isShowAppointmentPopup.value = false
         }
     }
 
@@ -231,6 +231,8 @@ export default function useCommon() {
     }
 
     async function appointment(type) {
+        openTipPopup('이벤트가 종료되었습니다. ')
+        return
         reservationAppointmentEvent('hw_yry_reservation_count',inputValue.value)
         if (!/^\d{8}$/.test(inputValue.value)) {
             openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
@@ -329,20 +331,20 @@ export default function useCommon() {
     }
 
     function initOperation() {
-        if (isAlreadyAppointment.value) {
-            if (!isGoShop.value) {
-                isShowPhoneAppointmentSuccessPopup.value = true
-            }
-            gge(storagePhoneInfo.value?.phone)
-        }
-        else {
-            if (isGoShop.value) {
-                isShowPhoneAppointmentPopup.value = true
-            } else {
-                isShowAppointmentPopup.value = true
-            }
-        }
-        
+        // if (isAlreadyAppointment.value) {
+        //     if (!isGoShop.value) {
+        //         isShowPhoneAppointmentSuccessPopup.value = true
+        //     }
+        //     gge(storagePhoneInfo.value?.phone)
+        // }
+        // else {
+        //     if (isGoShop.value) {
+        //         isShowPhoneAppointmentPopup.value = true
+        //     } else {
+        //         isShowAppointmentPopup.value = true
+        //     }
+        // }
+  
         kke('pageView')
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
@@ -353,7 +355,6 @@ export default function useCommon() {
             reservationInitApi()
         })
     }
-
 
 
  

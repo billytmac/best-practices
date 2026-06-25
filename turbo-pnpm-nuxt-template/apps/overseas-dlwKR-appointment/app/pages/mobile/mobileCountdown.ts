@@ -1,11 +1,10 @@
 
-import { reservationPlayerReserve, reservationInit, reservationEvent } from "~/api"
+import { reservationPlayerReserve, reservationInit, reservationEvent, reservationAppointmentEvent } from "~/api/index"
 import { useCustomStore } from "~/stores/custom"
 import { storeToRefs } from 'pinia'
 import { useDebounceFn } from '@vueuse/core'
-import { fbe,  ttq,  } from '@/composables/mediaTagging'
-// ga4
-import { mobileSystem, waitForUrlParam } from "~/utils/index.client"
+import { fbe, ga4, ttq, gge, kke, naverWcs } from '@/composables/mediaTagging'
+import { mobileSystem } from "~/utils/index.client"
 
 
 export default function useCommon() {
@@ -26,7 +25,7 @@ export default function useCommon() {
         loungeUrl: 'https://game.naver.com/lounge/ExtraordinaryDemonHunter',
         youtubeUrl: 'https://www.youtube.com/@citydemonhunter',
         one: 'https://m.onestore.co.kr/v2/ko-kr/app/0001004178',
-        sanxing:'https://galaxystore.samsung.com/preorder/000008918737?cntyCd=KOR'
+        sanxing:'https://galaxystore.samsung.com/detail/com.dlw.kr.sx'
     }
 
     const bannerArr = ['swiper-1', 'swiper-2', 'swiper-3', 'swiper-4', 'swiper-5', 'swiper-6']
@@ -39,6 +38,7 @@ export default function useCommon() {
     const tipText = ref('')
     const initData = ref({})
     const roleListRef = ref(null)
+    const isShowNav = ref<boolean>(false)
     const storagePhoneInfo = computed(() => ({
         phone: userInfo.value?.phone,
         bind_os: userInfo.value?.bind_os,
@@ -112,9 +112,9 @@ export default function useCommon() {
                 path = `../assets/images/${name}.png`;
                 break;
         }
-        console.log(images, 'images')
-        console.log(path, 'path111')
-        console.log(images[path], 'images11')
+        // console.log(images, 'images')
+        // console.log(path, 'path111')
+        // console.log(images[path], 'images11')
         // 2. 匹配对应的完整路径
         // const pathName = `${path}/${name}.png`;
         // 3. 返回处理后的路径（通常包含 Hash）
@@ -128,12 +128,15 @@ export default function useCommon() {
     const openStoreUrl = (type, customStoreType) => {
         reservationEventApi('hw_yry_shopping_count')
         if (isAlreadyAppointment.value) {
-            // gge(storagePhoneInfo.value?.phone)
+            gge(storagePhoneInfo.value?.phone)
         }
         fbe('AddToCart')
-        // ga4('AddToCart')
+        ga4('AddToCart')
+        kke('addToCart')
+        naverWcs('lead')
+
         fbe('Lead')
-        // ga4('Lead')
+        ga4('Lead')
 
         ttq('ClickButton')
 
@@ -142,24 +145,31 @@ export default function useCommon() {
         if (customStoreType) {
             if (customStoreType === 'google') {
                 url = store_url
-                fbe('ST_MO_gp')
+                fbe('MO_gp')
+                kke('viewCart')
+                ga4('MO_gp')
+                naverWcs('view_content')
                 ttq('AddToWishlist')
-                // ga4('MO_ios')
             } else {
-                fbe('ST_MO_ios')
-
-                // ga4('MO_gp')
+                fbe('MO_ios')
+                kke('search')
+                ga4('MO_ios')
+                naverWcs('search')
                 url = store_ios_url
             }
         } else {
             if (isIos.value) {
-                fbe('ST_MO_ios')
-                // ga4('MO_ios')
+                fbe('MO_ios')
+                kke('search')
+                ga4('MO_ios')
+                naverWcs('search')
                 url = store_ios_url
             } else {
-                fbe('ST_MO_gp')
+                fbe('MO_gp')
+                kke('viewCart')
+                ga4('MO_gp')
+                naverWcs('view_content')
                 ttq('AddToWishlist')
-                // ga4('MO_gp')
                 url = store_url
             }
         }
@@ -167,23 +177,23 @@ export default function useCommon() {
         window.open(url)
 
         switch (type) {
-            // case 'main-menu':
-            //     fbe('MO_1')
-            //     break
-            // case 'preorder':
-            //     fbe('MO_1_1')
-            //     break
-            // case 'fixed-bottom':
-            //     fbe('MO_1_2')
-            //     break
+            case 'main-menu':
+                fbe('MO_1')
+                break
+            case 'preorder':
+                fbe('MO_1_1')
+                break
+            case 'fixed-bottom':
+                fbe('MO_1_2')
+                break
             case 'phoneAndShopPopup':
-                fbe('ST_MO_2')
-                // ga4('MO_2')
+                fbe('MO_2')
+                ga4('MO_2')
                 ttq('Search')
                 break
             case 'PhoneAppointmentSuccessPopup':
-                fbe('ST_MO_3')
-                // ga4('MO_2')
+                fbe('MO_3')
+                ga4('MO_2')
                 ttq('Search')
                 isShowPhoneAppointmentSuccessPopup.value = false
                 break
@@ -222,7 +232,7 @@ export default function useCommon() {
     }
 
     async function appointment(type) {
-        reservationEventApi('hw_yry_reservation_count')
+        reservationAppointmentEvent('hw_yry_reservation_count',inputValue.value)
         if (!/^\d{8}$/.test(inputValue.value)) {
             openTipPopup('올바른 휴대폰 번호를 입력해 주세요.')
             return
@@ -251,12 +261,13 @@ export default function useCommon() {
         if (isReserve === 1) {
             openTipPopup('이미 사전 예약을 완료하셨습니다.')
         } else {
-            // gge(phoneInfo.phone)
-            // ga4('CompleteRegistration')
+            gge(phoneInfo.phone)
+            ga4('CompleteRegistration')
             fbe('CompleteRegistration')
-            fbe('ST_CompleteRegistration')
             ttq('CompleteRegistration')
+            kke('completeRegistration')
             ttq('Subscribe')
+            naverWcs('sign_up')
             reservationInitApi()
         }
         if (isGoShop.value) {
@@ -271,18 +282,18 @@ export default function useCommon() {
             case 'phonePopup':
                 isShowPhoneAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    // fbe('CompleteRegistration4')
+                    fbe('CompleteRegistration4')
                 }
                 break;
             case 'phoneAndShopPopup':
                 isShowAppointmentPopup.value = false
                 if (isReserve === 0) {
-                    // fbe('CompleteRegistration3')
+                    fbe('CompleteRegistration3')
                 }
                 break;
             default:
                 if (isReserve === 0) {
-                    // fbe('CompleteRegistration2')
+                    fbe('CompleteRegistration2')
                 }
                 break;
         }
@@ -290,7 +301,7 @@ export default function useCommon() {
     }
 
 
-    async function reservationInitApi() {
+    async function reservationInitApi(type) {
         allowMultipleToast();
         const loadingToast = showLoadingToast({
             message: '로딩 중...',
@@ -300,6 +311,10 @@ export default function useCommon() {
             loadingToast.close()
         })
         const resData = res?.data || {}
+        if(type === 'countdown') {
+            countdown(1781622000000, res?.time * 1000 || 0)
+        } 
+        // callback?.(res?.time || 0)
         console.log(resData, 'resData')
         initData.value = resData
     }
@@ -318,37 +333,88 @@ export default function useCommon() {
         reservationEvent(eventName)
     }
 
-    function initOperation() {
+ 
+
+    function initOperation(flag=true) {
         if (isAlreadyAppointment.value) {
-            if (!isGoShop.value) {
-                isShowPhoneAppointmentSuccessPopup.value = true
+            if(flag) { 
+                if (!isGoShop.value) {
+                    isShowPhoneAppointmentSuccessPopup.value = true
+                } 
             }
-            // gge(storagePhoneInfo.value?.phone)
+        
+            gge(storagePhoneInfo.value?.phone)
         }
         else {
-            if (isGoShop.value) {
-                isShowPhoneAppointmentPopup.value = true
-            } else {
-                isShowAppointmentPopup.value = true
+            if(flag) {  
+                if (isGoShop.value) {
+                    isShowPhoneAppointmentPopup.value = true
+                } else {
+                    isShowAppointmentPopup.value = true
+                }
             }
         }
+
+      
+    }
+    function setActivedNav(val: string) {
+        activeNav.value = val
+        const targetElement = document.getElementById(val)
+        if (targetElement) {
+          // 计算需要滚动的位置，考虑固定头部的高度（76px）
+          const offsetTop = targetElement.offsetTop - 86
+      
+          // 平滑滚动到目标位置
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          })
+      
+          // 滚动完成后重置标志
+          // setTimeout(() => {
+          //   isProgrammaticScroll.value = false
+          // }, 1000)
+        }
+        // 关闭导航弹窗
+        isShowNav.value = false
+      }
+
+ 
+    function countdown(targetTime,currentTime) {
+        const deadline = new Date(targetTime).getTime();
+        const remaining = deadline - currentTime;
+        console.log(remaining, 'remaining')
+        if(remaining > 0) {
+            initOperation(true)
+            const timer = setInterval(() => {
+             const remaining = deadline - currentTime;
+                if (remaining <= 0) {
+                    clearInterval(timer);
+                    initOperation(false)
+                    setActivedNav('preorder')
+                } 
+            }, 1000);
+        } else {
+            initOperation(false)
+            setActivedNav('preorder')
+        }
      
+      
+        return () => clearInterval(timer);
+    }
+    onMounted(() => {
+        reservationEventApi('hw_yry_PV')
+        kke('pageView')
         isIos.value = mobileSystem() === 'ios'
         if (isIos.value) {
             bindOs.value = 'ios'
         }
-        waitForUrlParam('channel').finally(() => {
-            reservationEventApi('hw_yry_PV')
-            reservationInitApi()
-        })
-    }
-
- 
-
-
-
-
+        reservationInitApi('countdown')
+    })
     return {
+        setActivedNav,
+        isShowNav,
+        countdown,
         initOperation,
         reservationEventApi,
         reservationInitApi,

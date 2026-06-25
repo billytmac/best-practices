@@ -300,9 +300,9 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        class="w-192 h-229 fixed z-20 right-0 top-[49%] cursor-pointer animate__animated animate__pulse animate__infinite"
+        class="w-190 h-229 fixed z-20 right-0 top-[49%] cursor-pointer animate__animated animate__pulse animate__infinite"
         @click="setActiveNav('preorder')" v-show="showBottomPopup">
-        <img src="/assets/images/pc/fixed-icon.png" class="w-full h-full" />
+        <img src="/assets/images/pc/fixed-icon-1.png" class="w-full h-full" />
       </div>
       <!-- kv图 -->
       <div class="kv-bg bg-cover-no-repeat bg-no-repeat pt-134 h-1098 w-full pt-89" id="main-menu">
@@ -323,12 +323,12 @@ onMounted(async () => {
             <img :src="getPcImageUrl(item, '')" class="h-full w-full" />
           </div>
         </div>
-        <div class="mt-14 ml-803 relative">
+        <!-- <div class="mt-14 ml-803 relative">
           <img src="/assets/images/pc/appointment-btn.png" class=" h-120 w-330 cursor-pointer"
             @click="setActiveNav('preorder')" />
           <img src="/assets/images/animated-png/more-icon.png"
             class="h-97 w-88 cursor-pointer absolute top-101 left-115" />
-        </div>
+        </div> -->
 
       </div>
       <div class="apppointment-bg bg-cover-no-repeat h-4884 absolute w-full top-[95%]">
@@ -351,11 +351,11 @@ onMounted(async () => {
               <div class="mt-12 flex gap-6">
                 <div class="shine-wrapper overflow-hidden relative google-1-wrap w-279 h-100 ml-58"
                   @click="openStoreUrl(undefined, 'google')">
-                  <img src="/assets/images/pc/google-1.png" class="w-full h-full   cursor-pointer" />
+                  <img src="/assets/images/pc/google-1-1.png" class="w-full h-full   cursor-pointer" />
                 </div>
                 <div class="shine-wrapper overflow-hidden relative iphone-2-wrap w-279 h-100"
                   @click="openStoreUrl(undefined, 'iphone')">
-                  <img src="/assets/images/pc/iphone-2.png" class="w-full h-full  cursor-pointer" />
+                  <img src="/assets/images/pc/iphone-2-1.png" class="w-full h-full  cursor-pointer" />
                 </div>
               </div>
             </div>
