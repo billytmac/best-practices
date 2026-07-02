@@ -1,19 +1,20 @@
 {
-  "name": "antd-demo",
+  "name": "basic",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
+    "lint:fix": "oxlint --fix && eslint --fix",
+    "fmt": "oxfmt",
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^6.5.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
-  
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@rolldown/plugin-babel": "^0.2.3",
@@ -23,7 +24,6 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "babel-plugin-react-compiler": "^1.0.0",
-    "oxlint": "^1.69.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.0"
   }
