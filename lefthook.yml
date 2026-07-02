@@ -1,0 +1,8 @@
+# lefthook.yml
+pre-commit:
+  parallel: true # 平行執行所有 commands
+  commands:
+    lint:
+      glob: "*.{ts,tsx}"
+      run: npx eslint {staged_files} --fix
+      stage_fixed: true
