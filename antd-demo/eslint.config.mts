@@ -25,8 +25,8 @@ export default defineConfig([
     },
   },
   eslintConfigPrettier,
-  // eslintPluginOxlint.configs["flat/eslint"],
-  // eslintPluginOxlint.configs["flat/typescript"],
-  // eslintPluginOxlint.configs["flat/react"],
-  // eslintPluginOxlint.configs["flat/react-perf"],
+  eslintPluginOxlint.configs["flat/eslint"],
+  eslintPluginOxlint.configs["flat/typescript"],
+  eslintPluginOxlint.configs["flat/react"],
+  eslintPluginOxlint.configs["flat/react-perf"],
 ]);
