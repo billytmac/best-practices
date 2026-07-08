@@ -8,9 +8,12 @@
     "build": "tsc -b && vite build",
     "lint:fix": "oxlint --fix && eslint --fix",
     "fmt": "oxfmt",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "compile": "lingui compile --typescript",
+    "extract": "lingui extract"
   },
   "dependencies": {
+    "@lingui/react": "^6.5.0",
     "@tanstack/react-query": "^5.101.2",
     "antd": "^6.5.0",
     "react": "^19.2.7",
@@ -20,6 +23,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@lingui/cli": "^6.5.0",
+    "@lingui/swc-plugin": "^6.5.1",
     "@lingui/vite-plugin": "^6.5.0",
     "@rolldown/plugin-babel": "^0.2.3",
     "@tanstack/eslint-plugin-query": "^5.101.2",
@@ -30,6 +35,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "@vitejs/plugin-react-swc": "^4.3.1",
     "autoprefixer": "^10.5.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "postcss": "^8.5.16",
