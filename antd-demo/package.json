@@ -2,16 +2,15 @@
   "name": "antd-demo",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "turbo dev",
     "lint:fix": "turbo lint:fix"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
   "dependencies": {
     "turbo": "^2.10.0"
   },
@@ -37,6 +36,7 @@
     "prettier": "^3.9.1",
     "typescript-eslint": "^8.62.0"
   },
+  "packageManager": "pnpm@10.10.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "lefthook"

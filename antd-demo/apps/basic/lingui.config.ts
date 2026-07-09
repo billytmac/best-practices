@@ -1,12 +1,15 @@
-import { defineConfig } from "@lingui/cli";
+import { formatter } from "@lingui/format-po";
 
-export default defineConfig({
+const config = {
+  locales: ["en", "zh"],
   sourceLocale: "en",
-  locales: ["cs", "en"],
   catalogs: [
     {
-      path: "<rootDir>/src/locales/{locale}/messages",
+      path: "src/locales/{locale}/messages",
       include: ["src"],
     },
   ],
-});
+  format: formatter({ lineNumbers: false }),
+};
+
+export default config;

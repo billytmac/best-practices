@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
+import { Button } from "antd";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -54,6 +55,7 @@ function App() {
           <svg className="icon" role="presentation" aria-hidden="true">
             <use href="/icons.svg#social-icon"></use>
           </svg>
+          <Button type="primary">Button</Button>
           <h2>Connect with us</h2>
           <p>Join the Vite community</p>
           <ul>

@@ -26,5 +26,8 @@
   },
   "search.exclude": {
     "**/routeTree.gen.ts": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   }
 }
