@@ -1,9 +1,9 @@
 import { Button, Input, Select, theme } from "antd";
+import { useLingui } from "@lingui/react/macro";
 import { Plus, UserRound } from "lucide-react";
 import { forwardRef, useMemo } from "react";
 import { FilterToolbar } from "@/components/FilterToolbar";
 
-/** Search + role slot `minWidth` for FilterToolbar collapse math */
 const FILTER_CONTROL_WIDTH = 220;
 
 export type ToolbarProps = {
@@ -28,6 +28,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
   },
   ref,
 ) {
+  const { t } = useLingui();
   const { token } = theme.useToken();
 
   const slots = useMemo(
@@ -38,7 +39,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
         children: (
           <Input.Search
             allowClear
-            placeholder="Search User"
+            placeholder={t`Search User`}
             style={{ width: FILTER_CONTROL_WIDTH }}
             value={keywordInput}
             onChange={(e) => onKeywordChange(e.target.value)}
@@ -53,14 +54,14 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
         children: (
           <Select
             allowClear
-            placeholder="Role"
+            placeholder={t`Role`}
             style={{ width: FILTER_CONTROL_WIDTH }}
             prefix={<UserRound size={token.fontSize} />}
             value={roleValue}
             onChange={(v) => onRoleChange(v ?? "")}
             options={[
-              { label: "Admin", value: "admin" },
-              { label: "Editor", value: "editor" },
+              { label: t`Admin`, value: "admin" },
+              { label: t`Editor`, value: "editor" },
             ]}
           />
         ),
@@ -73,6 +74,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
       onRoleChange,
       onSearch,
       roleValue,
+      t,
       token.fontSize,
     ],
   );
@@ -83,11 +85,11 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
       slots={slots}
       actions={
         <Button type="primary" icon={<Plus size={token.fontSize} />} onClick={onCreateClick}>
-          Create User
+          {t`Create User`}
         </Button>
       }
-      moreFiltersLabel="More filters"
-      moreFiltersTitle="More filters"
+      moreFiltersLabel={t`More filters`}
+      moreFiltersTitle={t`More filters`}
     />
   );
 });

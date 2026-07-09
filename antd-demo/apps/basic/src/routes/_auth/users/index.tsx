@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Avatar, Button, Space, Form, App, Dropdown, theme, Tag, Flex } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
+import { useLingui } from "@lingui/react/macro";
 import { useMemo, useRef, useState } from "react";
 import { httpClient } from "@/utils/http";
 import { USER_ENDPOINTS } from "@/api/user";
@@ -38,6 +39,7 @@ function UsersPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const { message, modal } = App.useApp();
+  const { t } = useLingui();
   const { token } = theme.useToken();
   const [modalOpen, setModalOpen] = useState(false);
   const pageShellRef = useRef<HTMLDivElement>(null);
@@ -120,11 +122,11 @@ function UsersPage() {
 
   const confirmDelete = (record: User) => {
     modal.confirm({
-      title: "Are you absolutely sure?",
-      content: "This action cannot be undone. This will permanently delete the user.",
-      okText: "Delete",
+      title: t`Are you absolutely sure?`,
+      content: t`This action cannot be undone. This will permanently delete the user.`,
+      okText: t`Delete`,
       okType: "danger",
-      cancelText: "Cancel",
+      cancelText: t`Cancel`,
       onOk: () => deleteMutation.mutate(record.id),
     });
   };
@@ -138,7 +140,7 @@ function UsersPage() {
       sortOrder: search.sortField === "id" ? search.sortOrder : null,
     },
     {
-      title: "Username",
+      title: t`Username`,
       dataIndex: "username",
       key: "username",
       sorter: true,
@@ -164,14 +166,14 @@ function UsersPage() {
       },
     },
     {
-      title: "Email",
+      title: t`Email`,
       dataIndex: "email",
       key: "email",
       sorter: true,
       sortOrder: search.sortField === "email" ? search.sortOrder : null,
     },
     {
-      title: "Roles",
+      title: t`Roles`,
       dataIndex: "roles",
       key: "roles",
       sorter: true,
@@ -209,7 +211,7 @@ function UsersPage() {
               {
                 key: "edit",
                 icon: <Pencil size={token.fontSize} />,
-                label: "Edit",
+                label: t`Edit`,
                 onClick: () => {
                   setEditingUser(record);
                   form.setFieldsValue(record);
@@ -219,7 +221,7 @@ function UsersPage() {
               {
                 key: "delete",
                 icon: <Trash2 size={token.fontSize} />,
-                label: "Delete",
+                label: t`Delete`,
                 danger: true,
                 onClick: () => confirmDelete(record),
               },
@@ -230,7 +232,7 @@ function UsersPage() {
           <Button
             type="text"
             icon={<MoreVertical size={token.fontSize} />}
-            aria-label="Row actions"
+            aria-label={t`Row actions`}
           />
         </Dropdown>
       ),
@@ -258,7 +260,7 @@ function UsersPage() {
             current: currentPage,
             pageSize: search.limit,
             showSizeChanger: true,
-            showTotal: (total) => `${total} rows`,
+            showTotal: (total) => t`${total} rows`,
             onChange: (page, pageSize) => {
               void navigate({
                 search: {
@@ -270,7 +272,7 @@ function UsersPage() {
             },
           }
         : false,
-    [showPagination, data?.total, currentPage, search, navigate],
+    [showPagination, data?.total, currentPage, search, navigate, t],
   );
 
   return (

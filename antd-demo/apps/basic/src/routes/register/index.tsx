@@ -2,6 +2,7 @@ import { Link, createFileRoute, redirect, useNavigate } from "@tanstack/react-ro
 import { Form, Input, Button, Card, App, theme, Typography, Flex } from "antd";
 import type { CSSProperties } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useLingui } from "@lingui/react/macro";
 import { httpClient } from "@/utils/http";
 import { useAuthStore } from "@/stores/auth";
 import { AUTH_ENDPOINTS } from "@/api/auth";
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/register/")({
 function RegisterPage() {
   const navigate = useNavigate();
   const { message } = App.useApp();
+  const { t } = useLingui();
   const setTokens = useAuthStore((s) => s.setTokens);
   const { token } = theme.useToken();
 
@@ -38,11 +40,11 @@ function RegisterPage() {
       await fetchSessionAndApplyToStore();
     },
     onSuccess: () => {
-      message.success("Account created successfully");
+      message.success(t`Account created successfully`);
       void navigate({ to: "/dashboard" });
     },
     onError: (err) => {
-      message.error(err instanceof Error ? err.message : "Registration failed");
+      message.error(err instanceof Error ? err.message : t`Registration failed`);
     },
   });
 
@@ -132,48 +134,48 @@ function RegisterPage() {
             >
               <Form.Item
                 name="username"
-                label={<span style={{ fontWeight: 500 }}>Username</span>}
-                rules={[{ required: true, message: "Please enter your username" }]}
+                label={<span>{t`Username`}</span>}
+                rules={[{ required: true, message: t`Please enter your username` }]}
               >
                 <Input placeholder="new-user" size="large" />
               </Form.Item>
 
               <Form.Item
                 name="email"
-                label={<span style={{ fontWeight: 500 }}>Email address</span>}
-                rules={[{ type: "email", message: "Please enter a valid email address" }]}
+                label={<span>{t`Email address`}</span>}
+                rules={[{ type: "email", message: t`Please enter a valid email address` }]}
               >
                 <Input placeholder="you@example.com" size="large" />
               </Form.Item>
 
               <Form.Item
                 name="password"
-                label={<span style={{ fontWeight: 500 }}>Password</span>}
+                label={<span>{t`Password`}</span>}
                 rules={[
-                  { required: true, message: "Please enter your password" },
-                  { min: 6, message: "Password must be at least 6 characters long" },
+                  { required: true, message: t`Please enter your password` },
+                  { min: 6, message: t`Password must be at least 6 characters long` },
                 ]}
               >
-                <Input.Password placeholder="Enter at least 6 characters" size="large" />
+                <Input.Password placeholder={t`Enter at least 6 characters`} size="large" />
               </Form.Item>
 
               <Form.Item
                 name="confirmPassword"
-                label={<span style={{ fontWeight: 500 }}>Confirm password</span>}
+                label={<span>{t`Confirm password`}</span>}
                 dependencies={["password"]}
                 rules={[
-                  { required: true, message: "Please confirm your password" },
+                  { required: true, message: t`Please confirm your password` },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue("password") === value) {
                         return Promise.resolve();
                       }
-                      return Promise.reject(new Error("Passwords do not match"));
+                      return Promise.reject(new Error(t`Passwords do not match`));
                     },
                   }),
                 ]}
               >
-                <Input.Password placeholder="Re-enter your password" size="large" />
+                <Input.Password placeholder={t`Re-enter your password`} size="large" />
               </Form.Item>
 
               <Form.Item style={{ marginBottom: 0, marginTop: token.marginLG }}>
@@ -184,15 +186,15 @@ function RegisterPage() {
                   block
                   size="large"
                 >
-                  Create account
+                  {t`Create account`}
                 </Button>
               </Form.Item>
 
               <Flex justify="center" style={{ marginTop: token.margin }}>
                 <Typography.Text type="secondary">
-                  Already have an account?{" "}
+                  {t`Already have an account?`}{" "}
                   <Link to="/login" style={{ color: token.colorPrimary }}>
-                    Sign in
+                    {t`Sign in`}
                   </Link>
                 </Typography.Text>
               </Flex>

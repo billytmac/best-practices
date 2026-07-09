@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Card, Col, Row, Typography, Avatar, theme, Flex, Skeleton, Timeline, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
+import { useLingui } from "@lingui/react/macro";
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
 import "./index.css";
 
@@ -19,10 +20,8 @@ async function fetchDashboardShell() {
 
 type AntToken = ReturnType<typeof theme.useToken>["token"];
 
-/** Matches loaded stat card body height: title row, value, description. */
 function StatCardSkeleton({ token }: { token: AntToken }) {
   const titleLine = Math.round(token.fontSizeSM * token.lineHeight);
-  /** Lucide default icon box 24px to align with the first row of real cards. */
   const iconBox = 24;
   const titleRowHeight = Math.max(titleLine, iconBox);
   const valueLine = Math.round(24 * 1);
@@ -114,6 +113,7 @@ function DashboardSkeleton() {
 }
 
 function DashboardPage() {
+  const { t } = useLingui();
   const { token } = theme.useToken();
   const { isPending } = useQuery({
     queryKey: ["dashboard"],
@@ -121,7 +121,6 @@ function DashboardPage() {
     staleTime: 60_000,
   });
 
-  /* Hover: emphasize border; keep background matching the card so light theme doesn't gray the whole block */
   const cardHoverStyle = {
     ["--dash-card-hover-bg" as string]: token.colorBgContainer,
     ["--dash-card-hover-border" as string]: token.colorPrimaryBorderHover,
@@ -131,31 +130,31 @@ function DashboardPage() {
   const stats = useMemo(
     () => [
       {
-        title: "Total Revenue",
+        title: t`Total Revenue`,
         value: "$45,231.89",
-        description: "+20.1% from last month",
+        description: t`+20.1% from last month`,
         icon: <DollarSign style={{ color: token.colorTextSecondary }} />,
       },
       {
-        title: "Subscriptions",
+        title: t`Subscriptions`,
         value: "+2350",
-        description: "+180.1% from last month",
+        description: t`+180.1% from last month`,
         icon: <Users style={{ color: token.colorTextSecondary }} />,
       },
       {
-        title: "Sales",
+        title: t`Sales`,
         value: "+12,234",
-        description: "+19% from last month",
+        description: t`+19% from last month`,
         icon: <CreditCard style={{ color: token.colorTextSecondary }} />,
       },
       {
-        title: "Active Now",
+        title: t`Active Now`,
         value: "+573",
-        description: "+201 since last hour",
+        description: t`+201 since last hour`,
         icon: <Activity style={{ color: token.colorTextSecondary }} />,
       },
     ],
-    [token.colorTextSecondary],
+    [t, token.colorTextSecondary],
   );
 
   const recentSales = useMemo(
@@ -197,43 +196,47 @@ function DashboardPage() {
   const timelineItems = useMemo(
     () => [
       {
-        color: "green" as const,
+        color: "green",
         content: (
           <Flex vertical gap={4}>
-            <Text strong>08:30 · Deploy V3.2.0</Text>
-            <Text type="secondary">Release branch merged and production rollout completed.</Text>
+            <Text strong>{t`08:30 · Deploy V3.2.0`}</Text>
+            <Text type="secondary">
+              {t`Release branch merged and production rollout completed.`}
+            </Text>
           </Flex>
         ),
       },
       {
-        color: "blue" as const,
+        color: "blue",
         content: (
           <Flex vertical gap={4}>
-            <Text strong>10:10 · Menu policy updated</Text>
-            <Text type="secondary">Admin changed sidebar visibility and permission mapping.</Text>
+            <Text strong>{t`10:10 · Menu policy updated`}</Text>
+            <Text type="secondary">
+              {t`Admin changed sidebar visibility and permission mapping.`}
+            </Text>
           </Flex>
         ),
       },
       {
-        color: "gold" as const,
+        color: "gold",
         content: (
           <Flex vertical gap={4}>
-            <Text strong>13:20 · Security review</Text>
-            <Text type="secondary">Token refresh behavior and 403 routes validated.</Text>
+            <Text strong>{t`13:20 · Security review`}</Text>
+            <Text type="secondary">{t`Token refresh behavior and 403 routes validated.`}</Text>
           </Flex>
         ),
       },
       {
-        color: "red" as const,
+        color: "red",
         content: (
           <Flex vertical gap={4}>
-            <Text strong>15:50 · Incident recovery</Text>
-            <Text type="secondary">User creation spike handled and queue restored.</Text>
+            <Text strong>{t`15:50 · Incident recovery`}</Text>
+            <Text type="secondary">{t`User creation spike handled and queue restored.`}</Text>
           </Flex>
         ),
       },
     ],
-    [],
+    [t],
   );
 
   if (isPending) {
@@ -273,10 +276,10 @@ function DashboardPage() {
             title={
               <Flex align="center" gap={token.marginSM}>
                 <Title level={5} style={{ margin: 0 }}>
-                  Timeline
+                  {t`Timeline`}
                 </Title>
                 <Tag variant="filled" color="processing">
-                  Today
+                  {t`Today`}
                 </Tag>
               </Flex>
             }
@@ -288,11 +291,7 @@ function DashboardPage() {
           <Card
             className="dash-card-interactive"
             style={{ ...cardHoverStyle, height: "100%" }}
-            title={
-              <Title level={5} style={{ margin: 0 }}>
-                Recent Sales
-              </Title>
-            }
+            title={<Title level={5} style={{ margin: 0 }}>{t`Recent Sales`}</Title>}
           >
             <Flex
               vertical

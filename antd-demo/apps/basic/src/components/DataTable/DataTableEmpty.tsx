@@ -1,11 +1,10 @@
 import { Flex, theme } from "antd";
+import { useLingui } from "@lingui/react/macro";
 import { BarChart3 } from "lucide-react";
 import type { ReactElement } from "react";
 
-/**
- * Table empty state: icon in soft tile + bold title + secondary description (dashboard-style).
- */
 export function DataTableEmpty(): ReactElement {
+  const { t } = useLingui();
   const { token } = theme.useToken();
 
   return (
@@ -44,7 +43,7 @@ export function DataTableEmpty(): ReactElement {
             lineHeight: token.lineHeightLG,
           }}
         >
-          No data
+          {t`No data`}
         </span>
         <span
           style={{
@@ -54,7 +53,7 @@ export function DataTableEmpty(): ReactElement {
             lineHeight: token.lineHeight,
           }}
         >
-          Nothing to show in this list yet
+          {t`Nothing to show in this list yet`}
         </span>
       </Flex>
     </Flex>

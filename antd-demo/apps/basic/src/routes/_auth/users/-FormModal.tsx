@@ -1,5 +1,6 @@
 import { Form, Input, Select } from "antd";
 import type { FormInstance } from "antd/es/form";
+import { useLingui } from "@lingui/react/macro";
 import type { CreateUserRequest, User } from "@/api/schemas";
 import { BaseFormModal } from "@/components/FormModal";
 
@@ -20,12 +21,14 @@ export function FormModal({
   onCancel,
   onFinish,
 }: FormModalProps) {
+  const { t } = useLingui();
+
   return (
     <BaseFormModal<CreateUserRequest>
       open={open}
-      title={editingUser ? "Edit User" : "New User"}
-      okText="OK"
-      cancelText="Cancel"
+      title={editingUser ? t`Edit User` : t`New User`}
+      okText={t`OK`}
+      cancelText={t`Cancel`}
       form={form}
       confirmLoading={confirmLoading}
       onCancel={onCancel}
@@ -33,25 +36,25 @@ export function FormModal({
     >
       <Form.Item
         name="username"
-        label="Username"
-        rules={[{ required: true, message: "Please enter username" }]}
+        label={t`Username`}
+        rules={[{ required: true, message: t`Please enter username` }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         name="roles"
-        label="Roles"
-        rules={[{ required: true, message: "Please select roles" }]}
+        label={t`Roles`}
+        rules={[{ required: true, message: t`Please select roles` }]}
       >
         <Select
           mode="multiple"
           options={[
-            { label: "Admin", value: "admin" },
-            { label: "Editor", value: "editor" },
+            { label: t`Admin`, value: "admin" },
+            { label: t`Editor`, value: "editor" },
           ]}
         />
       </Form.Item>
-      <Form.Item name="email" label="Email">
+      <Form.Item name="email" label={t`Email`}>
         <Input />
       </Form.Item>
     </BaseFormModal>
